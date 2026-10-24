@@ -1,0 +1,5 @@
+# 28 SDK cipher
+
+T30 is `jsvmp2_challenge`. The page file stays a black box. `assets/sdk.min.js` exposes `spiderEncrypt`, `spiderEncryptBytes`, `spiderDecryptBytes`, `msgpackEncode`, and `msgpackDecode` after it loads. Local checks: the base62 alphabet matches the lowercase-first alphabet, a byte roundtrip holds, the token frame is 108 bytes, and the fingerprint frame is 89 characters.
+
+The shipped entry keeps one Python socket. Node only seals and opens frames. The upgrade carries the session cookie plus the sealed `ads-baidu` value. The first frame is command 100. The 24-character challenge opens to 18 bytes with the init seed as the key. The reply is command 99 with 38 fingerprint numbers. Page requests are command 4 and run through `collect_pages` with concurrency 4. Page 1 is taken from init when `current_page` is 1. Numbers are the string leaves on nodes whose first field is 16. The site accepted the sum: `is_correct` true, message contains `答案正确`. No second trace. No VM bytecode edit.

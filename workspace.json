@@ -1,0 +1,377 @@
+{
+  "schema": "reverse-workspace.v1",
+  "project": "spiderdemo",
+  "goal": "用补环境或纯算做完 spiderdemo 开放挑战并让站点判定通过。登录模块在 modules/login。两道开发中的题跳过。禁止浏览器自动化和外部打码。",
+  "next": "route_web_jsvmp",
+  "turnGate": "run",
+  "humanRequired": false,
+  "dispatcher": "web_case",
+  "caseId": "spiderdemo-register-login",
+  "head": "192b764",
+  "slices": [
+    {
+      "id": "s1-ruyitrace-capture-start",
+      "skill": "web-reverse",
+      "objective": "RuyiTrace 3.3 interactive capture 打开 spiderdemo 首页并发现注册与登录页，只记录请求边界，不提交凭据。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s1-capture-start.md",
+      "handles": {
+        "runId": "rt_20261010022224_c1437434d7"
+      },
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "s2-ruyidom-run",
+      "skill": "web-reverse",
+      "objective": "用 allowNetwork=true 的最小 RuyiDOM runner 对照首页认证请求边界，不提交凭据。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s2-ruyidom-run.md",
+      "handles": {
+        "runId": "r56175f00023947f4985b"
+      },
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "s5-rerun-host-baseline",
+      "skill": "web-env-patcher",
+      "objective": "重跑同一条 document 安装 runner，只看 location 和 auth 请求边界，不新增字段。",
+      "status": "blocked",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s5-rerun-host-baseline.md",
+      "handles": {
+        "runId": "r656200b927284d80866d"
+      },
+      "blocker": "r656200b927284d80866d exited before JSON; location and auth boundary were not emitted",
+      "conclusion": "blocked"
+    },
+    {
+      "id": "s4-environment-patch",
+      "skill": "web-env-patcher",
+      "objective": "只补首页 document 没有离开 about:blank 这一个存在性面，不重跑。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s4-environment-patch.md",
+      "handles": {},
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "s3-compare-facts",
+      "skill": "web-reverse",
+      "objective": "把首页 browser fact 与 RuyiDOM 对照分类为 firstDivergence，并记下请求边界未对齐。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s3-compare-facts.md",
+      "handles": {
+        "revision": 3
+      },
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "s8-rerun-document-write",
+      "skill": "web-env-patcher",
+      "objective": "重跑 document.write 之后的同一条 runner，只记录 location 和 auth 请求边界。",
+      "status": "blocked",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s8-rerun-document-write.md",
+      "handles": {
+        "runId": "r7429e6a582b7404ea200"
+      },
+      "blocker": "r7429e6a582b7404ea200 exited before JSON; location and auth boundary were not emitted",
+      "conclusion": "blocked"
+    },
+    {
+      "id": "s7-document-same-surface",
+      "skill": "web-env-patcher",
+      "objective": "仍只改 document 安装。去掉嵌套 RuyiDOM，避免 channel error。不重跑，不提交登录。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s7-document-same-surface.md",
+      "handles": {},
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "s6-record-host-probe",
+      "skill": "web-env-patcher",
+      "objective": "把 document 安装重跑记成 same-surface。请求边界没有 method/url/status，不能记成 moved 或 unchanged。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s5-rerun-host-baseline.md",
+      "handles": {
+        "runId": "r656200b927284d80866d",
+        "factsRevision": 6
+      },
+      "blocker": "重跑在打出 location 和 auth 请求边界前因 channel error 退出",
+      "conclusion": "fact"
+    },
+    {
+      "id": "s14-capture-for-human",
+      "skill": "web-reverse",
+      "objective": "起 interactive capture 并保持 running，留给用户自己注册和登录。不要停止，不要代填。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s14-capture-for-human.md",
+      "handles": {
+        "runId": "rt_20261010071226_f62dc0d172"
+      },
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "s15-capture-restart",
+      "skill": "web-reverse",
+      "objective": "上一轮 interactive capture 已 completed。重开一条并保持 running，留给用户自己注册和登录。不要停止，不要代填。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s15-capture-restart.md",
+      "handles": {
+        "runId": "rt_20261010073916_6f589cbd54"
+      },
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "s16-human-finished",
+      "skill": "web-reverse",
+      "objective": "用户已在录制窗口完成注册。记下自动登录、邮箱不验证、滑块是挑战。不读请求包。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s16-human-finished.md",
+      "handles": {
+        "runId": "rt_20261010073916_6f589cbd54",
+        "factsRevision": 15
+      },
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "s17-capture-stop",
+      "skill": "web-reverse",
+      "objective": "交互窗口已结束。停止 rt_20261010073916_6f589cbd54 并等回执落盘。不要盘点请求，不要再开 capture。",
+      "status": "blocked",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s17-capture-stop.md",
+      "handles": {
+        "runId": "rt_20261010073916_6f589cbd54"
+      },
+      "blocker": "graceful stop landed state=stopped; evidence-receipt pending; no integrityReceipt; receipt tool only reviews completed runs",
+      "conclusion": "blocked"
+    },
+    {
+      "id": "s18-login-capture",
+      "skill": "web-reverse",
+      "objective": "按补环境默认开关重开 interactive capture，只留给用户登录。不开 JSCall，不代填，不注册。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s18-login-capture.md",
+      "handles": {
+        "runId": "rt_20261010083653_880526e2a7"
+      },
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "s19-login-finished",
+      "skill": "web-reverse",
+      "objective": "用户已在登录轮窗口完成登录。清掉 humanActionPending，把 captureWindow 写成 ended。不读请求包。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s19-login-finished.md",
+      "handles": {
+        "runId": "rt_20261010083653_880526e2a7",
+        "factsRevision": 19
+      },
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "s20-login-capture-stop",
+      "skill": "web-reverse",
+      "objective": "登录窗口已结束。停止 rt_20261010083653_880526e2a7，等 worker 退出后再看 gate。不要读请求包，不要再开 capture。",
+      "status": "blocked",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s20-login-capture-stop.md",
+      "handles": {
+        "runId": "rt_20261010083653_880526e2a7"
+      },
+      "blocker": "graceful stop landed state=stopped; evidence-receipt pending; no integrityReceipt",
+      "conclusion": "blocked"
+    },
+    {
+      "id": "s21-login-module",
+      "skill": "web-reverse",
+      "objective": "从登录轮 trace 写出只含 username/password 的登录客户端。不代填，不重开 capture。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s21-login-module.md",
+      "handles": {
+        "runId": "rt_20261010083653_880526e2a7"
+      },
+      "blocker": "run remains stopped without integrityReceipt; live login was not replayed",
+      "conclusion": "fact"
+    },
+    {
+      "id": "s22-live-login",
+      "skill": "web-reverse",
+      "objective": "用用户给出的账号对 LoginClient 做一次真实登录和 user_stats 读回。不记录密码和 cookie。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s22-live-login.md",
+      "handles": {},
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "s23-login-package",
+      "skill": "web-reverse",
+      "objective": "登录模块收成 modules/login。凭据写入项目根 .env。不建能力测试目录，不新开 capture。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s23-login-package.md",
+      "handles": {
+        "activeRun": "rt_20261010022224_c1437434d7"
+      },
+      "blocker": "login observation run remains stopped without integrityReceipt",
+      "conclusion": "fact"
+    },
+    {
+      "id": "s24-challenge-scaffold",
+      "skill": "web-reverse",
+      "objective": "为 31 道开放题建语义化目录和共享 HTTP 运行时。跳过两道开发中的题。不升浏览器采集。",
+      "status": "in_progress",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\catalog.json",
+      "handles": {},
+      "blocker": "site acceptance is still per challenge",
+      "conclusion": "working"
+    },
+    {
+      "id": "s12-record-boundary-moved",
+      "skill": "web-env-patcher",
+      "objective": "通道日志证明请求 URL 集合已变，但 auth/check 与 auth/captcha 仍未出现。记 boundary-moved。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s11-rerun-flush.md",
+      "handles": {
+        "runId": "r26a50520ee3b4e1da3fb",
+        "factsRevision": 12
+      },
+      "blocker": "两条 auth GET 仍未出现，登录 POST 未观察",
+      "conclusion": "fact"
+    },
+    {
+      "id": "s11-rerun-flush",
+      "skill": "web-env-patcher",
+      "objective": "重跑带通道落盘的同一条 runner，只记录 auth/check 与 auth/captcha 的 method/status。",
+      "status": "blocked",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s11-rerun-flush.md",
+      "handles": {
+        "runId": "r26a50520ee3b4e1da3fb"
+      },
+      "blocker": "channel error before JSON; channel-log has no auth/check or auth/captcha",
+      "conclusion": "blocked"
+    },
+    {
+      "id": "s10-flush-auth-boundary",
+      "skill": "web-env-patcher",
+      "objective": "同一 document 安装上，把通道响应立刻写入 jsonl，并在两个 auth GET 都出现时提前 print。不重跑，不提交登录。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s10-flush-auth-boundary.md",
+      "handles": {},
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "s9-record-host-probe",
+      "skill": "web-env-patcher",
+      "objective": "把 document.write 重跑记成 same-surface。没有 method/url/status，不能记成 moved 或 unchanged。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s8-rerun-document-write.md",
+      "handles": {
+        "runId": "r7429e6a582b7404ea200",
+        "factsRevision": 9
+      },
+      "blocker": "重跑在打出 location 和 auth 请求边界前因 channel error 退出",
+      "conclusion": "fact"
+    },
+    {
+      "id": "s28-jsvmp06-interpreter",
+      "skill": "web-jsvmp",
+      "objective": "06-jsvmp interpreter-structure only. No opcode fill, no internal patch.",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s28-jsvmp06-interpreter.md",
+      "handles": {
+        "runId": "rt_20261010143356_3e38a94715",
+        "readRef": "skill/web-jsvmp/references/interpreter-structure.md"
+      },
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "s29-jsvmp28-interpreter",
+      "skill": "web-jsvmp",
+      "objective": "28-jsvmp2 interpreter-structure only. No opcode fill, no internal patch.",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s29-jsvmp28-interpreter.md",
+      "handles": {
+        "readRef": "skill/web-jsvmp/references/interpreter-structure.md"
+      },
+      "blocker": "no operand/stack trace; request entry not tied to fetch",
+      "conclusion": "blocked"
+    },
+    {
+      "id": "s30-jsvmp28-trace",
+      "skill": "web-jsvmp",
+      "objective": "One logged-in interactive trace of jsvmp2. Stop after the socket observation. Not a submit path.",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s30-jsvmp28-trace.md",
+      "handles": {
+        "runId": "rt_20261024005551_a5cd2fe0e2",
+        "readRef": "skill/web-jsvmp/references/interpreter-structure.md"
+      },
+      "blocker": "no operand or stack values; browser upgrade is 101",
+      "conclusion": "fact"
+    },
+    {
+      "id": "codex-audit-technical",
+      "skill": "web-jsvmp",
+      "objective": "核查 28-jsvmp2 技术阻碍并执行 interpreter-structure 本拍",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\codex-grok-audit-20261024\\technical\\technical.md",
+      "handles": {},
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "codex-audit-process",
+      "skill": "web-reverse",
+      "objective": "审计 Grok 轨迹、事实状态与重复实验偏差",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\codex-grok-audit-20261024\\process\\process.md",
+      "handles": {},
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "codex-audit-reference",
+      "skill": "search-layer",
+      "objective": "检索相关方法与现有知识，仅辅助核查",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\codex-grok-audit-20261024\\reference\\reference.md",
+      "handles": {},
+      "blocker": null,
+      "conclusion": "fact"
+    },
+    {
+      "id": "s35-jsvmp28-textencoder",
+      "skill": "web-env-patcher",
+      "objective": "对照 cookie 封口前的 TextEncoder 域身份，只保留会改变冻结 token 的宿主差异。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s35-jsvmp28-textencoder.md",
+      "handles": {
+        "runId": "rt_20261024005551_a5cd2fe0e2"
+      },
+      "blocker": null,
+      "conclusion": "dead_end"
+    },
+    {
+      "id": "s37-jsvmp28-sdk-cipher",
+      "skill": "web-jsvmp",
+      "objective": "用 sdk.min.js 暴露的密码学原语完成 28 的本地提交，不改 VM 字节码。",
+      "status": "done",
+      "evidence": "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s37-jsvmp28-sdk-cipher.md",
+      "handles": {
+        "runId": "rt_20261024005551_a5cd2fe0e2"
+      },
+      "blocker": null,
+      "conclusion": "fact"
+    }
+  ],
+  "updatedAt": "2026-10-24T08:20:00Z"
+}

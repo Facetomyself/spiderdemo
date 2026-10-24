@@ -1,0 +1,7 @@
+version 1.0.0
+instance version,modules,behaviorLog,honeypotLog,traceLog,seed,isConsumed,MAX_BEHAVIOR_LOG,cachedFingerprints,collectPromise,first,sessionId,deviceId
+checkbox-proto constructor,I18N,onWlzReady,createEmbedLayout,initDOM,startVerification,onUIUpdateSuccess,onUIUpdateFail,updateProgress,simulateProgress,onReset
+payload-type object
+payload-keys 
+collector object version,modules,behaviorLog,honeypotLog,traceLog,seed,isConsumed,MAX_BEHAVIOR_LOG,cachedFingerprints,collectPromise,first,sessionId,deviceId
+widget-error TypeError: Bind must be called on a function |     at bind (<anonymous>) |     at mV (wlzshield.min.js:2:8433) |     at new yt (wlzshield.min.js:2:2947) |     at mo (wlzshield.min.js:3:7099) |     at k (wlzshield.min.js:3:9551)

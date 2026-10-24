@@ -1,0 +1,11 @@
+{
+  "slug": "25-panel-console",
+  "id": "panel_challenge",
+  "title": "控制台检测",
+  "page": "/authentication/panel_challenge?challenge_type=panel_challenge",
+  "score": 15,
+  "difficulty": "hard",
+  "category": "reverse",
+  "description": "答案在控制台，如果hook打开控制台之后没有打印，那就是hook错误",
+  "status": "open"
+}

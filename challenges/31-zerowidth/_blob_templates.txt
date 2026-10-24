@@ -1,0 +1,66 @@
+0 join 224 getElementById submitBtn\x0ael.on submitBtn click\x0agetElementById loadingOverlay\x0afetch GET /authentication/api/spiderking_challenge/init/?cn=H32 headers Accept,Referer,Origin,User-Agent\x0adone returned
+1 join 264 "features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"
+2 utf8 266 {"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,
+3 utf8 1 \x01
+4 utf8 55 {"dpr":1,"height":1080,"width":1920,"widthMatch":false}
+5 utf8 1 \x01
+6 utf8 164 {"env":"H32","media":"H32","salt":"H24","sid":"H36"}
+7 utf8 24 H24
+8 utf8 157 spiderdemo-spiderking/v1|main|H36|H32|H24|H32
+9 utf8 1 \x01
+10 join 264 "features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"
+11 join 409 "body":{"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"
+12 join 123 "body":{"dpr":1,"height":1080,"width":1920,"widthMatch":false},"coherent":false,"digest":"H32"
+13 join 686 "env":{"body":{"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewp
+14 utf8 688 {"env":{"body":{"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","view
+15 utf8 32 H32
+16 join 264 "features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"
+17 join 409 "body":{"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"
+18 join 123 "body":{"dpr":1,"height":1080,"width":1920,"widthMatch":false},"coherent":false,"digest":"H32"
+19 join 729 "env":{"body":{"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewp
+20 utf8 731 {"env":{"body":{"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","view
+21 utf8 99 {"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"}
+22 utf8 1 \x01
+23 utf8 166 {"main":"H32","salt":"H24","sid":"H36","worker":"H32"}
+24 utf8 24 H24
+25 utf8 159 spiderdemo-spiderking/v1|worker|H36|H24|H32|H32
+26 utf8 1 \x01
+27 join 222 "body":{"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"},"digest":"H32","hasCrypto":true,"hasDocument":false,"noWindow":true,"sharedScope":true
+28 join 416 "mainSeal":"H32","report":{"body":{"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"},"digest":"H32","hasCrypto":true,"hasDocument":false,"noWindow":true,"sharedScope":true
+29 utf8 418 {"mainSeal":"H32","report":{"body":{"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"},"digest":"H32","hasCrypto":true,"hasDocument":false,"noWindow":true,"sharedScope":tru
+30 utf8 32 H32
+31 join 222 "body":{"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"},"digest":"H32","hasCrypto":true,"hasDocument":false,"noWindow":true,"sharedScope":true
+32 join 459 "mainSeal":"H32","proof":"H32","report":{"body":{"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"},"digest":"H32","hasCrypto":true,"hasDocument":false,"noWindow":true,"sha
+33 utf8 461 {"mainSeal":"H32","proof":"H32","report":{"body":{"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"},"digest":"H32","hasCrypto":true,"hasDocument":false,"noWindow":true,"sh
+34 join 264 "features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"
+35 utf8 266 {"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,
+36 utf8 1 \x01
+37 utf8 55 {"dpr":1,"height":1080,"width":1920,"widthMatch":false}
+38 utf8 1 \x01
+39 utf8 279 {"envDigest":"H32","mainSeal":"H32","mediaDigest":"H32","page":1,"salt":"H24","sid":"H36","workerSeal":"H32"}
+40 utf8 24 H24
+41 utf8 132 {"page":1,"pulse":"H32","salt":"H24","sid":"H36"}
+42 utf8 24 H24
+43 utf8 190 spiderdemo-spiderking/v1|page|H36|H24|H32|H32|H32
+44 utf8 1 \x01
+45 join 386 "gate":"H32","mainSeal":"H32","page":1,"pulse":{"envDigest":"H32","mediaDigest":"H32"},"pulseSeal":"H32","sid":"H36","ticket":"H32","workerSeal":"H32"
+46 utf8 388 {"gate":"H32","mainSeal":"H32","page":1,"pulse":{"envDigest":"H32","mediaDigest":"H32"},"pulseSeal":"H32","sid":"H36","ticket":"H32","workerSeal":"H32"}
+47 utf8 32 H32
+48 join 429 "gate":"H32","mainSeal":"H32","page":1,"proof":"H32","pulse":{"envDigest":"H32","mediaDigest":"H32"},"pulseSeal":"H32","sid":"H36","ticket":"H32","workerSeal":"H32"
+49 utf8 431 {"gate":"H32","mainSeal":"H32","page":1,"proof":"H32","pulse":{"envDigest":"H32","mediaDigest":"H32"},"pulseSeal":"H32","sid":"H36","ticket":"H32","workerSeal":"H32"}
+50 join 264 "features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"
+51 utf8 266 {"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,
+52 utf8 1 \x01
+53 utf8 55 {"dpr":1,"height":1080,"width":1920,"widthMatch":false}
+54 utf8 1 \x01
+55 utf8 279 {"envDigest":"H32","mainSeal":"H32","mediaDigest":"H32","page":2,"salt":"H24","sid":"H36","workerSeal":"H32"}
+56 utf8 24 H24
+57 utf8 132 {"page":2,"pulse":"H32","salt":"H24","sid":"H36"}
+58 utf8 24 H24
+59 utf8 190 spiderdemo-spiderking/v1|page|H36|H24|H32|H32|H32
+60 utf8 1 \x01
+61 join 386 "gate":"H32","mainSeal":"H32","page":2,"pulse":{"envDigest":"H32","mediaDigest":"H32"},"pulseSeal":"H32","sid":"H36","ticket":"H32","workerSeal":"H32"
+62 utf8 388 {"gate":"H32","mainSeal":"H32","page":2,"pulse":{"envDigest":"H32","mediaDigest":"H32"},"pulseSeal":"H32","sid":"H36","ticket":"H32","workerSeal":"H32"}
+63 utf8 32 H32
+64 join 429 "gate":"H32","mainSeal":"H32","page":2,"proof":"H32","pulse":{"envDigest":"H32","mediaDigest":"H32"},"pulseSeal":"H32","sid":"H36","ticket":"H32","workerSeal":"H32"
+65 utf8 431 {"gate":"H32","mainSeal":"H32","page":2,"proof":"H32","pulse":{"envDigest":"H32","mediaDigest":"H32"},"pulseSeal":"H32","sid":"H36","ticket":"H32","workerSeal":"H32"}

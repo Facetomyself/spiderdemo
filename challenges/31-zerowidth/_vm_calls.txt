@@ -1,0 +1,5 @@
+getElementById submitBtn
+el.on submitBtn click
+getElementById loadingOverlay
+fetch GET /authentication/api/spiderking_challenge/init/ headers Accept,Referer,Origin,User-Agent ctype 
+done returned

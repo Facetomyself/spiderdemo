@@ -1,0 +1,11 @@
+{
+  "slug": "04-wasm",
+  "id": "wasm_challenge",
+  "title": "WASM挑战",
+  "page": "/sec1/wasm_challenge?challenge_type=wasm_challenge",
+  "score": 10,
+  "difficulty": "beginner",
+  "category": "reverse",
+  "description": "反调试+基本wasm，请使用hook方式过反调试",
+  "status": "open"
+}

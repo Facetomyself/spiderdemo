@@ -1,0 +1,16 @@
+{
+  "exit_code": 0,
+  "stdout": {
+    "crossRealmArrayBuffer": {
+      "branch": "StringFallback",
+      "actualLength": 4,
+      "serializedLength": 20
+    },
+    "crossRealmView": {
+      "branch": "view",
+      "actualLength": 4
+    }
+  },
+  "stderr": "",
+  "claim_scope": "Synthetic host semantics only; target SDK was not executed and actual target send subtype is unknown."
+}

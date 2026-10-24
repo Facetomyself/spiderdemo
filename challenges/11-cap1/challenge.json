@@ -1,0 +1,11 @@
+{
+  "slug": "11-cap1",
+  "id": "cap1_challenge",
+  "title": "第一代验证码",
+  "page": "/captcha/cap1_challenge?challenge_type=cap1_challenge",
+  "score": 10,
+  "difficulty": "easy",
+  "category": "captcha",
+  "description": "第一代验证码",
+  "status": "open"
+}

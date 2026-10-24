@@ -1,0 +1,3 @@
+apply 511858 D:\reverse_ENV\workspace\spiderdemo\challenges\28-jsvmp2\assets\fn-1.js
+new 1274 D:\reverse_ENV\workspace\spiderdemo\challenges\28-jsvmp2\assets\newfn-2.js
+result undefined

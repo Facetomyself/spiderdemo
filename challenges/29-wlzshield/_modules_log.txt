@@ -1,0 +1,5 @@
+module-keys 
+behavior 0
+seed-type string
+session-type string device-type string
+first-type boolean consumed false

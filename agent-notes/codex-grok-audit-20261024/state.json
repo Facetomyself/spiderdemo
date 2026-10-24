@@ -1,0 +1,21 @@
+{
+  "schema": "grok-stall-audit.v1",
+  "startedAt": "2026-10-24T06:23:38.756220+00:00",
+  "project": "D:\\reverse_ENV\\workspace\\spiderdemo",
+  "challenge": "28-jsvmp2",
+  "scope": "诊断卡点与偏差，不扩大为通关实现",
+  "dispatcherAction": "route_web_jsvmp",
+  "turnGate": "run",
+  "readRef": "skill/web-jsvmp/references/interpreter-structure.md",
+  "head": "58ddc0c41395e83a417bd790305f689d1b680f46",
+  "dirtyStatusSha256": "ab9bbbe0d7df789350ce6d91c20eb735dcc0a65eefd2438160c08831866a4d6c",
+  "snapshotTiming": "after initial next; not pre-audit historical stamp",
+  "status": "completed",
+  "outputs": [
+    "report.md",
+    "findings.json",
+    "triage.md"
+  ],
+  "completedAt": "2026-10-24T06:29:52.171926+00:00",
+  "technicalRootCauseProven": false
+}

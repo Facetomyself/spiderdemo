@@ -1,0 +1,11 @@
+{
+  "slug": "15-cap5-slider",
+  "id": "cap5_challenge",
+  "title": "第二代验证码（随机滑块）",
+  "page": "/captcha/cap5_challenge?challenge_type=cap5_challenge",
+  "score": 15,
+  "difficulty": "beginner",
+  "category": "captcha",
+  "description": "第二代验证码（随机滑块）",
+  "status": "open"
+}

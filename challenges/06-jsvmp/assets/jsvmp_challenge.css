@@ -1,0 +1,487 @@
+/* =================================
+   数字采集挑战页面样式
+   ================================= */
+
+/* 全局样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* 主容器 */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 页面标题 */
+.page-header {
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+}
+
+
+.page-title {
+    font-size: 3.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.page-subtitle {
+    font-size: 1.3em;
+    opacity: 0.9;
+    margin-bottom: 10px;
+}
+
+/* 挑战内容区域 */
+.challenge-content {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.challenge-header {
+    background: linear-gradient(90deg, #1e3c72, #2a5298);
+    color: white;
+    padding: 25px;
+    text-align: center;
+}
+
+.challenge-title {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+}
+
+.challenge-description {
+    opacity: 0.9;
+    font-size: 16px;
+}
+
+/* 数字挑战样式 */
+.number-challenge {
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.challenge-task {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 10px;
+    padding: 25px;
+    margin: 25px 0;
+    text-align: left;
+}
+
+.task-title {
+    color: #856404;
+    font-weight: bold;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.task-list {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.task-list li {
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+.numbers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 25px;
+    margin: 40px 0;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.number-box {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 12px;
+    font-size: 28px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    animation: numberPulse 3s ease-in-out infinite alternate;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.number-box:hover {
+    transform: scale(1.05);
+}
+
+@keyframes numberPulse {
+    0% { 
+        transform: scale(1);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+    100% { 
+        transform: scale(1.02);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    }
+}
+
+/* CSS反爬虫混合数字卡片 */
+.css-mixed-number {
+    /* 继承number-box的所有样式 */
+}
+
+/* 统计信息 */
+.stats-info {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 25px 0;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.stat-item {
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+}
+
+.stat-number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1e3c72;
+    display: block;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+/* 分页控件 */
+.pagination-container {
+    padding: 30px;
+    text-align: center;
+    background: #f8f9fa;
+}
+
+.pagination-info {
+    margin-bottom: 20px;
+    color: #6c757d;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.pagination {
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.page-btn {
+    padding: 12px 20px;
+    border: 2px solid #1e3c72;
+    background: white;
+    color: #1e3c72;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-size: 14px;
+    min-width: 45px;
+}
+
+.page-btn:hover:not(:disabled) {
+    background: #1e3c72;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(30, 60, 114, 0.3);
+}
+
+.page-btn.active {
+    background: #1e3c72;
+    color: white;
+    box-shadow: 0 4px 12px rgba(30, 60, 114, 0.4);
+}
+
+.page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.page-dots {
+    padding: 12px 8px;
+    color: #6c757d;
+    font-weight: bold;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
+}
+
+/* 答案提交区域 */
+.answer-section {
+    background: #fff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.answer-title {
+    margin-bottom: 20px;
+    color: #1e3c72;
+    font-size: 20px;
+    text-align: center;
+}
+
+.answer-form {
+    display: flex;
+    gap: 15px;
+    align-items: end;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.input-group {
+    flex: 1;
+    min-width: 250px;
+    max-width: 400px;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #495057;
+}
+
+.answer-input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    font-size: 18px;
+    text-align: center;
+    transition: border-color 0.3s ease;
+}
+
+.answer-input:focus {
+    outline: none;
+    border-color: #1e3c72;
+    box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+}
+
+.submit-btn {
+    background: linear-gradient(45deg, #27ae60, #2ecc71);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+}
+
+.result-message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    display: none;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* 加载动画 */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #1e3c72;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .page-title { font-size: 2.5em; }
+    .numbers-grid { 
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    .number-box {
+        padding: 20px;
+        font-size: 24px;
+    }
+    .answer-form { 
+        flex-direction: column; 
+        align-items: stretch;
+    }
+    .input-group {
+        min-width: 100%;
+        max-width: 100%;
+    }
+    .stats-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .login-alert {
+        padding: 12px 15px;
+        margin: 0 0 15px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .container { padding: 15px; }
+    .numbers-grid { grid-template-columns: 1fr 1fr; }
+    .challenge-header { padding: 20px 15px; }
+    .number-challenge { padding: 25px 15px; }
+    .login-alert {
+        padding: 12px 15px;
+        margin: 0 0 15px 0;
+    }
+    .login-alert-content {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+    .login-alert-btn {
+        align-self: center;
+    }
+}
+
+/* 返回框样式 */
+.back-btn {
+    position: fixed;
+    top: 25px;
+    left: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #4c63d2;
+    border: 2px solid rgba(76, 99, 210, 0.2);
+    padding: 12px 20px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 90px;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.back-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(76, 99, 210, 0.25);
+    color: #667eea;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+.back-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 4px 16px rgba(76, 99, 210, 0.2);
+}
+
+.back-btn:before {
+    content: "←";
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1;
+    transition: transform 0.3s ease;
+}
+
+.back-btn:hover:before {
+    transform: translateX(-2px);
+}
+
+/* 返回框的响应式设计 */
+@media (max-width: 768px) {
+    .back-btn {
+        top: 20px;
+        left: 30px;
+        padding: 10px 16px;
+        font-size: 13px;
+        min-width: 80px;
+        gap: 6px;
+        border-radius: 12px;
+    }
+    
+    .back-btn:before {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .back-btn {
+        top: 15px;
+        left: 25px;
+        padding: 8px 14px;
+        font-size: 12px;
+        min-width: 70px;
+        border-radius: 10px;
+        gap: 4px;
+    }
+    
+    .back-btn:before {
+        font-size: 14px;
+    }
+}

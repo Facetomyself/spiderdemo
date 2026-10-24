@@ -1,0 +1,19 @@
+{
+  "cache": {},
+  "currentPage": 0,
+  "loading": true,
+  "perPage": 10,
+  "salts": {
+    "main": "H24",
+    "page": "H24",
+    "submit": "H24",
+    "worker": "H24"
+  },
+  "sid": "H36",
+  "success": true,
+  "ticket": "H32",
+  "totalPages": 100,
+  "clientNonce": "H32",
+  "csrfToken": "",
+  "mainSeal": "H32"
+}

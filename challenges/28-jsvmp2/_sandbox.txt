@@ -1,0 +1,48 @@
+doc-on DOMContentLoaded
+result undefined
+qs .challenge-title
+qs .page-title
+byId loadingOverlay
+fetch GET https://www.spiderdemo.cn/authentication/api/jsvmp2_challenge/init/?challenge_type=jsvmp2_challenge
+doc-on keypress
+fetch-status [redacted]
+create a
+attr a id=_sp_1791633692357
+create a
+log [Main] SharedWorker 不支持，使用普通 Worker
+worker /static/js/authentication/sdk.min.js
+worker-run ok
+worker-post {"type":"INIT","data":{"seed":"str:32","wsUrl":"str:27","token":"str:94"}}
+ws url=wss://www.spiderdemo.cn/ws/ proto=undefined
+from-worker {"type":"INIT_OK"}
+log [Main] Worker 初始化完成
+byId numbersGrid
+byId currentPageNum
+byId totalPages
+byId collectedPages
+byId currentPageNum2
+byId totalPages2
+byId collectedPages2
+byId paginationInfo
+byId paginationControls
+byId loadingOverlay
+ws-send mask:��xxxx�xxxxx�^xxxxxxxx.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+from-worker {"type":"WS_CONNECTED"}
+log [Main] WebSocket 已连接
+create a
+attr a id=_fp_1791633692851
+create a
+create canvas
+create canvas
+create audio
+create iframe
+worker-post {"type":"FINGERPRINT","data":{"fp":[1,0,0,1,1,1,1,1,1,1,1,1]}}
+ws-send mask:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+fns setTimeout,clearTimeout,setInterval,clearInterval,queueMicrotask,atob,btoa,alert,confirm,prompt,requestAnimationFrame,cancelAnimationFrame,getComputedStyle,MutationObserver,WebSocket,XMLHttpRequest,fetch,Image,Event,CustomEvent,WebSocketImpl,URL,URLSearchParams,TextEncoder,TextDecoder,Blob,File,FormData,Headers,Request,Response,AbortController,AbortSignal,DOMException,TextDecoderStream,TextEncoder
+byId loadingOverlay
+worker-post {"type":"PAGE","data":{"page":2}}
+called changePage undefined
+ws-send mask:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+error 获取数据失败: 请求超时
+byId resultMessage
+byId loadingOverlay

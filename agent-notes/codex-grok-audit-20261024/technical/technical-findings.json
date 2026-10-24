@@ -1,0 +1,159 @@
+{
+  "schema": "codex-grok-technical-audit/v1",
+  "case": "28-jsvmp2",
+  "date": "2026-10-24",
+  "status": "triage-only",
+  "scope": "Static interpreter-structure and existing evidence audit; no target JS execution or network",
+  "facts": [
+    {
+      "id": "T1",
+      "severity": "medium",
+      "confidence": "high",
+      "claim": "Current stored send closed 4003 is after successful WebSocket connect/opened; upgrade-rejected wrapper misclassifies failure phase",
+      "evidence": [
+        "challenges/28-jsvmp2/result.json:3-4",
+        "challenges/28-jsvmp2/solve.py:249-250",
+        "challenges/28-jsvmp2/solve.py:404-416",
+        "challenges/28-jsvmp2/solve.py:427-434"
+      ],
+      "limitation": "Does not prove Grok still believes the obsolete 403 narrative or identify application rejection cause"
+    },
+    {
+      "id": "T2",
+      "severity": "high",
+      "confidence": "high",
+      "claim": "Interpreter shapes already identified; missing request-to-VM binding, not missing static VM structure",
+      "evidence": [
+        "agent-notes/s29-jsvmp28-interpreter.md:7-64",
+        "challenges/28-jsvmp2/assets/jsvmp2.js:3",
+        "challenges/28-jsvmp2/assets/sdk.min.js:3"
+      ]
+    },
+    {
+      "id": "T3",
+      "severity": "medium",
+      "confidence": "high",
+      "claim": "Captured response assets hash-match local assets and s29; no evidence for asset variant mismatch",
+      "evidence": [
+        "agent-notes/s29-jsvmp28-interpreter.md:79-80",
+        "evidence/web/ruyitrace/rt_20261024005551_a5cd2fe0e2/raw/http_packet/000008_GET_200_www.spiderdemo.cn_static_js_jsvmp2.js_b1a3943b_pid58576_400000015.http_packet.json:1",
+        "evidence/web/ruyitrace/rt_20261024005551_a5cd2fe0e2/raw/http_packet/000013_GET_200_www.spiderdemo.cn_static_js_authentication_sdk.min.js_427eae38_pid58576_40000001a.http_packet.json:1"
+      ]
+    },
+    {
+      "id": "T4",
+      "severity": "medium",
+      "confidence": "high",
+      "claim": "Trace has a real target 101 but mixes target and browser-control WebSocket frames",
+      "evidence": [
+        "evidence/web/ruyitrace/rt_20261024005551_a5cd2fe0e2/raw/websocket_handshake.jsonl:2",
+        "evidence/web/ruyitrace/rt_20261024005551_a5cd2fe0e2/raw/websocket_frames.jsonl:3-47"
+      ],
+      "target_counts": {
+        "binary_send": 1,
+        "text_send": 8,
+        "text_recv": 8,
+        "ping_recv": 11,
+        "pong_send": 11
+      },
+      "control_or_unbound_counts": {
+        "text_send": 2,
+        "text_recv": 2,
+        "close_send": 1,
+        "close_recv": 1
+      }
+    },
+    {
+      "id": "T5",
+      "severity": "medium",
+      "confidence": "high",
+      "claim": "FakeWS.send corrupts cross-realm ArrayBuffer inputs via String fallback",
+      "evidence": [
+        "challenges/28-jsvmp2/_sandbox.js:295-303",
+        "challenges/28-jsvmp2/_sandbox.js:1022-1026",
+        "cross-realm-fixture.js:1-5",
+        "cross-realm-result.json"
+      ],
+      "causal_status": "Conditional defect proven by synthetic fixture; actual SDK send subtype and connection to 4003 unproven"
+    },
+    {
+      "id": "T6",
+      "severity": "medium",
+      "confidence": "high",
+      "claim": "06 and 28 have materially different dispatch and code encodings; shared stack shape does not establish common ISA or auth cause",
+      "evidence": [
+        "agent-notes/s28-jsvmp06-interpreter.md:7-56",
+        "challenges/06-jsvmp/assets/jsvmp_challenge.js:3",
+        "agent-notes/s29-jsvmp28-interpreter.md:29-60"
+      ]
+    }
+  ],
+  "recommendation": {
+    "current_blocker": "interpreter-structure",
+    "subreference": "skill/web-jsvmp/references/request-dispatcher.md",
+    "action": "Bind frozen INIT -> Worker -> first target business send -> browser/local first divergence; do not repeat shape classification",
+    "replacement_blocker": null,
+    "rejected_as_unproven": [
+      "host-primitive",
+      "chaos-vm-instrument",
+      "opcode-recovery",
+      "variant-failure"
+    ]
+  },
+  "hypotheses_not_established": [
+    "4003 caused by token semantics",
+    "4003 caused by fingerprint bits",
+    "4003 caused by cross-realm ArrayBuffer",
+    "runtime bytecode differs from static source",
+    "06 and 28 share protection or protocol implementation"
+  ],
+  "source_hashes": {
+    "jsvmp2.js": "0bf700f338edcc3aa8addc45d86be0240efa3f1746cea2f792d00fb4fec70775",
+    "sdk.min.js": "bbce993e05762e6c01b032f5203deba96ecdb94a3a7b964343aa143fdc7770a9",
+    "06-jsvmp_challenge.js": "64e6e4698722383fbe24ef2a58c554bc20616c7c32a52694d746cd1895394fa8",
+    "solve.py": "3ae63915650c5a15c2a26db5a10150c77a03e8a0163461f14bda1dd4bf043a29",
+    "_sandbox.js": "5eba32ae52ea88ea2b77ade4269d20ffaf2874ec00ce55f6fa6bf216e82925c8"
+  },
+  "handles": {
+    "inherited_capture_run": "rt_20261024005551_a5cd2fe0e2",
+    "active_runtime_handles": []
+  },
+  "concurrency_notice": "Grok may still be writing. These are sequential live observations, not a quiescent snapshot.",
+  "final_live_samples": [
+    {
+      "path": "challenges/28-jsvmp2/solve.py",
+      "sampled_at_utc": "2026-10-24T06:28:20.559827+00:00",
+      "mtime_utc": "2026-10-24T06:00:36.729079+00:00",
+      "sha256": "3ae63915650c5a15c2a26db5a10150c77a03e8a0163461f14bda1dd4bf043a29",
+      "bytes": 19829
+    },
+    {
+      "path": "challenges/28-jsvmp2/_sandbox.js",
+      "sampled_at_utc": "2026-10-24T06:28:20.559827+00:00",
+      "mtime_utc": "2026-10-24T06:28:03.197975+00:00",
+      "sha256": "700a3ba05eb87f8a751314ee145af8563e5ba41aa0d5a28915a17b4fdb608c1d",
+      "bytes": 60409
+    },
+    {
+      "path": "challenges/28-jsvmp2/result.json",
+      "sampled_at_utc": "2026-10-24T06:28:20.559827+00:00",
+      "mtime_utc": "2026-10-24T06:27:37.323868+00:00",
+      "sha256": "93042689d5e5136f119beb6398219370f1fafcc70384316f35f52827e9fb0875",
+      "bytes": 128
+    },
+    {
+      "path": "challenges/28-jsvmp2/assets/jsvmp2.js",
+      "sampled_at_utc": "2026-10-24T06:28:20.559827+00:00",
+      "mtime_utc": "2026-10-10T11:02:48.749260+00:00",
+      "sha256": "0bf700f338edcc3aa8addc45d86be0240efa3f1746cea2f792d00fb4fec70775",
+      "bytes": 569833
+    },
+    {
+      "path": "challenges/28-jsvmp2/assets/sdk.min.js",
+      "sampled_at_utc": "2026-10-24T06:28:20.559827+00:00",
+      "mtime_utc": "2026-10-10T11:32:54.466580+00:00",
+      "sha256": "bbce993e05762e6c01b032f5203deba96ecdb94a3a7b964343aa143fdc7770a9",
+      "bytes": 369122
+    }
+  ]
+}

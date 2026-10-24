@@ -1,0 +1,11 @@
+{
+  "slug": "22-symmetry",
+  "id": "symmetry_challenge",
+  "title": "对称加密",
+  "page": "/authentication/symmetry_challenge?challenge_type=symmetry_challenge",
+  "score": 10,
+  "difficulty": "easy",
+  "category": "reverse",
+  "description": "Aes，Des",
+  "status": "open"
+}

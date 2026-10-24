@@ -1,0 +1,97 @@
+<code>https://spiderdemo.cn/captcha/cap7_challenge</code>
+
+----- CODE -----
+
+<code>deepseek-v4-pro</code>
+
+----- CODE -----
+
+<code> gpt-5.5</code>
+
+----- CODE -----
+
+<code>claude-opus-4-8</code>
+
+----- CODE -----
+
+<code>cap7_challenge/init/</code>
+
+----- CODE -----
+
+<code>cap7_challenge/captcha_image/</code>
+
+----- CODE -----
+
+<code>arc_path['points']</code>
+
+----- CODE -----
+
+<code>/cap7_challenge/page/</code>
+
+----- CODE -----
+
+<code>distance（拖动距离）</code>
+
+----- CODE -----
+
+<code>rotation_angle（旋转角度）</code>
+
+----- CODE -----
+
+<code>trajectory_encoded（轨迹）</code>
+
+----- CODE -----
+
+<code>trajectory_encoded</code>
+
+----- CODE -----
+
+<code>cap7_challenge</code>
+
+----- CODE -----
+
+<code>const data</code>
+
+----- CODE -----
+
+<code>cap7_challenge.js</code>
+
+----- CODE -----
+
+<code>arc_path['points']</code>
+
+----- CODE -----
+
+<pre><code class="language-python">def normalize_points(points):
+    normalized = []
+    for point in points:
+        if isinstance(point, dict):
+            x = point.get("x")
+            y = point.get("y")
+        else:
+            x, y = point[:2]
+        normalized.append((float(x), float(y)))
+    return normalized
+
+
+def draw_points_on_bg(points, bg_path="bg_img.png", output_path="bg_img_points.png"):
+    points = normalize_points(points)
+    if len(points) &lt; 2:
+        raise ValueError("Need at least two points to draw the path.")
+
+    bg_image = Image.open(bg_path).convert("RGBA")
+    overlay = Image.new("RGBA", bg_image.size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+
+    draw.line(points, fill=(255, 255, 255, 255), width=3, joint="curve")
+
+    Image.alpha_composite(bg_image, overlay).convert("RGB").save(output_path)
+</code></pre>
+
+----- CODE -----
+
+<code>deepseek-v4-pro</code>
+
+----- CODE -----
+
+<code>claude-opus-4-8</code>

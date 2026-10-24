@@ -1,0 +1,13 @@
+fetchRealm true
+openSrc open(method, url) { const esValue = this !== null && this !== undefined ? this : globalObject; if (!exports.
+sendSrc send() { const esValue = this !== null && this !== undefined ? this : globalObject; if (!exports.is(esValue)
+xhrSrc class XMLHttpRequest extends globalObject.XMLHttpRequestEventTarget { constr
+wsSrc class WebSocket extends globalObject.EventTarget { constructor(url) { 
+xhrKeys constructor,open,setRequestHeader,send,abort,getResponseHeader,getAllResponseHeaders,overrideMimeType,onreadystatechange,readyState,timeout,withCredentials,upload,responseURL,status,statusText,responseType,response,responseText,responseXML,UNSENT,OPENED,HEADERS_RECEIVED,LOADING,DONE
+upload object
+ready 0
+afterOpen 1
+wsState 0
+rtc TypeError window.RTCPeerConnection is not a constructor
+Request:undefined Headers:function Response:undefined AbortController:function ReadableStream:undefined MessageChannel:undefined Worker:undefined Blob:function File:function FormData:function TextEncoder:function TextDecoder:function RTCSessionDescription:undefined RTCIceCandidate:undefined MediaStream:undefined AudioContext:undefined OfflineAudioContext:undefined webkitAudioContext:undefined speechSynthesis:undefined chrome:undefined external:object Notification:undefined Permissions:undefined WebGLRenderingContext:undefined CanvasRenderingContext2D:undefined
+mediaDevices undefined

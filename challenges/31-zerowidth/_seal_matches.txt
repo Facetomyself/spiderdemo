@@ -1,0 +1,5 @@
+blobs 66
+seals 2.env.digest,2.mainSeal,2.media.digest,2.proof,2.ticket,3.mainSeal,3.proof,3.report.digest,3.ticket,3.workerSeal,4.gate,4.mainSeal,4.proof,4.pulse.envDigest,4.pulse.mediaDigest,4.pulseSeal,4.ticket,4.workerSeal,5.gate,5.mainSeal,5.proof,5.pulse.envDigest,5.pulse.mediaDigest,5.pulseSeal,5.ticket,5.workerSeal
+MATCH 2.env.digest|4.pulse.envDigest|5.pulse.envDigest utf8 raw {"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,
+MATCH 2.media.digest|4.pulse.mediaDigest|5.pulse.mediaDigest utf8 raw {"dpr":1,"height":1080,"width":1920,"widthMatch":false}
+MATCH 3.report.digest utf8 raw {"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"}

@@ -1,0 +1,11 @@
+{
+  "slug": "27-press-rotate",
+  "id": "press_rotate_challenge",
+  "title": "按压旋转验证码",
+  "page": "/captcha/press_rotate_challenge?challenge_type=press_rotate_challenge",
+  "score": 26,
+  "difficulty": "medium",
+  "category": "captcha",
+  "description": "通过解决按压旋转验证码获取数据",
+  "status": "open"
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "26-click-stitch",
+  "id": "click_stitch_challenge",
+  "title": "点击拼图验证码",
+  "page": "/captcha/click_stitch_challenge?challenge_type=click_stitch_challenge",
+  "score": 15,
+  "difficulty": "medium",
+  "category": "captcha",
+  "description": "通过解决点击拼图验证码获取接口响应数据",
+  "status": "open"
+}

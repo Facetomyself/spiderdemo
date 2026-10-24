@@ -1,0 +1,11 @@
+{
+  "slug": "20-cap8-click",
+  "id": "cap8_challenge",
+  "title": "点选验证码",
+  "page": "/captcha/cap8_challenge?challenge_type=cap8_challenge",
+  "score": 20,
+  "difficulty": "medium",
+  "category": "captcha",
+  "description": "点选验证码",
+  "status": "open"
+}

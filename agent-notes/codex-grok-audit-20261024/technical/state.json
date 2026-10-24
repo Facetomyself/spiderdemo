@@ -1,0 +1,15 @@
+{
+  "status": "done",
+  "conclusion": "blocked",
+  "skill": "web-jsvmp",
+  "stage": "interpreter-structure",
+  "claim_scope": "technical audit",
+  "evidence": [
+    "technical.md",
+    "technical-findings.json",
+    "cross-realm-result.json"
+  ],
+  "blocker": "Request-to-VM/first-frame binding and frozen browser/local parity missing; actual cause of 4003 unproven",
+  "next": "Return to parent; request-dispatcher subreference within existing interpreter-structure stage",
+  "handles": []
+}

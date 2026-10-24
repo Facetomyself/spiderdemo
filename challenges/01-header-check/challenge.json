@@ -1,0 +1,11 @@
+{
+  "slug": "01-header-check",
+  "id": "header_check",
+  "title": "请求头检测",
+  "page": "/sec1/header_check",
+  "score": 10,
+  "difficulty": "easy",
+  "category": "reverse",
+  "description": "header顺序反爬，控制台发包检测",
+  "status": "open"
+}

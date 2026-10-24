@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZeroWidth</title>
+    <link rel="stylesheet" href="/static/css/header.css">
+    <link rel="stylesheet" href="/static/css/login-alert.css">
+</head>
+<body>
+    <nav class="top-navbar">
+        <div class="navbar-container">
+            <a href="/" class="nav-back-btn">返回首页</a>
+            <div class="navbar-title"><span class="navbar-icon">&#128274;</span><span>ZeroWidth</span></div>
+            <div class="navbar-spacer"></div>
+        </div>
+    </nav>
+    <main class="page-wrapper">
+        <section class="container">
+            <header class="page-header">
+                <h1 class="page-title">ZeroWidth</h1>
+                <p class="page-subtitle">Zero-width 字符协议 + SharedWorker + 100 页数据采集</p>
+            </header>
+            <div id="loginAlert" class="login-alert" style="display: none;">
+                <div class="login-alert-content"><span class="login-alert-icon">&#128274;</span><span class="login-alert-text">请先登录才能参与挑战。</span><a href="/admin_I/" class="login-alert-btn">立即登录</a></div>
+            </div>
+            <section class="challenge-content" id="challengeContent">
+                <div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div></div>
+                <div class="challenge-header">
+                    <h2 class="challenge-title">采集 100 页数据并计算总和</h2>
+                    <p class="challenge-description">完成浏览器与 SharedWorker 校验后，可自由查看任意页并计算总和。</p>
+                </div>
+                <div class="stats-info">
+                    <div class="stat-item"><span class="stat-number" id="currentPageNum">0</span><div class="stat-label">当前页</div></div>
+                    <div class="stat-item"><span class="stat-number">100</span><div class="stat-label">总页数</div></div>
+                    <div class="stat-item"><span class="stat-number" id="collectedPages">0</span><div class="stat-label">已采集页数</div></div>
+                </div>
+                <div class="number-challenge"><div class="numbers-grid" id="numbersGrid"><div class="empty">正在建立挑战会话...</div></div></div>
+                <div class="pagination-container">
+                    <div class="pagination-info" id="paginationInfo">正在完成浏览器与 Worker 校验</div>
+                    <div class="pagination" id="paginationControls">
+                        <button class="page-btn" onclick="changePage('prev')" disabled>← 上一页</button>
+                        <button class="page-btn active" onclick="changePage(1)">1</button>
+                        <button class="page-btn" onclick="changePage(2)">2</button>
+                        <button class="page-btn" onclick="changePage(3)">3</button>
+                        <button class="page-btn" onclick="changePage(4)">4</button>
+                        <button class="page-btn" onclick="changePage(5)">5</button>
+                        <button class="page-btn" onclick="changePage('next')">下一页 →</button>
+                    </div>
+                </div>
+            </section>
+            <section class="answer-section">
+                <h3 class="answer-title">提交计算结果</h3>
+                <div class="answer-form">
+                    <div class="input-group"><label class="input-label" for="answerInput">100 页数字总和</label><input id="answerInput" class="answer-input" inputmode="numeric" placeholder="请输入总和"></div>
+                    <button class="submit-btn" id="submitBtn" disabled>提交答案</button>
+                </div>
+                <div id="resultMessage" class="result-message"></div>
+            </section>
+        </section>
+        
+<aside class="professional-sidebar">
+    <div class="sidebar-card">
+        <div class="sidebar-card-header"><span class="card-icon">📊</span><h4 class="card-title">挑战统计</h4></div>
+        <div class="sidebar-stats-simple">
+            <div class="stat-simple-item"><div class="stat-simple-icon">📄</div><div class="stat-simple-text"><div class="stat-simple-value" id="currentPageNum2">1</div><div class="stat-simple-label">当前页</div></div></div>
+            <div class="stat-simple-item"><div class="stat-simple-icon">📚</div><div class="stat-simple-text"><div class="stat-simple-value" id="totalPages2">100</div><div class="stat-simple-label">总页数</div></div></div>
+            <div class="stat-simple-item"><div class="stat-simple-icon">✅</div><div class="stat-simple-text"><div class="stat-simple-value" id="collectedPages2">0</div><div class="stat-simple-label">已采集</div></div></div>
+        </div>
+    </div>
+    <div class="sidebar-card">
+        <div class="sidebar-card-header"><span class="card-icon">📢</span><h4 class="card-title">推广</h4></div>
+        <div class="ad-banner">
+            <a class="ad-image bestproxy-ad-box" href="https://bestproxy.com/?keyword=ukiqswvg" target="_blank" rel="noopener noreferrer"><img src="/static/images/bestproxy.gif" alt="BestProxy 海外真实住宅IP" class="bestproxy-ad-img"></a>
+            <div class="bestproxy-ad-info"><div class="bestproxy-ad-title">海外真实住宅IP</div><div class="bestproxy-ad-desc">稳定突破海外各大平台反爬</div><div class="bestproxy-coupon">券码：<strong>ZCTYUH90</strong> · 新用户送500MB</div></div>
+            <a href="https://bestproxy.com/?keyword=ukiqswvg" target="_blank" rel="noopener noreferrer" class="ad-link">立即免费试用 →</a>
+        </div>
+        <div class="ad-banner" style="margin-top:18px;padding-top:18px;border-top:1px solid rgba(102,126,234,.12);">
+            <a class="ad-image bestproxy-ad-box" href="https://www.fastaitoken.com/register?aff=U4N66P7ML7KP" target="_blank" rel="noopener noreferrer"><div class="fastai-banner" style="background:linear-gradient(135deg,#1a1a2e,#16213e);color:#00d4ff;padding:22px 24px;text-align:center;border-radius:8px;font-size:16px;font-weight:700;letter-spacing:2px;border:1px solid rgba(0,212,255,.3);"><span style="font-size:24px;margin-right:10px;">🤖</span><span style="color:#ff6b6b;font-weight:800;">FastAI</span> Token · AI大模型API中转</div></a>
+            <div class="bestproxy-ad-info"><div class="bestproxy-ad-title">AI大模型API中转站</div><div class="bestproxy-ad-desc">OpenAI / Claude 低价接入</div></div>
+            <a href="https://www.fastaitoken.com/register?aff=U4N66P7ML7KP" target="_blank" rel="noopener noreferrer" class="ad-link">立即注册使用 →</a>
+        </div>
+    </div>
+</aside>
+
+    </main>
+    <script src="/static/js/login-alert.js"></script>
+    <script src="/static/js/spiderking_challenge.js"></script>
+</body>
+</html>

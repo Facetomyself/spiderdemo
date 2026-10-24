@@ -1,0 +1,51 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "file": "report.md",
+      "bytes": 7559,
+      "sha256": "4b0a8ab7d3cbbbb6e017e0bd5baf15d0b4ee8f74a627e02f4252b16fc03453fd"
+    },
+    {
+      "file": "findings.json",
+      "bytes": 11495,
+      "sha256": "023bee972d85e6c4315fabb171654b6a8a8711066f03969279d1b78c35f8eb6f"
+    },
+    {
+      "file": "triage.md",
+      "bytes": 1777,
+      "sha256": "5ddcd375b90111bb20abcd750b771568bde95a94aede1cfec60d7fa03253c351"
+    },
+    {
+      "file": "state.json",
+      "bytes": 773,
+      "sha256": "3a58a74853c1bc2bc605e9f7545b32af42489a16bfe17b7cc7e0ae782b40d73e"
+    },
+    {
+      "file": "process/process-findings.json",
+      "bytes": 7822,
+      "sha256": "c0e6971e0268862da5e3e43ed04503d3ea7f9ecbb774434077440a43bf4221d3"
+    },
+    {
+      "file": "process/timeline.json",
+      "bytes": 63456,
+      "sha256": "7a554e5bd17e7ca7dfd46cd4fcf45c7cf659c7ff52d9c4d00eec095621f608b2"
+    },
+    {
+      "file": "technical/technical-findings.json",
+      "bytes": 6410,
+      "sha256": "ebc8b80d6b5ed2f186a641f3a6a1e060dc0f98cdaae058e09983fc2d0d1155cf"
+    },
+    {
+      "file": "technical/cross-realm-result.json",
+      "bytes": 382,
+      "sha256": "caa7399b2743b57594530d0ba5a721d5e6aaf914e828d80f34f21dee130f48f2"
+    },
+    {
+      "file": "reference/state.json",
+      "bytes": 592,
+      "sha256": "8739b7f70899c8ce6e0cc82de937e1b0d5faeb1b7eb51d434570577532f7852a"
+    }
+  ],
+  "scope": "audit artifact integrity and JSON parsing; no target execution"
+}

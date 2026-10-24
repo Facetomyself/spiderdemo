@@ -1,0 +1,11 @@
+{
+  "slug": "28-jsvmp2",
+  "id": "jsvmp2_challenge",
+  "title": "Jsvmp2",
+  "page": "/authentication/jsvmp2_challenge?challenge_type=jsvmp2_challenge",
+  "score": 35,
+  "difficulty": "hard",
+  "category": "reverse",
+  "description": "Jsvmp+websocket，你真的能连上websocket嘛",
+  "status": "open"
+}

@@ -1,0 +1,15 @@
+{
+  "schema": "case-metadata.v1",
+  "caseId": "spiderdemo-register-login",
+  "projectRoot": "D:\\reverse_ENV\\workspace\\spiderdemo",
+  "caseClass": "stateful",
+  "currentHead": "58ddc0c41395e83a417bd790305f689d1b680f46",
+  "contractRevision": 3,
+  "contractRefs": {
+    "workflowArtifacts": "contracts/workflow-artifacts.v1.json",
+    "parameterLineage": "contracts/request-parameter-lineage.v1.json",
+    "riskControlPlan": null,
+    "riskControlReceipt": null
+  },
+  "updatedAt": "2026-10-24T04:41:55Z"
+}

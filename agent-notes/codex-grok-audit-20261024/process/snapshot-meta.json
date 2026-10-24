@@ -1,0 +1,11 @@
+{
+  "readOnly": true,
+  "cutoff": "2026-10-24T06:26:13.845803+00:00",
+  "source": "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl",
+  "size": 34677207,
+  "lines": 10943,
+  "sha256": "a127aa8614138f1ea6b495ce1f0a4c5734673261554605263d9f584970c5c212",
+  "mtime": "2026-10-24T06:24:33.260126+00:00",
+  "liveWriterObserved": true,
+  "note": "No raw log copied. Timeline is sanitized extraction of this one read; original can append/rewrite."
+}

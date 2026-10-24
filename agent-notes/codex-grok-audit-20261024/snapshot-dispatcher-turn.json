@@ -1,0 +1,10 @@
+{
+  "schema": "reverse-dispatcher-turn.v1",
+  "project": "D:\\reverse_ENV\\workspace\\spiderdemo",
+  "source": "web_case",
+  "action": "route_web_jsvmp",
+  "turnGate": "run",
+  "humanRequired": false,
+  "updatedAt": "2026-10-24T06:21:44Z",
+  "sessionId": "01a12396-16d9-78d3-8dfd-366ae7667bb6"
+}

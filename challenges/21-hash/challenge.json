@@ -1,0 +1,11 @@
+{
+  "slug": "21-hash",
+  "id": "hash_challenge",
+  "title": "摘要算法",
+  "page": "/authentication/hash_challenge?challenge_type=hash_challenge",
+  "score": 10,
+  "difficulty": "easy",
+  "category": "reverse",
+  "description": "MD5，SHA系列，HMAC",
+  "status": "open"
+}

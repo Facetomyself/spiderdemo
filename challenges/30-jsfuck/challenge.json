@@ -1,0 +1,11 @@
+{
+  "slug": "30-jsfuck",
+  "id": "jsfuck_challenge",
+  "title": "JSFUCK",
+  "page": "/authentication/jsfuck_challenge?challenge_type=jsfuck_challenge",
+  "score": 15,
+  "difficulty": "beginner",
+  "category": "reverse",
+  "description": "jsfuck加密,AA混淆",
+  "status": "open"
+}

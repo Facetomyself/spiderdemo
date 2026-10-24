@@ -1,0 +1,25 @@
+{
+  "status": "complete",
+  "scope": "external-method-reference-only",
+  "report": "reference.md",
+  "handles": [],
+  "search": {
+    "providers_returned": [
+      "exa",
+      "tavily"
+    ],
+    "grok": "timeout",
+    "native_lane": "not exposed in client tool catalog"
+  },
+  "knowledge_query": {
+    "tag": "jsvmp",
+    "matched_module_entries": 27,
+    "returned": 12
+  },
+  "limits": [
+    "No business-file inspection",
+    "No current runtime evidence or diagnosis of exact WS-close cause",
+    "No browser/runtime execution",
+    "No case state edits"
+  ]
+}

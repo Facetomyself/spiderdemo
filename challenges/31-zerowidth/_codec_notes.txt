@@ -1,0 +1,35 @@
+stable===json true
+digest state 54755b98699284aa3de7df32be07e042
+md5 stable 9ef7047d27c78bd4562dfddfd4cb6e8f
+md5 json 9ef7047d27c78bd4562dfddfd4cb6e8f
+sha256 stable c69c4d973a254b314cc8291fca028bf85bbe87c78581b69bb6b5b77562505239
+digest main 4ee3a2d426c96845682aca9175ad0b19
+md5 main fad58de7366495db4650cfefac2fcd61
+digest empty 9e3779b985ebca6a1bdcb3d324234423
+md5 empty d41d8cd98f00b204e9800998ecf8427e
+digest hello fe151aba256fc592db7adf282384e04c
+md5 hello 5d41402abc4b2a76b9719d911017c592
+md5 salt+stable main 32a456c449496dac873972e5449e2f65
+md5 stable+salt main 6695a58196ac1b5e24c863cce0089a63
+digest salt+key 7885200151b5a77929308778ca3ac77a
+md5 salt+stable page 25822da07fce0b33b6598bba76e19686
+md5 stable+salt page 429488a099beefee5445f9a9961d51ef
+digest salt+key 1708effa126d20db0565cf21297610d5
+md5 salt+stable submit 8c7d4ff2aa8524be9e7629cd8237e82f
+md5 stable+salt submit ea681bdc37df8bece25fc54ac101df09
+digest salt+key c942bbfce57a63ae2c38d852aebd1faa
+md5 salt+stable worker b8ee4b7bad23d057ecb534ee137e386b
+md5 stable+salt worker 98b017cfaed24ef363665faafd67f9bb
+digest salt+key db9d7e95fd1dfb29268085bcd8bb79be
+attest type object
+attest ctor Promise
+attest keys []
+attest json {}
+derive keys []
+derive main {}
+derive state {}
+derive main state {}
+onconnect function
+INDEX keys []
+zw U+200B,U+200C,U+200D,U+2060,U+2061,U+2062,U+2063,U+2064
+manual encode match true

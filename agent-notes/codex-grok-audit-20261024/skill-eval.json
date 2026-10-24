@@ -1,0 +1,160 @@
+{
+  "schema": "web-jsvmp-case-eval.v1",
+  "case": "28-jsvmp2",
+  "date": "2026-10-24",
+  "scope": "只评 skill 在本 case 的使用与改进建议，不改变已通关事实",
+  "stageTimeline": [
+    {
+      "stage": "interpreter-structure",
+      "slices": [
+        "s28",
+        "s29"
+      ],
+      "what": "分型完成",
+      "outcome": "结构识别",
+      "used": "yes"
+    },
+    {
+      "stage": "interpreter-structure/request-dispatcher",
+      "slices": [
+        "s32"
+      ],
+      "what": "请求绑定",
+      "outcome": "请求锚确认，但 108 字节正文没解开",
+      "used": "yes"
+    },
+    {
+      "stage": "host-primitive",
+      "slices": [
+        "s33",
+        "s34",
+        "s35",
+        "s36"
+      ],
+      "what": "宿主面 A/B",
+      "outcome": "多轮排除，无单点命中",
+      "used": "partial"
+    },
+    {
+      "stage": "variant-failure",
+      "slices": [
+        "s37"
+      ],
+      "what": "读 variant-failure 但没有多轮变体",
+      "outcome": "未实际启用",
+      "used": "partial"
+    },
+    {
+      "stage": "opcode-recovery",
+      "slices": [],
+      "what": "未进入",
+      "outcome": "无带 operands/stack 的 trace",
+      "used": "no"
+    },
+    {
+      "stage": "chaos-vm-instrument",
+      "slices": [],
+      "what": "未进入",
+      "outcome": "无动态代码证据",
+      "used": "no"
+    }
+  ],
+  "skillGaps": [
+    {
+      "gap": "无全局导出侦察",
+      "effect": "sdk.min.js 暴露 spiderEncrypt/spiderDecrypt/msgpack，s37 才发现，早于 s29 就应查",
+      "stage": "interpreter-structure",
+      "evidence": "agent-notes/s37-jsvmp28-sdk-cipher.md"
+    },
+    {
+      "gap": "无握手 cookie/凭据链检查",
+      "effect": "ads-baidu cookie 到 upgrade 头没接上，一直等应用层修 token",
+      "stage": "interpreter-structure/request-dispatcher",
+      "evidence": "agent-notes/s32-jsvmp28-request-binding.md; solve.py:277"
+    },
+    {
+      "gap": "无 WebSocket/二进制帧分析分支",
+      "effect": "cmd 100/99、spiderEncryptBytes 解密、msgpack 编码结构没有现成流程",
+      "stage": "interpreter-structure 或独立分支",
+      "evidence": "agent-notes/s37-jsvmp28-sdk-cipher.md"
+    },
+    {
+      "gap": "blocker 语义未覆盖「边界已过、应用层未对」",
+      "effect": "upgrade-rejected 标签混淆握手/应用层，facts 未反映真实阶段",
+      "stage": "facts/contract",
+      "evidence": "result.json; agent-notes/s32-jsvmp28-request-binding.md:1"
+    },
+    {
+      "gap": "host-primitive 没有提前停止条件",
+      "effect": "s33-s36 连做 4 轮宿主 A/B，token id 不动仍未停",
+      "stage": "host-primitive",
+      "evidence": "agent-notes/s33..s36"
+    },
+    {
+      "gap": "opcode-recovery 前置重",
+      "effect": "无 opcode trace 就停在更早，但当时真实缺口在协议层而不是 opcode 层",
+      "stage": "opcode-recovery",
+      "evidence": "agent-notes/s29 缺口段"
+    }
+  ],
+  "skillWins": [
+    {
+      "win": "interpreter-structure 停止条件清晰",
+      "effect": "s29/s32 没有硬填 opcode 表"
+    },
+    {
+      "win": "host-primitive 单变量原则",
+      "effect": "s33-s36 实验记录清楚、可回溯"
+    },
+    {
+      "win": "dispatch_evidence 结构化",
+      "effect": "s32 的 JSON 附件有 request_anchor/script_sha256/limits"
+    },
+    {
+      "win": "variant-failure 三分账",
+      "effect": "s37 明确把解析、本地一致、业务接受分开"
+    },
+    {
+      "win": "request-dispatcher S1-S2",
+      "effect": "请求锚确实定位到 /ws/ 首帧"
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "high",
+      "rec": "interpreter-structure 增加「全局导出清单」子步骤：加载完就枚举 window/self/worker 全局上的可疑函数名",
+      "effort": "low",
+      "impact": "high"
+    },
+    {
+      "priority": "high",
+      "rec": "request-dispatcher 增加握手凭据检查：Cookie/Authorization/自定义头到 upgrade 的闭环，不只看应用层帧",
+      "effort": "low",
+      "impact": "high"
+    },
+    {
+      "priority": "high",
+      "rec": "增加 WebSocket/二进制帧阶段分支：frame → cmd/opcode → codec → 加密 key 来源",
+      "effort": "med",
+      "impact": "high"
+    },
+    {
+      "priority": "med",
+      "rec": "host-primitive 增加 N 轮无 id 变化即回父 next 的停止条件",
+      "effort": "low",
+      "impact": "med"
+    },
+    {
+      "priority": "med",
+      "rec": "facts 增加 phase 字段区分 handshake / app_ready / answer_accepted，替代单一 blocker 字段",
+      "effort": "med",
+      "impact": "high"
+    },
+    {
+      "priority": "low",
+      "rec": "blocker 值集增加 ws-app-protocol，与 interpreter-structure 分开",
+      "effort": "low",
+      "impact": "med"
+    }
+  ]
+}

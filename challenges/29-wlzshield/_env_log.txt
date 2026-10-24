@@ -1,0 +1,55 @@
+before subtle undefined ws function rtc undefined fetch undefined
+types Request function Response function fetch function wsClose number rtc function
+tells jsdom false node false webdriver  outer 1024 plugins 0 langs 2
+ns open:wtruectrueetruegundefined send:wtruectrueetruegundefined same true fetch function xhr true
+iframe cw true fetch function xhr true
+native xhr true open true send true ws true fetch true rtc true
+CryptoJS undefined
+shadow 1
+version 1.0.0
+uaJsdom false
+constructed localUrl false
+methods onWlzReady,createEmbedLayout,initDOM,startVerification,onUIUpdateSuccess,onUIUpdateFail,updateProgress,simulateProgress,onReset,initLayout,resolveWidth,applyCustomStyles,createEmbedLayout,createTriggerWidget,createPopupLayout,openModal,closeModal,resetTriggerUI,detectLanguage,initI18N,injectStyles,injectBaseStyles,triggerSubmission,sendRequest,handleSuccessState,handleFailureState,handleErrorState,handleFatal
+host process:undefined,Buffer:undefined,require:undefined,module:undefined,global:undefined
+crypto object subtle object
+children 0
+onWlzReady undefined
+initLayout undefined
+initDOM undefined
+createEmbedLayout undefined
+children2 0
+collected
+inside Error: || IMG || Error: || ptype [object Promise] || pkeys  || ikeys version,modules,behaviorLog,honeypotLog,traceLog,seed,isConsumed,MAX_BEHAVIOR_LOG,cachedFingerprints,collectPromise,first,sessionId,deviceId
+before-payload jsonSeen 2828
+resolved str0other
+started
+fake OPTIONS  originOk true cred false pre true
+fake-ok
+fake POST  originOk true cred false pre true
+fake-ok
+success keys status,msg,wsToken tokenlen 11
+behavior 0
+modules 
+idlens seed4,sessionId24,deviceId36
+slot 0 klen 5 version:s258,vendor:s258,renderer:s258,shadingLanguageVersion:s258,vendorUnmasked:s258,rendererUnmasked:s258,contextAttributes:arr0,parameters:arr0,extensions:s258,extensionParameters:object,imageHash:s4,shaderPrecisions:arr12
+slot 1 klen 6 supported:s9,adapterInfo:s8,limits:s8,features:arr0,isFallbackAdapter:s9,primaryDeviceArchitecture:s3
+slot 2 klen 6 hash:s15,dataUrlLength:s5,windingResult:s258,pixelHash:s4,unstableNoise:s9,unsupported:s9,textMetrics:object
+slot 3 klen 5 canPlayType:object
+slot 4 klen 5 hash:s4,total:s4,absTotal:s4,sampleRate:s5,length:s5,duration:s5,channelCount:s5,maxPoint:s4,minPoint:s4,unsupported:s8
+slot 5 klen 3 prefersColorScheme:s18,prefersContrast:s16,pointer:s16,anyPointer:s16,hover:s16,anyHover:s16,displayMode:s16,overflowBlock:s16,overflowInline:s16,monochrome:s5,scripting:s16,update:s16,keyboardLayout:s3,cssSupports:object
+slot 6 klen 12 hash:s4,x:s4,y:s4,width:s4,height:s4,top:s4,right:s4,bottom:s4,left:s4,unsupported:s8
+slot 7 klen 4 pluralRules:s16,currencyFormatsHash:s14,relativeTimeFormatsHash:s16,listFormatsHash:s15,languages:arr2,intlSupport:object,localeInfo:object,numberFormats:object,datetimeFormats:object,timezoneInfo:object
+slot 8 klen 9 appCodeName:s11,appName:s12,appVersion:s6,platform:s3,product:s9,productSub:s12,vendor:s27,vendorSub:s3,userAgent:s138,brands:arr0,mobile:s9,uaPlatform:s3,effectiveType:s3,rtt:s5,downlink:s5,saveData:s9,batteryLevel:s5,batteryCharging:s9,batteryChargingTime:s5,batteryDischargingTime:s5,onLine:s8,cookieEnabled:s8,deviceMemory:s5,hardwareConcurrency:s5
+slot 9 klen 4 acos:s25,acosh:s22,acoshPf:s22,asin:s26,asinh:s24,asinhPf:s25,atanh:s25,atanhPf:s25,atan:s25,sin:s25,sinh:s25,sinhPf:s24,cos:s26,cosh:s25,coshPf:s25,tan:s26,tanh:s25,tanhPf:s25,exp:s24,expm1:s24,expm1Pf:s24,log1p:s25,log1pPf:s25,powPI:s30
+slot 10 klen 4 fonts:arr0,fontPreferences:object
+slot 11 klen 5 maxTouchPoints:s14,touchEvent:s8,touchStart:s8
+slot 12 klen 11 jsHeapSizeLimit:s5,totalJSHeapSize:s5,usedJSHeapSize:s5,timingPrecision:s29,navigationType:s5,redirectCount:s5,resourceCount:s5,timeOrigin:s22,performanceSupported:s8,memorySupported:s9,navigationSupported:s9,markSupported:s9,measureSupported:s9,getEntriesSupported:s9
+slot 13 klen 13 voices:arr0
+slot 14 klen 11 webdriverFlag:s9,webdriverIntegrity:s8,automationVarsCount:s4,automationVarsHash:s4,hasChromeObject:s8,hasChromeRuntime:s8,chromeKeys=hxLA,cdcVarsCount:s4,hasProcess:s9,hasGlobal:s9,hasBuffer:s9,hasRequire:s9,hasModule:s9,alertIntegrity:s9,confirmIntegrity:s9,evalIntegrity:s9,toStringIntegrity:s9,hasSharedArrayBuffer:s8,hasAtomics:s8,hasBluetooth:s9,hasUsb:s9,hasSerial:s9,hasHid:s9,hasXR:s9
+slot 15 klen 7 localStorage:s8,sessionStorage:s8,caches:s9,indexedDB:s9,openDatabase:s9,quota:s5,usage:s5
+slot 16 klen 6 hash:s4,deviceCount:s4,devices:arr0,ip:s3,candidates:arr0
+slot 17 klen 8 href:s130,origin:s33,protocol:s10,host:s23,hostname:s23,pathname:s47,port:s3,search:s55,hash:s3,referrer:s3,isTopLevel:s8,inIframe:s9,frameDepth:s4,historyLength=hxLs,isWorker:s9
+slot 18 klen 11 supported:s9,permissions:object,notificationPermission:s3,supportedCount:s4,grantedCount:s4,deniedCount:s4,promptCount:s4
+sameFn false
+console IMG || Error: || arr500000 || IMG || Error: || IMG || Error: || arr500000 || IMG || Error: || IMG || Error:
+payload {}

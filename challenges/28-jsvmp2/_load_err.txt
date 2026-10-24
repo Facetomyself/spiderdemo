@@ -1,0 +1,21 @@
+﻿node.exe : D:\reverse_ENV\workspace\spiderdemo\challenges\28-jsvmp2\_load.js:6
+所在位置 行:1 字符: 1
++ & "D:\reverse_ENV\tools\node\node.exe" "D:\reverse_ENV\workspace\spid ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\reverse_ENV\...vmp2\_load.js:6:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+const body = fn.toString();
+                ^
+
+TypeError: Cannot read properties of undefined (reading 'toString')
+    at Object.<anonymous> (D:\reverse_ENV\workspace\spiderdemo\challenges\28-jsvmp2\_load.js:6:17)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+    at node:internal/main/run_main_module:28:49
+
+Node.js v20.20.2
+璇峰嬁鍒犻櫎鎴栦慨鏀圭増鏉?璇峰嬁鍒犻櫎鎴栦慨鏀圭増鏉?

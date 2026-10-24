@@ -1,0 +1,11 @@
+{
+  "slug": "29-wlzshield",
+  "id": "wlzshield_captcha_challenge",
+  "title": "无感验证码",
+  "page": "/captcha/wlzshield_captcha_challenge?challenge_type=wlzshield_captcha_challenge",
+  "score": 25,
+  "difficulty": "hard",
+  "category": "captcha",
+  "description": "无感验证码",
+  "status": "open"
+}

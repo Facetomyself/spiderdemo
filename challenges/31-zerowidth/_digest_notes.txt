@@ -1,0 +1,38 @@
+digest "" 9e3779b985ebca6a1bdcb3d324234423
+digest "a" ec9ae05fbb27117f57bdf120a7c1f1de
+digest "b" e1d5aba9be9819345f4db29da06dc4dd
+digest "ab" 17852c17cd7765e1daf249f6e4fc91f8
+digest "abc" 2b65963b276e33c70c0ba5fc52d3ca02
+digest "0" 8fcbd12e173d319598f6e0bba70902c3
+env.digest fa6a81d604325126fe58d0f0fe9cd2fc
+digest env.body fa6a81d604325126fe58d0f0fe9cd2fc
+digest stable env.body fa6a81d604325126fe58d0f0fe9cd2fc
+media.digest baf4f1352d7dfe7097890f45e872efa5
+digest media.body baf4f1352d7dfe7097890f45e872efa5
+digest stable media.body baf4f1352d7dfe7097890f45e872efa5
+mainSeal 4d5f4853092d94064472dc55568cdc59
+proof 97d6469a5d413e54ca9778cef51784ee
+digest ticket 08088d10d768c4b3df6049a3df7151c3
+digest sid 33db4397e718e897d4c3ab001af42c2e
+digest mainSeal field 3770327d0ce72fa73b971dda44576224
+digest salt main b71380b3fff4ab7348e72bc0b7082c26
+digest salt+ticket main ed49b8a6ca1dc9d227547174b7678278
+digest ticket+salt main 22d7418fc2acfef8e07bbf77e5844087
+digest salt page e0fc6c0a0964b72ae998db20ea612334
+digest salt+ticket page 3bfb1d76dea2350fe55928791a9d5285
+digest ticket+salt page 69c2e74bfc34dedc95f6399765f7c627
+digest salt submit 08791b4c5a374711524e5c5d62b0625d
+digest salt+ticket submit f488086f396adb54cde2d33b2df2e3c3
+digest ticket+salt submit eadfeb9c1dd5e03af70a0ba608b5cbd6
+digest salt worker f8deeb50964033e46e9ed8b48f1f1f34
+digest salt+ticket worker e6241247b7e4d69951c0c4de9e08e8e0
+digest ticket+salt worker 37f2aca24825c57b7fd769d98018721d
+digest ticket+main 22d7418fc2acfef8e07bbf77e5844087
+digest sid+ticket c4efbd32adb63e7f6959834d72a5fbb1
+match mainSeal digest(ticket+mainSalt) false
+match mainSeal digest(mainSalt+ticket) false
+match mainSeal digest(stable init) false
+match proof digest(env.digest+media.digest) false
+match proof digest(mainSeal+ticket) false
+await attest error Bind must be called on a function
+await derive "a1b74e640fdcbaaeae6bf4cab1940912"

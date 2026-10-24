@@ -1,0 +1,11 @@
+{
+  "slug": "03-protobuf",
+  "id": "protobuf_challenge",
+  "title": "protobuf加密",
+  "page": "/authentication/protobuf_challenge?challenge_type=protobuf_challenge",
+  "score": 20,
+  "difficulty": "medium",
+  "category": "reverse",
+  "description": "魔改md5，魔改protobuf加密",
+  "status": "open"
+}

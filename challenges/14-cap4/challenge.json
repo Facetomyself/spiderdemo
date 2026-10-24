@@ -1,0 +1,11 @@
+{
+  "slug": "14-cap4",
+  "id": "cap4_challenge",
+  "title": "第二代验证码",
+  "page": "/captcha/cap4_challenge?challenge_type=cap4_challenge",
+  "score": 10,
+  "difficulty": "easy",
+  "category": "captcha",
+  "description": "第二代验证码",
+  "status": "open"
+}

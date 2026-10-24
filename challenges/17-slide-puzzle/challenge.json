@@ -1,0 +1,11 @@
+{
+  "slug": "17-slide-puzzle",
+  "id": "slide_puzzle_challenge",
+  "title": "滑动拼图",
+  "page": "/captcha/slide_puzzle_challenge?challenge_type=slide_puzzle_challenge",
+  "score": 20,
+  "difficulty": "medium",
+  "category": "captcha",
+  "description": "通过解决滑动拼图验证码获取接口响应数据",
+  "status": "open"
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "24-cap7-arc",
+  "id": "cap7_challenge",
+  "title": "弧度验证码",
+  "page": "/captcha/cap7_challenge?challenge_type=cap7_challenge",
+  "score": 25,
+  "difficulty": "medium",
+  "category": "captcha",
+  "description": "弧度验证码",
+  "status": "open"
+}

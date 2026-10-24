@@ -1,0 +1,11 @@
+{
+  "slug": "18-cap6-dual",
+  "id": "cap6_challenge",
+  "title": "双滑块验证码",
+  "page": "/captcha/cap6_challenge?challenge_type=cap6_challenge",
+  "score": 15,
+  "difficulty": "medium",
+  "category": "captcha",
+  "description": "双滑块验证码",
+  "status": "open"
+}

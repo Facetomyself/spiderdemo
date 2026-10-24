@@ -1,0 +1,2 @@
+loaded 1.0.0
+TypeError: BIND_TARGET [object Undefined]     at Object.apply (evalmachine.<anonymous>:5:21) |     at mV (wlzshield.min.js:2:8433) |     at new yt (wlzshield.min.js:2:2947) |     at Object.apply (evalmachine.<anonymous>:6:13) |     at mV (wlzshield.min.js:2:8433) |     at new yt (wlzshield.min.js:2:2947) |     at mo (wlzshield.min.js:3:7099) |     at k (wlzshield.min.js:3:9551) |     at mo (wlzshi

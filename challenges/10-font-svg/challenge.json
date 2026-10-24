@@ -1,0 +1,11 @@
+{
+  "slug": "10-font-svg",
+  "id": "font_svg_challenge",
+  "title": "字体反爬(SVG和canvas)",
+  "page": "/font_anti/font_svg_challenge?challenge_type=font_svg_challenge",
+  "score": 20,
+  "difficulty": "medium",
+  "category": "reverse",
+  "description": "字体反爬(SVG和canvas)",
+  "status": "open"
+}

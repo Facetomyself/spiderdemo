@@ -1,0 +1,11 @@
+{
+  "slug": "13-cap3-math",
+  "id": "cap3_challenge",
+  "title": "计算题验证码",
+  "page": "/captcha/cap3_challenge?challenge_type=cap3_challenge",
+  "score": 12,
+  "difficulty": "beginner",
+  "category": "captcha",
+  "description": "计算题验证码",
+  "status": "open"
+}

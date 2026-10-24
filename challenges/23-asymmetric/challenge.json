@@ -1,0 +1,11 @@
+{
+  "slug": "23-asymmetric",
+  "id": "fsymmetry_challenge",
+  "title": "非对称加密",
+  "page": "/authentication/fsymmetry_challenge?challenge_type=fsymmetry_challenge",
+  "score": 10,
+  "difficulty": "beginner",
+  "category": "reverse",
+  "description": "Dsa，Rsa，webpack，debugger",
+  "status": "open"
+}

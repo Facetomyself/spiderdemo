@@ -1,0 +1,198 @@
+{
+  "schema": "grok-stall-audit.v1",
+  "status": "completed",
+  "case": "28-jsvmp2",
+  "conclusion": "已确认过程偏差；4003 的唯一技术根因尚未确定",
+  "snapshot": {
+    "readOnly": true,
+    "cutoff": "2026-10-24T06:26:13.845803+00:00",
+    "source": "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl",
+    "size": 34677207,
+    "lines": 10943,
+    "sha256": "a127aa8614138f1ea6b495ce1f0a4c5734673261554605263d9f584970c5c212",
+    "mtime": "2026-10-24T06:24:33.260126+00:00",
+    "liveWriterObserved": true,
+    "note": "No raw log copied. Timeline is sanitized extraction of this one read; original can append/rewrite."
+  },
+  "processFindings": [
+    {
+      "id": "P1",
+      "severity": "high",
+      "confidence": "high",
+      "title": "请求归属未闭合时连续枚举宿主，实验目标逐渐变成改变 token",
+      "fact": "s29 已分型，但目标分页帧/提交答案尚未绑定到 VM 取指；后续进行 document.all、Window prototype、反射、stack、function name、version 等实验。token 改变只证明输入敏感性，不等于更接近浏览器或服务端接受。",
+      "evidence": [
+        "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s29-jsvmp28-interpreter.md:62",
+        "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s29-jsvmp28-interpreter.md:102",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:7931",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:8419",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:10454",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:10511",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:10845"
+      ],
+      "recommendation": "沿 interpreter-structure 的 request-dispatcher 分支，先冻结目标请求、page→Worker INIT→WebSocket send 归属、receiver/value provenance 和首个真实分歧；一个双条件宿主实验后回同一边界，不继续猜字段。"
+    },
+    {
+      "id": "P2",
+      "severity": "high",
+      "confidence": "high",
+      "title": "全站/登录 facts 被沿用到题 28，dispatcher 与实际工作脱钩",
+      "fact": "caseId 仍为注册登录；requestBoundaryAligned=true 被笔记明确解释为登录回放无反证，jsvmBlocker=interpreter-structure 则由 06 trace 改记。28 多次得到同一 route，但 Grok 明知重派分型无用，继续 Node host 工作；没有按题 28 重建对应 scope 的对照。",
+      "evidence": [
+        "D:\\reverse_ENV\\workspace\\spiderdemo\\web-case.json:3",
+        "D:\\reverse_ENV\\workspace\\spiderdemo\\contracts\\auto-decision-facts.json:41",
+        "D:\\reverse_ENV\\workspace\\spiderdemo\\contracts\\auto-decision-facts.json:55",
+        "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s27-acceptance-upstream.md:7",
+        "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s27-acceptance-upstream.md:11",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\chat_history.jsonl:4",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:4432",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:9507",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:10149"
+      ],
+      "recommendation": "把 28 的阶段、firstDivergence 与 requestBoundaryAligned 绑定到 28 请求锚及实验结果，避免登录边界的 true 代替本题完整边界。无需仅为字面变化改 blocker。"
+    },
+    {
+      "id": "P3",
+      "severity": "medium",
+      "confidence": "high",
+      "title": "稳定公开笔记滞后于实际 4003，影响恢复者对卡点判断",
+      "fact": "ANALYSIS 仍写重复 403；最新 result 与 Grok goal 已说明握手解决、send 后应用关闭 4003。s30 的浏览器 101 不是答案通过。",
+      "evidence": [
+        "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\28-jsvmp2\\ANALYSIS.md:7",
+        "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\28-jsvmp2\\result.json:1",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\goal\\plan.md:41",
+        "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s30-jsvmp28-trace.md:16"
+      ],
+      "recommendation": "分开记录 upgrade reached / token submitted / application accepted / page collected / answer accepted；同步 ANALYSIS 和当前阶段，不让 ready 前统一异常标签误指回握手。"
+    },
+    {
+      "id": "P4",
+      "severity": "medium",
+      "confidence": "high",
+      "title": "noOfflineFallback/live RuyiDOM 状态与长期 Node 执行缺少明确合同对齐",
+      "fact": "facts 仍 noOfflineFallback=true、ruyidomNetwork=live、ruyidom=diverged；实际已长期使用 Node vm。当前压缩摘要承认 Node 为现有 shipped runtime。用户允许本地补环境，故不能仅凭字段认定用户授权违规；这是运行面/证据面和状态维护不一致。",
+      "evidence": [
+        "D:\\reverse_ENV\\workspace\\spiderdemo\\contracts\\auto-decision-facts.json:2",
+        "D:\\reverse_ENV\\workspace\\spiderdemo\\contracts\\auto-decision-facts.json:3",
+        "D:\\reverse_ENV\\workspace\\spiderdemo\\contracts\\auto-decision-facts.json:4",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\chat_history.jsonl:4"
+      ],
+      "recommendation": "明确本题所用执行面及其证明范围，按既有事实记录流程对齐合同；Node 出参不得升格 browser fact。"
+    },
+    {
+      "id": "P5",
+      "severity": "info",
+      "confidence": "high",
+      "title": "不能归因于从未读过 JSVMP reference，亦无证据每步都是空转",
+      "fact": "08:35:49/08:53:34 读 interpreter-structure，08:53:45 读 request-dispatcher，12:43:20 读 variant-failure。s29 静态分型有具体状态/解码证据。冻结种子 A/B 和移除无效 probe 有效缩小候选，但其结论仅适用于该 fixture，非字段永远无关。",
+      "evidence": [
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:3731",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:3862",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:3874",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:9004",
+        "D:\\reverse_ENV\\workspace\\spiderdemo\\agent-notes\\s29-jsvmp28-interpreter.md:1",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:10457",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:10514",
+        "C:\\Users\\mengma\\.grok\\sessions\\D%3A%5Creverse_ENV\\01a12396-16d9-78d3-8dfd-366ae7667bb6\\updates.jsonl:10848"
+      ],
+      "recommendation": "保留冻结种子 A/B 和未通过如实标记；将发现沉淀成按请求边界的失败谱系，避免重新枚举已排除项。"
+    }
+  ],
+  "technicalFindings": [
+    {
+      "id": "T1",
+      "severity": "medium",
+      "confidence": "high",
+      "claim": "Current stored send closed 4003 is after successful WebSocket connect/opened; upgrade-rejected wrapper misclassifies failure phase",
+      "evidence": [
+        "challenges/28-jsvmp2/result.json:3-4",
+        "challenges/28-jsvmp2/solve.py:249-250",
+        "challenges/28-jsvmp2/solve.py:404-416",
+        "challenges/28-jsvmp2/solve.py:427-434"
+      ],
+      "limitation": "Does not prove Grok still believes the obsolete 403 narrative or identify application rejection cause"
+    },
+    {
+      "id": "T2",
+      "severity": "high",
+      "confidence": "high",
+      "claim": "Interpreter shapes already identified; missing request-to-VM binding, not missing static VM structure",
+      "evidence": [
+        "agent-notes/s29-jsvmp28-interpreter.md:7-64",
+        "challenges/28-jsvmp2/assets/jsvmp2.js:3",
+        "challenges/28-jsvmp2/assets/sdk.min.js:3"
+      ]
+    },
+    {
+      "id": "T3",
+      "severity": "medium",
+      "confidence": "high",
+      "claim": "Captured response assets hash-match local assets and s29; no evidence for asset variant mismatch",
+      "evidence": [
+        "agent-notes/s29-jsvmp28-interpreter.md:79-80",
+        "evidence/web/ruyitrace/rt_20261024005551_a5cd2fe0e2/raw/http_packet/000008_GET_200_www.spiderdemo.cn_static_js_jsvmp2.js_b1a3943b_pid58576_400000015.http_packet.json:1",
+        "evidence/web/ruyitrace/rt_20261024005551_a5cd2fe0e2/raw/http_packet/000013_GET_200_www.spiderdemo.cn_static_js_authentication_sdk.min.js_427eae38_pid58576_40000001a.http_packet.json:1"
+      ]
+    },
+    {
+      "id": "T4",
+      "severity": "medium",
+      "confidence": "high",
+      "claim": "Trace has a real target 101 but mixes target and browser-control WebSocket frames",
+      "evidence": [
+        "evidence/web/ruyitrace/rt_20261024005551_a5cd2fe0e2/raw/websocket_handshake.jsonl:2",
+        "evidence/web/ruyitrace/rt_20261024005551_a5cd2fe0e2/raw/websocket_frames.jsonl:3-47"
+      ],
+      "target_counts": {
+        "binary_send": 1,
+        "text_send": 8,
+        "text_recv": 8,
+        "ping_recv": 11,
+        "pong_send": 11
+      },
+      "control_or_unbound_counts": {
+        "text_send": 2,
+        "text_recv": 2,
+        "close_send": 1,
+        "close_recv": 1
+      }
+    },
+    {
+      "id": "T5",
+      "severity": "medium",
+      "confidence": "high",
+      "claim": "FakeWS.send corrupts cross-realm ArrayBuffer inputs via String fallback",
+      "evidence": [
+        "challenges/28-jsvmp2/_sandbox.js:295-303",
+        "challenges/28-jsvmp2/_sandbox.js:1022-1026",
+        "cross-realm-fixture.js:1-5",
+        "cross-realm-result.json"
+      ],
+      "causal_status": "Conditional defect proven by synthetic fixture; actual SDK send subtype and connection to 4003 unproven"
+    },
+    {
+      "id": "T6",
+      "severity": "medium",
+      "confidence": "high",
+      "claim": "06 and 28 have materially different dispatch and code encodings; shared stack shape does not establish common ISA or auth cause",
+      "evidence": [
+        "agent-notes/s28-jsvmp06-interpreter.md:7-56",
+        "challenges/06-jsvmp/assets/jsvmp_challenge.js:3",
+        "agent-notes/s29-jsvmp28-interpreter.md:29-60"
+      ]
+    }
+  ],
+  "limitations": [
+    "No target execution or fresh browser capture",
+    "Grok active; later changes excluded",
+    "No server-side reason for close4003 established",
+    "Current dirty skill/dispatcher not assumed historical baseline"
+  ],
+  "recommendedAction": "interpreter-structure/request-dispatcher: request binding and first browser/local divergence",
+  "technicalRootCauseProven": false,
+  "sourceReports": [
+    "process/process.md",
+    "technical/technical.md",
+    "reference/reference.md"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "12-cap2-gif",
+  "id": "cap2_challenge",
+  "title": "Gif动态验证码",
+  "page": "/captcha/cap2_challenge?challenge_type=cap2_challenge",
+  "score": 12,
+  "difficulty": "beginner",
+  "category": "captcha",
+  "description": "Gif动态验证码",
+  "status": "open"
+}

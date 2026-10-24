@@ -1,0 +1,11 @@
+{
+  "slug": "06-jsvmp",
+  "id": "jsvmp_challenge",
+  "title": "jsvmp",
+  "page": "/authentication/jsvmp_challenge?challenge_type=jsvmp_challenge",
+  "score": 30,
+  "difficulty": "hard",
+  "category": "reverse",
+  "description": "喵喵盾，自定义protobuf，css",
+  "status": "open"
+}

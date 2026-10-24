@@ -1,0 +1,36 @@
+{
+  "keys": [
+    "arc_path",
+    "captcha_id",
+    "image_info",
+    "masked",
+    "overlay",
+    "slider_y"
+  ],
+  "slider_y": 195,
+  "image_info": {
+    "bg_width": 840,
+    "bg_height": 540,
+    "mask_width": 120,
+    "mask_height": 100
+  },
+  "arc_keys": [
+    "points"
+  ],
+  "arc_non_points": {},
+  "point_count": 100,
+  "point_first": [
+    176.0,
+    201.0
+  ],
+  "point_mid": [
+    419.8792562917697,
+    249.6221473460631
+  ],
+  "point_last": [
+    660.0,
+    207.0
+  ],
+  "masked_len": 30080,
+  "overlay_len": 83008
+}

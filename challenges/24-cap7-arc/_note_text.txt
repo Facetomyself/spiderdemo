@@ -1,0 +1,147 @@
+【AI 逆向专栏】SpiderDemo 弧度验证码逆向分析 - K哥爬虫 - 博客园
+会员
+周边
+新闻
+博问
+闪存
+赞助商
+Chat2DB
+所有博客
+当前博客
+我的博客
+我的园子
+账号设置
+会员中心
+简洁模式
+...
+退出登录
+注册
+登录
+Loading
+K哥爬虫
+Python网络爬虫丨JS 逆向丨安卓逆向丨数据采集丨数据分析丨九层之台，起于累土
+博客园
+首页
+新随笔
+联系
+订阅
+-->
+管理
+【AI 逆向专栏】SpiderDemo 弧度验证码逆向分析
+声明
+本文章中所有内容仅供学习交流使用，不用于其他任何目的，不提供完整代码，抓包内容、敏感网址、数据接口等均已做脱敏处理，严禁用于商业用途和非法用途，否则由此产生的一切后果均与作者无关！
+本文章未经许可禁止转载，禁止任何修改后二次传播，擅自使用本文讲解的技术而导致的任何意外，作者均不负责，若有侵权，请在公众号【K哥爬虫】联系作者立即删除！
+前言
+做爬虫逆向的朋友想必深有体会：线上真实站点的反爬机制五花八门，直接上手实战极易踩坑，想系统实操又找不到安全合规、体系完整的练习环境。
+本文推荐一个反爬虫练习平台 —— SpiderDemo，不用找零散案例、不用搭建本地靶场，打开网页就能刷题，循序渐进吃透主流反爬技术。
+SpiderDemo 搭建了分层级的反爬挑战题库，囊括了当下企业最常用的防护方案，针对性较强：该站提供 JS 逆向解密、各类验证码识别、WASM 底层逆向、Protobuf 协议解析等挑战题目，难度从简单到困难，梯度清晰，新手能稳步入门，资深开发者也能用来查漏补缺、巩固逆向手感。
+本文将对该站中一个较为有意思的题目 —— 弧度验证码，进行逆向、识别分析。
+逆向目标
+目标：SpiderDemo T24 弧度验证码
+网址：
+https://spiderdemo.cn/captcha/cap7_challenge
+AI 模型：
+deepseek-v4-pro
+、
+gpt-5.5
+、
+claude-opus-4-8
+抓包分析
+打开开发者人员工具，进入目标网址，本题需要采集 30 页的数字进行求和运算，提交正确结果即完成，翻页会触发弧形验证码，拖动过程中，滑块本身会旋转：
+cap7_challenge/init/
+接口响应返回了第一页的 10 个数字及总页数等数据，并无加密，cookie 中的 sessionid 为登录后的用户凭证。
+cap7_challenge/captcha_image/
+接口与验证码图片有关，返回了背景、滑块图片链接以及对应尺寸，
+arc_path['points']
+即背景图片中的白色孤形轨道的坐标点，可依此绘制还原至图中：
+校验接口为
+/cap7_challenge/page/
+，后文主要分析以下三个请求参数：
+distance（拖动距离）
+、
+rotation_angle（旋转角度）
+、
+trajectory_encoded（轨迹）
+：
+各类验证结果如下，错误提示还是很友好的：
+{'success': True, 'data_type': 'page', 'page_data': [...], 'current_page': 2, 'total_pages': 30, 'challenge_type': 'cap7_challenge', 'message': '滑块验证成功，获取第2页数据'}；
+{'success': False, 'error': '轨迹异常，请重新操作'}；
+{'success': False, 'error': '验证码已过期，请刷新'}；
+{'success': False, 'error': '滑块未到达目标位置，请继续拖动'}；
+{'success': False, 'error': '滑块旋转角度不正确（误差 x°），请调整到正确位置'}；
+{'success': False, 'error': '轨迹验证失败：轨迹偏离过多（x 个点超出范围），请沿着弧形轨道拖动'}。
+参数分析
+本题的难点并不在于复杂的参数加密，而是如何识别出正确的拖动距离。
+trajectory_encoded
+是本题中唯一看起来经过加密、编码的参数，先不直接上 AI，我们自己来跟栈分析下。从 page 接口的堆栈里跟到
+cap7_challenge
+文件中，这部分代码未经过混淆，甚至关键位置还有清晰的注释：
+（不是重点的地方，真就一点都不为难人）
+当然，此时拖动距离、旋转角度以及轨迹是已经生成了的，具体是如何计算得到的呢？
+const data
+处下断点，重新拖动，断住后向上跟栈到
+cap7_challenge.js
+文件中，果然，核心文件经过混淆处理：
+先使用 AI 辅助解混淆，尽可能让代码逻辑清洗一些，直接将该文件保存到本地，打开 Codex，让 AI 开始处理，想要解的相对完全，还是需要多轮处理，针对性优化的：
+最终将 8000 多行代码解到了 700 行，从下图就能看出，还原的有多清晰（变量名都做了优化）：
+解完混淆后，上述参数的计算逻辑都很清晰了，相关代码会分享到知识星球当中，以供学习交流。
+AI 识别
+接下来，就是本题的重点、难点 —— 如何识别拖动距离。
+首先根据
+arc_path['points']
+将弧形轨道绘制到背景图片上，便于后续观察：
+def normalize_points(points):
+normalized = []
+for point in points:
+if isinstance(point, dict):
+x = point.get("x")
+y = point.get("y")
+else:
+x, y = point[:2]
+normalized.append((float(x), float(y)))
+return normalized
+def draw_points_on_bg(points, bg_path="bg_img.png", output_path="bg_img_points.png"):
+points = normalize_points(points)
+if len(points) &lt; 2:
+raise ValueError("Need at least two points to draw the path.")
+bg_image = Image.open(bg_path).convert("RGBA")
+overlay = Image.new("RGBA", bg_image.size, (0, 0, 0, 0))
+draw = ImageDraw.Draw(overlay)
+draw.line(points, fill=(255, 255, 255, 255), width=3, joint="curve")
+Image.alpha_composite(bg_image, overlay).convert("RGB").save(output_path)
+先让
+deepseek-v4-pro
+尝试下，为什么？别问，问就是想花小钱把事儿解决了：
+接下来就是漫长的思考与优化策略的过程，不断地调教。最好还是自己跟一下关键参数的生成逻辑或者结合 mcp，给予引导，效果会更好点，不然走错了路，就纯是浪费时间和 token 了。
+由于本次顺带做下模型之间的对比测试，所以只给了相关的算法文件，在引导有限的情况下，纯看模型自己的发挥，感受下硬解能力。
+经过几个小时的尝试，deepseek 能成功，只不过成功率较低，大概 20% - 30% 左右，勉强可以说是 “能用”：
+接下来让 GPT 接手，在现有代码的基础上做优化，看是否能突破瓶颈。很是有意思，半个小时他就整完了，然后信誓旦旦的说经过测试，目前成功率 100%，我一瞅，好家伙，这么强的吗：
+怀着激动的心情，点了运行，一看日志，不对劲啊，怎么失败的这么多？定睛一看，加了重试策略。。。“别管验证几次，你就说最后过没过吧”：
+上不了强度上手段，这自然是不行的，拿鞭子抽，让他老实的干。又思考了 40 分钟，这次他说成功率达到了 60%，实测差不多：
+最后让
+claude-opus-4-8
+在 gpt 的基础上，继续做深度优化，除了错改了轨迹，纠正之后，成功率直接干到了 100%，又快又猛：
+deepseek、gpt、claude 用到的方案如下，相关脚本会分享到知识星球中，以供学习交流：
+结果验证
+posted @
+2026-08-03 17:41
+&nbsp;
+K哥爬虫
+&nbsp;
+阅读(
+68
+)&nbsp;
+评论(
+0
+)&nbsp;
+&nbsp;
+收藏
+&nbsp;
+举报
+刷新页面
+返回顶部
+公告
+博客园
+&nbsp;&copy;&nbsp; 2004-2026
+浙公网安备 33010602011771号
+浙ICP备2021040463号-3

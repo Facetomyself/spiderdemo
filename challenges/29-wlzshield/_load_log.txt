@@ -1,0 +1,16 @@
+vendors-ok
+sdk-ok
+type object
+keys version,initCollector,CheckboxCaptcha,CheckpointCaptcha,FocusCaptcha,MagnetCaptcha,ObstacleCaptcha,RotationCaptcha,ScratchCaptcha,ShadowCaptcha,instance,getPayload
+member version string
+member initCollector function
+member CheckboxCaptcha function
+member CheckpointCaptcha function
+member FocusCaptcha function
+member MagnetCaptcha function
+member ObstacleCaptcha function
+member RotationCaptcha function
+member ScratchCaptcha function
+member ShadowCaptcha function
+member instance object
+member getPayload function

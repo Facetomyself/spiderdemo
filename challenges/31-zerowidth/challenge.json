@@ -1,0 +1,11 @@
+{
+  "slug": "31-zerowidth",
+  "id": "spiderking_challenge",
+  "title": "ZeroWidth",
+  "page": "/authentication/spiderking_challenge/",
+  "score": 20,
+  "difficulty": "hard",
+  "category": "reverse",
+  "description": "Zero-width 字符协议100 页数据采集。",
+  "status": "open"
+}

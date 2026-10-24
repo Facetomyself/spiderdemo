@@ -1,0 +1,11 @@
+{
+  "slug": "07-css-offset",
+  "id": "CSS1_challenge",
+  "title": "CSS偏移挑战",
+  "page": "/css_anti/CSS1_challenge?challenge_type=CSS1_challenge",
+  "score": 20,
+  "difficulty": "medium",
+  "category": "reverse",
+  "description": "通过还原偏移的css样式来完成挑战",
+  "status": "open"
+}

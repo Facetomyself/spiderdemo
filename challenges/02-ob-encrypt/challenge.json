@@ -1,0 +1,11 @@
+{
+  "slug": "02-ob-encrypt",
+  "id": "ob_challenge1",
+  "title": "加解密",
+  "page": "/ob/ob_challenge1?challenge_type=ob_challenge1",
+  "score": 20,
+  "difficulty": "medium",
+  "category": "reverse",
+  "description": "很恶心的混淆",
+  "status": "open"
+}

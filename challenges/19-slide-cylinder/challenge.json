@@ -1,0 +1,11 @@
+{
+  "slug": "19-slide-cylinder",
+  "id": "slide_cylinder_challenge",
+  "title": "圆柱验证码",
+  "page": "/captcha/slide_cylinder_challenge?challenge_type=slide_cylinder_challenge",
+  "score": 20,
+  "difficulty": "medium",
+  "category": "captcha",
+  "description": "圆柱验证码",
+  "status": "open"
+}

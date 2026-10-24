@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package authentication;
+
+// 请求消息格式
+message ChallengeRequest {
+  int32 page = 1;            // 请求的页码
+  string challengetype = 2; // 挑战类型
+  int64 timestamp = 3;       // 时间戳，防止重放攻击
+  string signature = 4;      // 请求签名 
+}
+
+// 响应消息格式
+message ChallengeResponse {
+  repeated NumberData numbers = 1; // 数字列表
+  int32 total_pages = 2;           // 总页数
+  int32 current_page = 3;          // 当前页码
+  int64 timestamp = 4;             // 响应时间戳
+  string signature = 5;            // 响应签名
+}
+
+// 单个数字数据
+message NumberData {
+  int32 id = 1;    // 数字ID
+  int32 value = 2; // 数字值
+}

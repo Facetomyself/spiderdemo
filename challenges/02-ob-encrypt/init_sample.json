@@ -1,0 +1,20 @@
+{
+  "success": true,
+  "message": "继续现有挑战 (ob_challenge1)",
+  "challenge_type": "ob_challenge1",
+  "page_data": [
+    1237,
+    1898,
+    1166,
+    2543,
+    5552,
+    8449,
+    3815,
+    6981,
+    7933,
+    2253
+  ],
+  "total_pages": 100,
+  "current_page": 1,
+  "has_passed_before": false
+}

@@ -1,0 +1,114 @@
+﻿{
+  "mode": "deep",
+  "intent": "exploratory",
+  "queries": [
+    "JavaScript virtual machine obfuscation devirtualization interpreter tracing browser environment",
+    "JavaScript JSVMP 环境 模拟 浏览器 解释器 指令 trace"
+  ],
+  "count": 11,
+  "results": [
+    {
+      "title": "GitHub - WhiteNightShadow/firefox-reverse: 🦊 内置 AI 逆向 Agent 的 Firefox — 通用 JS/JSVMP/WASM/签名逆向工作站，SpiderMonkey 引擎层非侵入 trace，把加密参数从黑盒还原成不依赖浏览器的纯算法 · GitHub",
+      "url": "https://github.com/WhiteNightShadow/firefox-reverse",
+      "snippet": "│ │ ├ manifest.json + 每环境 env/fingerprint/proxy/control/traces/logs │ │ └ 每环境独立 profile + Firefox 进程 + Marionette 端口 │ │ │ │ Gecko / SpiderMonkey C++ │ │ ├ FrxFingerprintConfig 启动读取，覆盖 Navigator/Screen/Intl/HTTP │ │ │ UA-CH/WebGL 等已接入字段 │ │ ├ JSVMP 逐指令 trace SpiderMonkey 解释器观测 │ │ ├ WebAPI trace DOM binding 边界观测 │ │ └ whitebox_diff 覆盖率与分支差分 │ └────────────────────────────────────────────────────────────────────────┘ 输出一：隔离、可复用、可由 UI / Agent / MCP 管理的指纹浏览器环境 输出二：经过实打验证、可脱离浏览器运行的 Node.js / Python [...] | 代码 / 脚本（4） | `code_search` `scripts_list` `scripts_save` `scripts_capture_all` | 搜索页面语料和工作目录、枚举与落盘脚本 |\n| 签名器 / 闭包追踪（2） | `signer_trace` `closure_read` | 从引擎调试通道读取签名函数真实入参与闭包变量真值 |\n| WebAPI trace（2） | `webapi_trace` `webapi_query` | 记录并查询页面读取过的 Navigator、DOM、Canvas 等 WebAPI |\n| JSVMP 白盒（5） | `jsvmp_trace` `jsvmp_query` `jsvmp_status` `jsvmp_split_dispatcher` `jsvmp_disassemble` | 逐指令 trace、查询状态、拆分派发器、解码字节并反汇编 |\n| 密码学识别（1） | `crypto_scan` | 识别 RC4、XXTEA、MD5/SHA、AES、SM4 与自定义 Base64 等常量特征 | [...] 新手名词速查（点开看）\n\n 签名 / 加密参数：请求里一段算出来的字符串（如 `sign` `token` `X-Bogus`），服务端用它校验请求是否合法。\n 补环境：签名算法常依赖浏览器特有的东西（`navigator`、DOM、`crypto` 等）。在 Node 里把这些「假装」提供出来，让算法能跑，就叫补环境。\n JSVMP：把 JS 编译成自定义「字节码 + 解释器」，看不到原始逻辑、极难读，是常见的强保护。\n WASM：把算法编译成二进制模块，浏览器直接执行，源码不可见。\n 白盒纯算：彻底搞懂算法、用普通代码重写，最终不再需要原始的 JSVMP/WASM 二进制。\n 工作目录：你为一个会话指定的本地文件夹，Agent 的抓取脚本 / trace / 还原代码 / 进度笔记都存这里。\n\n### 🪪 使用指纹环境（可选）",
+      "published_date": "",
+      "source": "tavily",
+      "score": 0.6
+    },
+    {
+      "title": "JavaScript obfuscator tool - Protect Your JS Code",
+      "url": "https://obfuscator.io",
+      "snippet": "VM (Virtual Machine) obfuscation transforms your JavaScript code into custom bytecode that runs on an embedded interpreter. Unlike standard obfuscation which still produces readable JavaScript, VM obfuscation completely hides your original code structure. Static analysis tools cannot understand the logic without first reverse-engineering the entire virtual machine. Learn more in our VM obfuscation guide. [...] obfuscation is much easier to defeat: it can often be partially reversed using automated tools and beautifiers. VM obfuscation requires fully reverse-engineering the virtual machine, decrypting and decoding its bytecode, understanding its instruction set, and tracing execution — a process that can take weeks of dedicated effort. Without VM Self Defending, powerful AI agents (e.g. Claude Opus 4.7) can trace bytecode and roughly reconstruct the original code for smaller codebases. With VM Self [...] No obfuscation is 100% foolproof — JavaScript ultimately runs in an environment the attacker controls — browser or Node.js — and runtime memory inspection is always possible there. No JavaScript obfuscation can seal that off; what it can do is raise the cost of reaching it. No automated deobfuscator online services currently exist for VM-obfuscated code — each obfuscation compiles code into custom bytecode with a unique virtual machine, making universal tooling impossible. Standard obfuscation",
+      "published_date": "",
+      "source": "tavily",
+      "score": 0.5667
+    },
+    {
+      "title": "How to Devirtualize an Obfuscated JS VM | Scrappey",
+      "url": "https://scrappey.com/qa/reverse-engineering/how-to-devirtualize-a-javascript-vm",
+      "snippet": "Deobfuscation cleans up code that is still structured as normal functions and control flow — renaming variables, decoding string arrays, unflattening switch dispatchers. A virtualized program has none of that: the logic has been compiled into bytecode that a small interpreter walks at runtime. Devirtualization means reconstructing that interpreter’s instruction set and replaying its program statically until you recover real JavaScript. It is a superset of deobfuscation aimed at a much harder [...] Devirtualization is the process of recovering a readable program from JavaScript that has been compiled into a tiny interpreter — a virtual machine — bundled inside the script itself. Instead of leaving the original functions on the page, the build emits an array of opaque “opcodes” plus a blob of bytecode, and a small loop that walks the bytecode and drives the opcodes. The logic you actually care about no longer lives in any function body; it lives in the composition the loop performs at [...] loop performs at runtime. Plain deobfuscation — renaming variables, decoding string arrays, unflattening control flow — gets you nowhere here, because there is no normal control flow to clean up. Devirtualization means reconstructing the VM’s instruction set, replaying its program statically, and collapsing the result back into JavaScript you can read top to bottom.",
+      "published_date": "",
+      "source": "tavily",
+      "score": 0.5
+    },
+    {
+      "title": "Building MirageVM: A JavaScript Virtual Machine for Code Obfuscation · The Security Vault",
+      "url": "https://thesecurityvault.com/building-miragevm-a-javascript-virtual-machine-for-code-obfuscation",
+      "snippet": "A JavaScript virtual machine for obfuscation works by replacing standard JavaScript with custom bytecode. Instead of sending readable code to the browser, you ship low-level instructions that only your custom VM can execute. Each high-level operation might require multiple VM instructions, similar to how a single line of C code translates to multiple assembly instructions. [...] This bot detection logic employs multiple telemetry collection techniques to build a behavioral profile. Rather than relying on simple captchas or basic fingerprinting, the system analyzes patterns like timing between events, mouse movement characteristics, keyboard input patterns, browser environment inconsistencies, and other behavioral markers. [...] The execution engine includes cooperative multitasking - it periodically yields control back to the JavaScript event loop to prevent blocking on long-running operations. This is crucial for maintaining responsiveness in a browser environment.\n\n### Instruction Set Architecture\n\nMirageVM supports over 60 opcodes covering:\n\n Arithmetic operations\n Logical operations\n Control flow\n Data Manipulation (Arrays, Strings, Objects, etc)\n JavaScript integration\n Advanced features",
+      "published_date": "",
+      "source": "tavily",
+      "score": 0.5
+    },
+    {
+      "title": "Devirtualizing an Obfuscated JavaScript VM: From Curried Thunks to Readable IR",
+      "url": "https://scrappey.com/qa/reverse-engineering/how-to-devirtualize-a-javascript-vm?path=obfuscation",
+      "snippet": "On this page\n\nA wall of Base64 isn’t always the easy kind The IIFE-fold trap There’s no constant pool — until there is Lowering opcodes to an expression IR Classifying shapes (roles) Flattening by shadow-execution Saturation and convergence Recovering control flow Bootstrapping and synthesized constants Side effects, cleanup, and checking the work\n\nDevirtualization is the process of recovering a readable program from JavaScript that has been compiled into a tiny interpreter — a virtual machine — bundled inside the script itself. Instead of leaving the original functions on the page, the build emits an array of opaque “opcodes” plus a blob of bytecode, and a small loop that walks the bytecode and drives the opcodes. The logic you actually care about no longer lives in any function body; it lives in the composition the loop performs at runtime. Plain deobfuscation — renaming variables, decoding string arrays, unflattening control flow — gets you nowhere here, because there is no normal control flow to clean up. Devirtualization means reconstructing the VM’s instruction set, replaying its program statically, and collapsing the result back into JavaScript you can read top to bottom.\n\n...\n\n## Quick facts\n\n| | |\n| --- | --- |\n| Technique | Static devirtualization of a curried-thunk bytecode VM |\n| Input shape | A wall of Base64 → a Uint16Array of bytecode + an array of curried \"opcode\" thunks |\n| Execution model | A triplet loop: Q[dest] = Q op |\n| Core trick | Opcodes are curried — nothing runs until a thunk is fully saturated with arguments |\n| Constants | No literal pool; synthesized via type coercion plus encoded, byte-transformed blob pools |\n| Goal | A semantically faithful IR you can read top-to-bottom, derived without executing the sample |\n| Real-world example | Imperva / Incapsula’s reese84 interrogator (cited here purely as an educational reference) |",
+      "published_date": "",
+      "source": "exa",
+      "meta": {
+        "exaType": ""
+      },
+      "score": 0.5
+    },
+    {
+      "title": "【JS 逆向百例】某音 X-Bogus 逆向分析，JSVMP 纯算法还原 - K哥爬虫 - 博客园",
+      "url": "https://www.cnblogs.com/ikdl/p/16807224.html",
+      "snippet": "01\n\n01\n\nJSVMP 的核心是在 JavaScript 代码保护过程中引入代码虚拟化思想，实现源代码的虚拟化过程，将目标代码转换成自定义的字节码，这些字节码只有特殊的解释器才能识别，隐藏目标代码的关键逻辑。在匡开圆的论文中，利用 WebAssembly 技术实现了特殊的虚拟解释器，通过编译隐藏解释器的执行逻辑。JSVMP 的保护流程如下图所示：\n\n02\n\n02\n\n一个完整的 JSVMP 保护系统，大致的架构应该是这样子的：服务器端读取 JavaScript 代码 —> 词法分析 —> 语法分析 —> 生成AST语法树 —> 生成私有指令 —> 生成对应私有解释器，将私有指令加密与私有解释器发送给浏览器，然后一边解释，一边执行。\n\n03\n\n03\n\n## JSVMP 有哪些学习资料？\n\n除了匡开圆的论文以外，还有以下文章也值得学习：\n\n## JSVMP 逆向方法有哪些？ [...] ## 什么是 JSVMP？\n\nJSVMP 全称 Virtual Machine based code Protection for JavaScript，即 JS 代码虚拟化保护方案。\n\nJSVMP 的概念最早应该是由西北大学2015级硕士研究生匡开圆，在其2018年的学位论文中提出的，论文标题为：《基于 WebAssembly 的 JavaScript 代码虚拟化保护方法研究与实现》，同年还申请了国家专利，专利名称：《一种基于前端字节码技术的 JavaScript 虚拟化保护方法》，网上可以直接搜到，也可在公众号【K哥爬虫】后台回复 JSVMP，免费获取原版高清无水印的论文和专利。本文就简单介绍一下 JSVMP，想要详细了解，当然还是建议去读一下这篇论文。\n\n01\n\n01 [...] `位置 2 索引I 16 索引A 738`\n`Add conditional breakpoint`\n`I == 16 && A == 738 && S && S == 21`\n`S`\n`索引I 16 索引A 738`\n\n（注意：本文描述的日志的多少行、断点的具体位置、变量的具体值，可能会有所变化，以你的实际情况为准，但思路是一样的）\n\n16\n\n16\n\n刷新网页，断下之后开始单步跟，来到下图所示的地方：\n\n17\n\n17\n\n到这里之后，就不要下一步了，再下一步有可能整个语句就执行完毕了，其中的细节你看不到，所以这里我们在控制台挨个输入看看：\n\n18\n\n18\n\n可以看到实际上的逻辑就是返回指定位置的字符，y 的值就是 `S`，m 的值就是 `S`，经过多次调试发现 m 的值是固定的，M 就是 `charAt()` 方法，我们再看看我们本地的日志，`S` 的值为 ``，`charAt()` 取值出来就是6，逻辑完全正确。\n\n`S`\n`S`\n`charAt()`\n`S`\n``\n`charAt()`\n\n19\n\n19",
+      "published_date": "",
+      "source": "tavily, exa",
+      "score": 0.5
+    },
+    {
+      "title": "JavaScript 虚拟机保护 - 逆向工程 Cookbook",
+      "url": "https://overkazaf.github.io/reverse_engineering/web/04-advanced-recipes/javascript_vm_protection/",
+      "snippet": "### 三种主要逆向方法（2025） \n\n目前针对 JSVMP 的逆向主要有三种方法：\n\n1. RPC 远程调用\n\n- 在真实浏览器环境中执行 JSVMP 保护的函数\n- 通过网络接口暴露功能\n- 优点：实现简单，稳定性高\n- 缺点：需要维护浏览器环境，性能开销大\n\n2. 环境补充（补环境）\n\n- 在 Node.js 中模拟浏览器环境\n- 补充缺失的 DOM、BOM API\n- 优点：执行效率高\n- 缺点：需要大量环境适配工作\n\n3. 插桩还原算法\n\n- 通过日志输出关键参数\n- 从结果反推生成逻辑\n- 实现纯算法还原\n- 优点：不依赖原始代码，可移植性强\n- 缺点：工作量大，需要深入理解算法\n\n...\n\n#### 2. 插桩/日志记录 \n\n在关键位置插入日志，输出关键参数信息：\n\n```\n 1\n 2\n 3\n 4\n 5\n 6\n 7\n 8\n 9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n\n```\n\n```javascript\n// 原始 JSVMP 解释器代码（示例）\nfunction vmExecute(bytecode, context) {\n// 插桩：记录字节码执行过程\nconsole.log(\"Executing bytecode:\", bytecode);\nconsole.log(\"Context:\", JSON.stringify(context));\n\nlet pc = 0;\nwhile (pc < bytecode.length) {\nconst opcode = bytecode[pc];\n\n// 插桩：记录每条指令\nconsole.log(`PC: ${pc}, Opcode: ${opcode}`);\n\nswitch (opcode) {\ncase OP_LOAD:\n// 插桩：记录加载操作\nconsole.log(\"LOAD operation:\", bytecode[pc + 1]);\nbreak;\n// ... 其他指令\n}\npc++;\n}\n}\n```\n\n#### 3. 浏览器替换函数 \n\n使用浏览器的资源覆盖功能调试：\n\n```\n 1\n 2\n 3\n 4\n 5\n 6\n 7\n 8\n 9\n10\n11\n12\n13\n14\n15\n16\n\n```\n\n```javascript\n// 在 Chrome DevTools 中使用 Overrides 功能\n// 1. 打开 DevTools → Sources → Overrides\n// 2. 选择本地文件夹\n// 3. 修改 JS 文件并保存\n// 4. 刷新页面测试修改后的代码\n\n// 示例：Hook JSVMP 解释器\n(function () {\nconst originalVMExecute = window.vmExecute;\nwindow.vmExecute = function (...args) {\nconsole.log(\"VM Execute called with:\", args);\nconst result = originalVMExecute.apply(this, args);\nconsole.log(\"VM Execute result:\", result);\nreturn result;\n};\n})();\n```\n\n#### 4. 动态分析 \n\n使用调试器捕获运行时指令流：\n\n```\n 1\n 2\n 3\n 4\n 5\n 6\n 7\n 8\n 9\n10\n11\n12\n13\n14\n\n```\n\n```javascript\n// 在关键位置设置断点\n// 使用 Chrome DevTools 的条件断点功能\n\n// 条件断点示例：\n// 当某个变量等于特定值时暂停\nif (context.register[0] === 0x1234) {\ndebugger;\n}\n\n// 记录执行路径\nconst executionTrace = [];\nfunction traceExecution(pc, opcode) {\nexecutionTrace.push({ pc, opcode, timestamp: Date.now() });\n}\n```",
+      "published_date": "2025-07-22T00:00:00.000Z",
+      "source": "exa",
+      "meta": {
+        "exaType": ""
+      },
+      "score": 0.4833
+    },
+    {
+      "title": "在浏览器中调试",
+      "url": "https://zh.javascript.info/debugging-chrome",
+      "snippet": "—— “跨步（Step over）”：运行下一条（即当前行）指令，但 不会进入到一个函数中，快捷键 `F10`。\n:   跟上一条命令“下一步（Step）”类似，但如果下一条语句是函数调用则表现不同。这里的函数指的是：不是内建的如 `alert` 函数等，而是我们自己写的函数。\n\n    如果我们对比一下，“下一步（Step）”命令会进入嵌套函数调用并在其第一行暂停执行，而“跨步（Step over）”对我们不可见地执行嵌套函数调用，跳过了函数内部。\n\n    执行会在该函数调用后立即暂停。\n\n    如果我们对该函数的内部执行不感兴趣，这命令会很有用。\n\n—— “步入（Step into）”，快捷键 `F11`。\n:   和“下一步（Step）”类似，但在异步函数调用情况下表现不同。如果你刚刚才开始学 JavaScript，那么你可以先忽略此差异，因为我们还没有用到异步调用。 [...] `Local` 显示当前函数中的变量，你还可以在源代码中看到它们的值高亮显示了出来。\n\n   `Global` 显示全局变量（不在任何函数中）。\n\n   这里还有一个 `this` 关键字，目前我们还没有学到它，不过我们很快就会学习它了。\n\n## 跟踪执行\n\n现在是 跟踪 脚本的时候了。\n\n在右侧面板的顶部是一些关于跟踪脚本的按钮。让我们来使用它们吧。\n\n—— “恢复（Resume）”：继续执行，快捷键 `F8`。\n:   继续执行。如果没有其他的断点，那么程序就会继续执行，并且调试器不会再控制程序。\n\n    我们点击它一下之后，我们会看到这样的情况：\n\n    执行恢复了，执行到 `say()` 函数中的另外一个断点后暂停在了那里。看一下右边的 “Call stack”。它已经增加了一个调用信息。我们现在在 `say()` 里面。\n\n—— “下一步（Step）”：运行下一条（即当前行）指令，快捷键 `F9`。\n:   运行下一条语句。如果我们现在点击它，`alert` 会被显示出来。\n\n    一次接一次地点击此按钮，整个脚本的所有语句会被逐个执行。 [...] 1. 断点。\n2. `debugger` 语句。\n3. error（如果开发者工具是打开状态，并且按钮 是开启的状态）。\n\n开发人员工具中的选项比本文介绍的多得多。完整的手册请点击这个链接查看：。\n\n上一节下一节\n\n分享\n\n教程路线图\n\n## 评论\n\n在评论之前先阅读本内容…\n\n 如果你发现教程有错误，或者有其他需要修改和提升的地方 — 请 提交一个 GitHub issue 或 pull request，而不是在这评论。\n 如果你对教程的内容有不理解的地方 — 请详细说明。\n 使用  `标签插入只有几个词的代码，插入多行代码可以使用  标签，对于超过 10 行的代码，建议你使用沙箱（plnkr，JSBin，codepen…）`\n\n#### 章节\n\n#### 课程导航\n\n分享\n\n在 GitHub 上编辑\n\n © 2007—2026  Ilya Kantor\n 关于本项目\n 联系我们",
+      "published_date": "",
+      "source": "tavily",
+      "score": 0.4133
+    },
+    {
+      "title": "Workshop: Analysis of Virtualization-based Obfuscation",
+      "url": "https://synthesis.to/presentations/r2con2021-deobfuscation.pdf",
+      "snippet": "Breaking Virtual Machine Obfuscation • locate the bytecode that is interpreted by the VM • understand the VM architecture/context • reverse engineer the handler semantics • reconstruct the VM control flow • reconstruct the the high-level control flow",
+      "published_date": "",
+      "source": "exa",
+      "meta": {
+        "exaType": ""
+      },
+      "score": 0.4
+    },
+    {
+      "title": "Writing Disassemblers for VM-based Obfuscators | Sneaker Dev",
+      "url": "https://www.sneakerdev.com/blog/writing-disassemblers-for-vm-based-obfuscators",
+      "snippet": "## Writing a Disassembler\n\nOur goal is to design a generic disassembler approach that works for most virtual machines in the wild, no matter their complexity. Starting from scratch with nearly no prior knowledge of the virtual machine, we interactively add more and more knowledge until we have a fully-fledged disassembler. For this, we build a system which symbolically explores the virtual machine and enrich the output with useful information about the symbolic state. On a high-level, the approach consists of two steps:\n\nWe build a symbolic executor that\n\nfollows the VM execution flow from the VM entry to the VM exit. - Afterward, we add callbacks to interesting code locations (such as VM handlers) and dump useful information from the symbolic state.\n\nBuilding such a symbolic executor is an interactive process: Starting at the VM entry, we symbolically follow the execution flow until the symbolic executor stops. This is always the case if the VM does a control-flow transfer that relying on symbolic values. Then, the symbolic executor has insufficient information to derive a concrete value. In these cases, we manually inspect why this happens and add additional knowledge to the symbolic state. Often, these are either missing information about the bytecode or (conditional) jumps which depend on user input (inputs to the VM from the outside). For the former, we concretize the symbolic memory around the bytecode; for the latter, we can hardcode specific input values.\n\nOnce the symbolic executor follows the execution from VM entry to exit without any interruption, we can manually reverse engineer specific VM components and add more and more knowledge about the VM to the executor.",
+      "published_date": "2021-10-21T00:00:00.000Z",
+      "source": "exa",
+      "meta": {
+        "exaType": ""
+      },
+      "score": 0.3667
+    },
+    {
+      "title": "鐵人賽 Day 14 JSVMP 實戰觀察：逐步還原 switch-case VM 混淆程式 - NickLabs",
+      "url": "https://nicklabs.cc/jsvmp-switch-case-vm-restore",
+      "snippet": "### 辨識與分析 VM 結構\n\n從程式碼中可以看到 _0x12128e 陣列變數包含了類似指令的字串以及資料。\n\n```plaintext\n_0x5b6c('0x12d')  => __op_load_const\n_0x5b6c('0x12e')  => __op_add\n_0x5b6c('0x12e')  => __op_print\n_0x5b6c('0x12b')  => 結果是：\n```\n\n上面是指令\n\n```plaintext\n5, 10\n```\n\n上面是資料\n\n這些就是虛擬機要執行的指令集及資料。\n\n### 找出指令指標\n\n_0x393c0d 變數被初始化為 0，並且在 _0x12128e[_0x393c0d++] 中遞增。\n\n這就是用來追蹤執行進度的指令指標。\n\n### 找出虛擬堆疊\n\n_0x1a84f3 陣列透過 .push() 和 .pop() 操作就是典型的堆疊結構，用於儲存運算過程中的臨時變數。\n\n### 找出主迴圈與分發器\n\nwhile (true) 迴圈和內部的 switch (_0x58249a) 就是整個虛擬機的主迴圈和分發器。\n\n## 解讀指令集\n\n分析 switch 語句中的每個 case 區塊，將混淆的指令名稱與其對應的實際操作進行對照。\n\n### case _0x5b6c('0x12d'):\n\n_0x5b6c('0x12d') 透過前面的解密函式得到實際內容為 '__op_load_const'。\n\n```javascript\n_0x1a84f3.push(_0x12128e[_0x393c0d++])。\n```\n\n從指令陣列中取出下一個值並將其推入堆疊陣列中。\n\n### case _0x5b6c('0x12e'):\n\n_0x5b6c('0x12e') 透過前面的解密函式得到實際內容為 '__op_add'。\n\n```javascript\nvar _0x1f727c = _0x1a84f3.pop();\nvar _0x5e97ee = _0x1a84f3.pop();\n_0x1a84f3.push(_0x5e97ee + _0x1f727c);\n```\n\n從_0x1a84f3 堆疊陣列透過 .pop() 取出兩個需要相加的資料。\n\n然後將相加結果 push 回堆疊陣列中。\n\n### case _0x5b6c('0x12f'):\n\nvar _0x3d4389 = _0x1a84f3.pop();\n\n_0x5b6c('0x12f') 透過前面的解密函式得到實際內容為 '__op_print'。\n\n_0x5b6c('0x12a') 透過前面的解密函式得到實際內容為 'log'。\n\n_0x5b6c('0x12b') 透過前面的解密函式得到實際內容為\n\n...\n\n## 追蹤指令執行流程\n\n從上面的分析已經知道執行的邏輯及每一個switch case相對應處理的邏輯，接下來就手動追蹤虛擬機的執行流程：\n\n### 指令 __op_load_const, 5\n\n執行 __op_load_const 將 5 推入堆疊。\n\n此時堆疊內容為 [5]。\n\n### 指令 __op_load_const, 10\n\n執行 __op_load_const 將 10 推入堆疊。\n\n此時堆疊內容為 [5, 10]。\n\n### 指令 __op_add\n\n執行 __op_add，取出 10 和 5，計算 5 + 10，將結果 15 推回堆疊。\n\n此時堆疊內容為 [15]。\n\n### 指令 __op_print\n\n執行 __op_print，從堆疊取出 15，並輸出 \"結果是：15\"。\n\n此時堆疊內容為 []。",
+      "published_date": "2025-09-13T16:00:00.000Z",
+      "source": "exa",
+      "meta": {
+        "exaType": ""
+      },
+      "score": 0.3333
+    }
+  ]
+}

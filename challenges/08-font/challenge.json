@@ -1,0 +1,11 @@
+{
+  "slug": "08-font",
+  "id": "font_anti_challenge",
+  "title": "字体反爬",
+  "page": "/font_anti/font_anti_challenge?challenge_type=font_anti_challenge",
+  "score": 10,
+  "difficulty": "easy",
+  "category": "reverse",
+  "description": "字体反爬",
+  "status": "open"
+}

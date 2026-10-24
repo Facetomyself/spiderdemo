@@ -1,0 +1,462 @@
+快速上手 | WlzShield - 免费且易集成的验证码
+Skip to content
+WlzShield
+Main Navigation
+首页
+文档
+更新日志
+社区
+Appearance
+Menu
+Return to top
+Sidebar Navigation
+接入指南
+快速上手
+更新日志
+组件文档
+智能复选框 (Checkbox)
+站点停靠 (Checkpoint)
+视觉对焦 (Focus)
+磁力排斥 (Magnet)
+避障轨迹 (Obstacle)
+角度矫正 (Rotation)
+刮刮乐 (Scratch)
+光影重合 (Shadow)
+社区和赞助
+社区
+赞助
+On this page
+快速上手
+​
+WlzShield Captcha 提供了一套简单易用的 SDK，帮助您在几分钟内完成验证码的接入。
+新一代行为验证安全组件。
+安全、有趣、易集成的 HTML5 验证码解决方案。
+1. 引入资源
+​
+请确保在页面中的head引入了组件库文件。
+html
+<
+script
+src
+=
+"https://captcha.wangluozhe.com/static/js/vendors.min.js"
+></
+script
+>
+<
+script
+src
+=
+"https://captcha.wangluozhe.com/static/js/wlzshield.min.js"
+></
+script
+>
+2. 准备容器
+​
+在您的页面中准备一个空的
+div
+容器，用于挂载验证码组件。请务必指定一个唯一的
+id
+。
+html
+<
+div
+id
+=
+"captcha-box"
+></
+div
+>
+3. 初始化组件
+​
+根据您的业务场景选择合适的组件进行初始化。
+复选框 (Checkbox)
+站点停靠 (Checkpoint)
+视觉对焦 (Focus)
+磁力排斥 (Magnet)
+避障轨迹 (Obstacle)
+角度矫正 (Rotation)
+刮刮乐 (Scratch)
+光影重合 (Shadow)
+javascript
+// 适用于登录、注册等流畅体验场景
+new
+WlzShield.
+CheckboxCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-box'
+,
+onSuccess
+:
+function
+(
+data
+) {
+console.
+log
+(
+'验证通过，凭证:'
+, data);
+// TODO: 将 data 提交给您的业务接口
+},
+});
+javascript
+// 适用于营销活动、高安全等级场景
+new
+WlzShield.
+CheckpointCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-box'
+,
+onSuccess
+:
+function
+(
+data
+) {
+console.
+log
+(
+'验证通过，凭证:'
+, data);
+// TODO: 将 data 提交给您的业务接口
+},
+});
+javascript
+// 适用于营销活动、高安全等级场景
+new
+WlzShield.
+FocusCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-box'
+,
+onSuccess
+:
+function
+(
+data
+) {
+console.
+log
+(
+'验证通过，凭证:'
+, data);
+// TODO: 将 data 提交给您的业务接口
+},
+});
+javascript
+// 适用于营销活动、高安全等级场景
+new
+WlzShield.
+MagnetCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-box'
+,
+onSuccess
+:
+function
+(
+data
+) {
+console.
+log
+(
+'验证通过，凭证:'
+, data);
+// TODO: 将 data 提交给您的业务接口
+},
+});
+javascript
+// 适用于营销活动、高安全等级场景
+new
+WlzShield.
+ObstacleCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-box'
+,
+onSuccess
+:
+function
+(
+data
+) {
+console.
+log
+(
+'验证通过，凭证:'
+, data);
+// TODO: 将 data 提交给您的业务接口
+},
+});
+javascript
+// 适用于营销活动、高安全等级场景
+new
+WlzShield.
+RotationCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-box'
+,
+onSuccess
+:
+function
+(
+data
+) {
+console.
+log
+(
+'验证通过，凭证:'
+, data);
+// TODO: 将 data 提交给您的业务接口
+},
+});
+javascript
+// 适用于营销活动、高安全等级场景
+new
+WlzShield.
+ScratchCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-box'
+,
+onSuccess
+:
+function
+(
+data
+) {
+console.
+log
+(
+'验证通过，凭证:'
+, data);
+// TODO: 将 data 提交给您的业务接口
+},
+});
+javascript
+// 适用于营销活动、高安全等级场景
+new
+WlzShield.
+ShadowCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-box'
+,
+onSuccess
+:
+function
+(
+data
+) {
+console.
+log
+(
+'验证通过，凭证:'
+, data);
+// TODO: 将 data 提交给您的业务接口
+},
+});
+4. 后端交互协议 (核心安全流程)
+​
+为了确保安全性，WlzShield 采用了
+"Challenge (前端签发) + Verify (后端核销)"
+的双重验证机制。
+交互流程图
+​
+步骤详解
+​
+1. 前端获取凭证
+​
+当用户在前端完成验证（如刮开图层或点击复选框）且
+风控引擎
+判定为真人后，
+onSuccess
+回调函数会被触发。
+javascript
+// 前端代码示例
+new
+WlzShield.
+ScratchCaptcha
+({
+// ...
+onSuccess
+:
+function
+(
+res
+) {
+// res.wsToken 就是您需要的加密凭证
+// 请将其随同您的业务表单一起提交给您的后端
+submitLogin
+(username, password, res.wsToken);
+}
+});
+响应结果 (Response)：
+✅ 认证成功
+(
+HTTP 200
+)：
+json
+{
+"status"
+:
+true
+,
+"msg"
+:
+"认证成功"
+,
+"wsToken"
+:
+"..."
+}
+❌ 认证失败
+(
+HTTP 200
+)：
+json
+{
+"status"
+:
+false
+,
+"msg"
+:
+"认证失败"
+,
+"wsToken"
+:
+""
+}
+2. 后端二次校验 (Verify)
+​
+这是最关键的一步。
+您的业务后端收到前端传来的
+token
+后，
+必须
+调用 WlzShield 的核销接口来验证该 Token 的合法性（是否过期、是否伪造、是否被重放）。
+接口说明：
+URL
+:
+https://captcha.wangluozhe.com/api/verify
+Method
+:
+POST
+Content-Type
+:
+application/json
+请求参数 (Request Body)：
+参数名
+类型
+必填
+说明
+siteKey
+string
+是
+您在配置文件中设置的 SiteKey。
+wsToken
+string
+是
+前端
+onSuccess
+回调中获取到的加密字符串。
+clientIp
+string
+否
+强烈推荐
+。当前请求用户的真实 IP。
+userAgent
+string
+否
+强烈推荐
+。当前请求用户的真实 User-Agent。
+请求示例：
+json
+{
+"siteKey"
+:
+"xxxxxxxxxxxx"
+,
+"wsToken"
+:
+"eyJhbGciOiJ..."
+,
+"clientIp"
+:
+"203.0.113.1"
+,
+"userAgent"
+:
+"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+响应结果 (Response)：
+✅ 校验通过
+(
+HTTP 200
+)：
+json
+{
+"status"
+:
+true
+,
+"msg"
+:
+"校验通过"
+}
+❌ 校验失败
+(
+HTTP 200
+)：
+json
+{
+"status"
+:
+false
+,
+"msg"
+:
+"参数错误 / SiteKey无效 / 无效的Token / Token不属于该站点 / Token已过期 / IP地址不匹配 / UserAgent不匹配 / 系统繁忙 / Token已被使用"
+}
+安全提示
+：
+一次性有效
+：Token 验证通过一次后会立即失效（防重放机制），请勿重复使用。
+有效期
+：Token 默认有效期较短（10分钟），请在获取后尽快进行核销。
+Pager
+Next page
+更新日志
+Released under the MIT License.
+Copyright © 2025 WlzShield

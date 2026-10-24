@@ -1,0 +1,48 @@
+count 3301
+## host 0
+## docu 0
+## sock 0
+## wss 0
+## http 0
+## page 0
+## sign 0
+## cookie 0
+## Web 0
+## send 0
+## open 0
+## ajax 0
+## fetch 0
+## json 0
+## answer 0
+## submit 0
+## Array 1
+86	isArray
+## Uint 0
+## proto 1
+100	prototype
+## message 0
+## ready 0
+## challenge 0
+## auth 0
+## token 0
+## sum 0
+## number 0
+## grid 0
+## click 0
+## mouse 0
+## ws 1
+134	H4vvvtPvvvzLvvvv/qjvv6CvvvSUvvvv6Wvvvxdvvv6AvvvvADvvvd/vvvv7vvvv3ePvv6PvvvSQvvvvz4vvv7Wvvv6xvvvvpvvvvd4vvvvtvvvvYanvvnPvvvzEvvvvTDvvvhEvvvvWvvvvPWvvvQ4vvv6ivvvvhrRvvpjvvvvxvvvvH4vvv9vvvvvIvvvv+vvvvpvv
+## binary 0
+## buffer 1
+125	Buffer
+## encrypt 0
+## decrypt 0
+## hmac 0
+## sha 0
+## md5 0
+## aes 0
+## xor 0
+## opcode 1
+99	Illegal Opcode
+## init 1
+97	Infinity

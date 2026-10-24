@@ -1,0 +1,11 @@
+{
+  "slug": "05-ob1-wall",
+  "id": "ob1_challenge",
+  "title": "柳暗花明又一墙",
+  "page": "/authentication/ob1_challenge?challenge_type=ob1_challenge",
+  "score": 10,
+  "difficulty": "beginner",
+  "category": "reverse",
+  "description": "变种ob",
+  "status": "open"
+}

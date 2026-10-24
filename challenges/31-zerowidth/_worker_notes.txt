@@ -1,0 +1,11 @@
+derive main a1b74e640fdcbaaeae6bf4cab1940912
+derive page 862b3c31685f2707ee741b36ee8a6338
+derive submit f8eec86badcd670a5523af61a6bc2f75
+derive worker 05fb2e72f642efd2f3b9c1a0fc3e1e44
+derive only role 6dbaaf759d311175f08bbe000aebc0ea
+derive noarg 495f4a0397328566de6dcf65e091cf69
+port.start 
+onconnect set function
+onmessage ret undefined
+reply {"success":false,"error":"no fetch"}
+replies 1

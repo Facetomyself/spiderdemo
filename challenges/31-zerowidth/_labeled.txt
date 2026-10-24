@@ -1,0 +1,66 @@
+0 join getElementById submitBtn\x0ael.on submitBtn click\x0agetElementById loadingOverlay\x0afetch GET /authentication/api/spiderking_challenge/init/?cn=H32 headers Accept,Referer,Origin,User-Agent\x0adone returned
+1 join "features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"
+2 utf8 {"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"height":1080,"width":1920},"webdriver":false}
+3 utf8 \x01
+4 utf8 {"dpr":1,"height":1080,"width":1920,"widthMatch":false}
+5 utf8 \x01
+6 utf8 {"env":"5.pulse.envDigest","media":"5.pulse.mediaDigest","salt":"mainSalt","sid":"sid"}
+7 utf8 mainSalt
+8 utf8 spiderdemo-spiderking/v1 | main | sid | cn | mainSalt | 5.ticket
+9 utf8 \x01
+10 join "features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"
+11 join "body":{"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"
+12 join "body":{"dpr":1,"height":1080,"width":1920,"widthMatch":false},"coherent":false,"digest":"H32"
+13 join "env":{"body":{"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewp
+14 utf8 {"env":{"body":{"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"height":1080,"width":1920},"webdriver":false},"digest":"fa6a81d604325126fe58d0f0fe9cd2fc","features":{"crypto":true,"fetch":true,"sharedWorker":true},"hardFlags":0,"webdriver":false},"mainSeal":"5.mainSeal","media":{"body":{"dpr":1,"height":1080,"width":1920,"widthMatch":false},"coherent":false,"digest":"baf4f1352d7dfe7097890f45e872efa5"},"sid":"sid","ticket":"5.ticket"}
+15 utf8 H32
+16 join "features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"
+17 join "body":{"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"
+18 join "body":{"dpr":1,"height":1080,"width":1920,"widthMatch":false},"coherent":false,"digest":"H32"
+19 join "env":{"body":{"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewp
+20 utf8 {"env":{"body":{"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"height":1080,"width":1920},"webdriver":false},"digest":"fa6a81d604325126fe58d0f0fe9cd2fc","features":{"crypto":true,"fetch":true,"sharedWorker":true},"hardFlags":0,"webdriver":false},"mainSeal":"5.mainSeal","media":{"body":{"dpr":1,"height":1080,"width":1920,"widthMatch":false},"coherent":false,"digest":"baf4f1352d7dfe7097890f45e872efa5"},"proof":"2.proof","sid":"sid","ticket":"5.ticket"}
+21 utf8 {"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"}
+22 utf8 \x01
+23 utf8 {"main":"5.mainSeal","salt":"workerSalt","sid":"sid","worker":"3.report.digest"}
+24 utf8 workerSalt
+25 utf8 spiderdemo-spiderking/v1 | worker | sid | workerSalt | 5.ticket | 5.mainSeal
+26 utf8 \x01
+27 join "body":{"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"},"digest":"H32","hasCrypto":true,"hasDocument":false,"noWindow":true,"sharedScope":true
+28 join "mainSeal":"H32","report":{"body":{"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"},"digest":"H32","hasCrypto":true,"hasDocument":false,"noWindow":true,"sharedScope":true
+29 utf8 {"mainSeal":"5.mainSeal","report":{"body":{"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"},"digest":"9567ac247cec6e93e98bc2b712541ab7","hasCrypto":true,"hasDocument":false,"noWindow":true,"sharedScope":true},"sid":"sid","ticket":"5.ticket","workerSeal":"5.workerSeal"}
+30 utf8 H32
+31 join "body":{"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"},"digest":"H32","hasCrypto":true,"hasDocument":false,"noWindow":true,"sharedScope":true
+32 join "mainSeal":"H32","proof":"H32","report":{"body":{"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"},"digest":"H32","hasCrypto":true,"hasDocument":false,"noWindow":true,"sha
+33 utf8 {"mainSeal":"5.mainSeal","proof":"3.proof","report":{"body":{"hasCrypto":true,"hasDocument":false,"hasWindow":false,"scope":"[object SharedWorkerGlobalScope]"},"digest":"9567ac247cec6e93e98bc2b712541ab7","hasCrypto":true,"hasDocument":false,"noWindow":true,"sharedScope":true},"sid":"sid","ticket":"5.ticket","workerSeal":"5.workerSeal"}
+34 join "features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"
+35 utf8 {"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"height":1080,"width":1920},"webdriver":false}
+36 utf8 \x01
+37 utf8 {"dpr":1,"height":1080,"width":1920,"widthMatch":false}
+38 utf8 \x01
+39 utf8 {"envDigest":"5.pulse.envDigest","mainSeal":"5.mainSeal","mediaDigest":"5.pulse.mediaDigest","page":1,"salt":"pageSalt","sid":"sid","workerSeal":"5.workerSeal"}
+40 utf8 pageSalt
+41 utf8 {"page":1,"pulse":"4.pulseSeal","salt":"pageSalt","sid":"sid"}
+42 utf8 pageSalt
+43 utf8 spiderdemo-spiderking/v1 | page | sid | pageSalt | 5.ticket | 5.mainSeal | 5.workerSeal
+44 utf8 \x01
+45 join "gate":"H32","mainSeal":"H32","page":1,"pulse":{"envDigest":"H32","mediaDigest":"H32"},"pulseSeal":"H32","sid":"H36","ticket":"H32","workerSeal":"H32"
+46 utf8 {"gate":"4.gate","mainSeal":"5.mainSeal","page":1,"pulse":{"envDigest":"fa6a81d604325126fe58d0f0fe9cd2fc","mediaDigest":"baf4f1352d7dfe7097890f45e872efa5"},"pulseSeal":"4.pulseSeal","sid":"sid","ticket":"5.ticket","workerSeal":"5.workerSeal"}
+47 utf8 H32
+48 join "gate":"H32","mainSeal":"H32","page":1,"proof":"H32","pulse":{"envDigest":"H32","mediaDigest":"H32"},"pulseSeal":"H32","sid":"H36","ticket":"H32","workerSeal":"H32"
+49 utf8 {"gate":"4.gate","mainSeal":"5.mainSeal","page":1,"proof":"4.proof","pulse":{"envDigest":"fa6a81d604325126fe58d0f0fe9cd2fc","mediaDigest":"baf4f1352d7dfe7097890f45e872efa5"},"pulseSeal":"4.pulseSeal","sid":"sid","ticket":"5.ticket","workerSeal":"5.workerSeal"}
+50 join "features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"
+51 utf8 {"features":{"crypto":true,"fetch":true,"sharedWorker":true},"nativeFetch":false,"ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36","viewport":{"dpr":1,"height":1080,"width":1920},"webdriver":false}
+52 utf8 \x01
+53 utf8 {"dpr":1,"height":1080,"width":1920,"widthMatch":false}
+54 utf8 \x01
+55 utf8 {"envDigest":"5.pulse.envDigest","mainSeal":"5.mainSeal","mediaDigest":"5.pulse.mediaDigest","page":2,"salt":"pageSalt","sid":"sid","workerSeal":"5.workerSeal"}
+56 utf8 pageSalt
+57 utf8 {"page":2,"pulse":"5.pulseSeal","salt":"pageSalt","sid":"sid"}
+58 utf8 pageSalt
+59 utf8 spiderdemo-spiderking/v1 | page | sid | pageSalt | 5.ticket | 5.mainSeal | 5.workerSeal
+60 utf8 \x01
+61 join "gate":"H32","mainSeal":"H32","page":2,"pulse":{"envDigest":"H32","mediaDigest":"H32"},"pulseSeal":"H32","sid":"H36","ticket":"H32","workerSeal":"H32"
+62 utf8 {"gate":"5.gate","mainSeal":"5.mainSeal","page":2,"pulse":{"envDigest":"fa6a81d604325126fe58d0f0fe9cd2fc","mediaDigest":"baf4f1352d7dfe7097890f45e872efa5"},"pulseSeal":"5.pulseSeal","sid":"sid","ticket":"5.ticket","workerSeal":"5.workerSeal"}
+63 utf8 H32
+64 join "gate":"H32","mainSeal":"H32","page":2,"proof":"H32","pulse":{"envDigest":"H32","mediaDigest":"H32"},"pulseSeal":"H32","sid":"H36","ticket":"H32","workerSeal":"H32"
+65 utf8 {"gate":"5.gate","mainSeal":"5.mainSeal","page":2,"proof":"5.proof","pulse":{"envDigest":"fa6a81d604325126fe58d0f0fe9cd2fc","mediaDigest":"baf4f1352d7dfe7097890f45e872efa5"},"pulseSeal":"5.pulseSeal","sid":"sid","ticket":"5.ticket","workerSeal":"5.workerSeal"}

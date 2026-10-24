@@ -1,0 +1,65 @@
+{
+  "schema": "web-reverse-case.v1",
+  "caseId": "spiderdemo-register-login",
+  "objective": "Recover the registration and login request chain on https://www.spiderdemo.cn/ so a later client can register, log in, and exercise crawler checks.",
+  "caseClass": "stateful",
+  "status": "triage",
+  "projectRoot": "D:\\reverse_ENV\\workspace\\spiderdemo",
+  "evidenceRoot": "evidence/web/",
+  "sensitivity": "private-redacted",
+  "routes": [
+    "ruyitrace"
+  ],
+  "stages": [
+    {
+      "name": "recon",
+      "status": "running"
+    },
+    {
+      "name": "browser-control",
+      "status": "skipped"
+    },
+    {
+      "name": "browser-evidence",
+      "status": "pending"
+    },
+    {
+      "name": "local-evidence",
+      "status": "pending"
+    },
+    {
+      "name": "environment-patch",
+      "status": "pending"
+    },
+    {
+      "name": "deobfuscation",
+      "status": "pending"
+    },
+    {
+      "name": "protocol-recovery",
+      "status": "pending"
+    },
+    {
+      "name": "parity",
+      "status": "pending"
+    }
+  ],
+  "activeRuns": {
+    "ruyitrace": "rt_20261010022224_c1437434d7",
+    "v8trace": null,
+    "v8trace-chromium": null,
+    "iv8": null
+  },
+  "contractRefs": {
+    "workflowArtifacts": "contracts/workflow-artifacts.v1.json",
+    "parameterLineage": "contracts/request-parameter-lineage.v1.json",
+    "riskControlPlan": null,
+    "riskControlReceipt": null
+  },
+  "handoffPath": null,
+  "notes": [],
+  "artifacts": [],
+  "limitations": [],
+  "createdAt": "2026-10-10T02:16:42Z",
+  "updatedAt": "2026-10-24T04:41:55Z"
+}

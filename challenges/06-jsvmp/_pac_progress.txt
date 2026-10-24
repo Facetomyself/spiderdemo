@@ -1,0 +1,702 @@
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=["getOwnPropertyDescriptor","document","get","indexOf","native code","createElement","canvas","getContext","2d","textBaseline","top","font"]
+call getAudioFingerprint
+ok getAudioFingerprint false strs=["OfflineAudioContext","createOscillator","createAnalyser"]
+call getUserAgent
+ok getUserAgent str:172 strs=["setPublicKey","navigator","substring","encrypt"]
+call getLanguage
+ok getLanguage undefined strs=["Navigator"]
+call getScreenResolution
+ok getScreenResolution undefined strs=["screen","Screen"]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=["cookieEnabled"]
+call getPlugins
+ok getPlugins undefined strs=[]
+call isSessionStorage
+ok isSessionStorage undefined strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=["apply"]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=["floor","now","a","href","aaa","jsvmp_challenge/aaa","jsvmp_secret_key_2022","concat","_","timestamp","hash"]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=[]
+call getAudioFingerprint
+ok getAudioFingerprint false strs=[]
+call getUserAgent
+ok getUserAgent str:172 strs=[]
+call getLanguage
+ok getLanguage undefined strs=[]
+call getScreenResolution
+ok getScreenResolution undefined strs=[]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=[]
+call getPlugins
+ok getPlugins undefined strs=[]
+call isSessionStorage
+ok isSessionStorage undefined strs=[]
+call isJavaEnabled
+ok isJavaEnabled false strs=[]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=[]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=["getOwnPropertyDescriptor","document","get","indexOf","native code","createElement","canvas","getContext","2d","textBaseline","top","font"]
+call getAudioFingerprint
+ok getAudioFingerprint false strs=["OfflineAudioContext","createOscillator","createAnalyser","createGain"]
+call getUserAgent
+ok getUserAgent str:172 strs=["setPublicKey","navigator","substring","encrypt"]
+call getLanguage
+ok getLanguage undefined strs=["Navigator"]
+call getScreenResolution
+ok getScreenResolution undefined strs=["screen","Screen"]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=["cookieEnabled"]
+call getPlugins
+ok getPlugins undefined strs=[]
+call isSessionStorage
+ok isSessionStorage undefined strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=["apply"]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=["floor","now","a","href","aaa","jsvmp_challenge/aaa","jsvmp_secret_key_2022","concat","_","timestamp","hash"]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=["getOwnPropertyDescriptor","document","get","indexOf","native code","createElement","canvas","getContext","2d","textBaseline","top","font"]
+call getAudioFingerprint
+ok getAudioFingerprint false strs=["OfflineAudioContext","createOscillator","createAnalyser","createGain"]
+call getUserAgent
+ok getUserAgent str:172 strs=["setPublicKey","navigator","substring","encrypt"]
+call getLanguage
+ok getLanguage undefined strs=["Navigator"]
+call getScreenResolution
+ok getScreenResolution undefined strs=["screen","Screen"]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=["cookieEnabled"]
+call getPlugins
+ok getPlugins undefined strs=[]
+call isSessionStorage
+ok isSessionStorage undefined strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=["apply"]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=["floor","now","a","href","aaa","jsvmp_challenge/aaa","jsvmp_secret_key_2022","concat","_","timestamp","hash"]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=["getOwnPropertyDescriptor","document","get","indexOf","native code","createElement","canvas","getContext","2d","textBaseline","top","font"]
+call getAudioFingerprint
+ok getAudioFingerprint false strs=["OfflineAudioContext","createOscillator","createAnalyser","createGain"]
+call getUserAgent
+ok getUserAgent str:172 strs=["setPublicKey","navigator","substring","encrypt"]
+call getLanguage
+ok getLanguage undefined strs=["Navigator"]
+call getScreenResolution
+ok getScreenResolution undefined strs=["screen","Screen"]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=["cookieEnabled"]
+call getPlugins
+ok getPlugins undefined strs=[]
+call isSessionStorage
+ok isSessionStorage undefined strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=["apply"]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=["floor","now","a","href","aaa","jsvmp_challenge/aaa","jsvmp_secret_key_2022","concat","_","timestamp","hash"]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=["getOwnPropertyDescriptor","document","get","indexOf","native code","createElement","canvas","getContext","2d","textBaseline","top","font"]
+call getAudioFingerprint
+ok getAudioFingerprint false strs=["OfflineAudioContext","createOscillator","createAnalyser","createGain","createScriptProcessor","type","triangle","frequency","setValueAtTime","currentTime"]
+call getUserAgent
+ok getUserAgent str:172 strs=["setPublicKey","navigator","substring","encrypt"]
+call getLanguage
+ok getLanguage undefined strs=["Navigator"]
+call getScreenResolution
+ok getScreenResolution undefined strs=["screen","Screen"]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=["cookieEnabled"]
+call getPlugins
+ok getPlugins undefined strs=[]
+call isSessionStorage
+ok isSessionStorage undefined strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=["apply"]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=["floor","now","a","href","aaa","jsvmp_challenge/aaa","jsvmp_secret_key_2022","concat","_","timestamp","hash"]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=["getOwnPropertyDescriptor","document","get","indexOf","native code","createElement","canvas","getContext","2d","textBaseline","top","font"]
+call getAudioFingerprint
+ok getAudioFingerprint false strs=["OfflineAudioContext","createOscillator","createAnalyser","createGain","createScriptProcessor","type","triangle","frequency","setValueAtTime","currentTime","gain"]
+call getUserAgent
+ok getUserAgent str:172 strs=["setPublicKey","navigator","substring","encrypt"]
+call getLanguage
+ok getLanguage undefined strs=["Navigator"]
+call getScreenResolution
+ok getScreenResolution undefined strs=["screen","Screen"]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=["cookieEnabled"]
+call getPlugins
+ok getPlugins undefined strs=[]
+call isSessionStorage
+ok isSessionStorage undefined strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=["apply"]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=["floor","now","a","href","aaa","jsvmp_challenge/aaa","jsvmp_secret_key_2022","concat","_","timestamp","hash"]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=["getOwnPropertyDescriptor","document","get","indexOf","native code","createElement","canvas","getContext","2d","textBaseline","top","font"]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=["OfflineAudioContext","createOscillator","createAnalyser","createGain","createScriptProcessor","type","triangle","frequency","setValueAtTime","currentTime","gain","connect"]
+call getUserAgent
+ok getUserAgent str:172 strs=["setPublicKey","navigator","substring","encrypt"]
+call getLanguage
+ok getLanguage undefined strs=["Navigator"]
+call getScreenResolution
+ok getScreenResolution undefined strs=["screen","Screen"]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=["cookieEnabled"]
+call getPlugins
+ok getPlugins undefined strs=[]
+call isSessionStorage
+ok isSessionStorage undefined strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=["apply"]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=["floor","now","a","href","aaa","jsvmp_challenge/aaa","jsvmp_secret_key_2025","concat","_","timestamp","hash"]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=[]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=[]
+call getUserAgent
+ok getUserAgent str:172 strs=[]
+call getLanguage
+ok getLanguage str:5 strs=[]
+call getScreenResolution
+ok getScreenResolution str:9 strs=[]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=[]
+call getPlugins
+err getPlugins Cannot read properties of undefined (reading 'set')
+call isSessionStorage
+ok isSessionStorage true strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=[]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=[]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=[]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=[]
+call getUserAgent
+ok getUserAgent str:172 strs=[]
+call getLanguage
+ok getLanguage str:5 strs=[]
+call getScreenResolution
+ok getScreenResolution str:9 strs=[]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=[]
+call getPlugins
+err getPlugins Cannot read properties of undefined (reading 'name')
+call isSessionStorage
+ok isSessionStorage true strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=[]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=[]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=[]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=[]
+call getUserAgent
+ok getUserAgent str:172 strs=[]
+call getLanguage
+ok getLanguage str:5 strs=[]
+call getScreenResolution
+ok getScreenResolution str:9 strs=[]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=[]
+call getPlugins
+ok getPlugins str:50 strs=[]
+call isSessionStorage
+ok isSessionStorage true strs=[]
+call isJavaEnabled
+ok isJavaEnabled false strs=[]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=[]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=[]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=[]
+call getUserAgent
+ok getUserAgent str:172 strs=[]
+call getLanguage
+ok getLanguage str:5 strs=[]
+call getScreenResolution
+ok getScreenResolution str:9 strs=[]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=[]
+call getPlugins
+ok getPlugins str:50 strs=[]
+call isSessionStorage
+ok isSessionStorage true strs=[]
+call isJavaEnabled
+ok isJavaEnabled false strs=[]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=[]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=[]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=[]
+call getUserAgent
+ok getUserAgent str:172 strs=[]
+call getLanguage
+ok getLanguage str:5 strs=[]
+call getScreenResolution
+ok getScreenResolution str:9 strs=[]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=[]
+call getPlugins
+ok getPlugins str:50 strs=[]
+call isSessionStorage
+ok isSessionStorage true strs=[]
+call isJavaEnabled
+ok isJavaEnabled false strs=[]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=[]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=["getOwnPropertyDescriptor","document","get","indexOf","native code","createElement","canvas","getContext","2d","textBaseline","top","font"]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=["OfflineAudioContext","createOscillator","createAnalyser","createGain","createScriptProcessor","type","triangle","frequency","setValueAtTime","currentTime","gain","connect"]
+call getUserAgent
+ok getUserAgent str:172 strs=["setPublicKey","navigator","substring","encrypt"]
+call getLanguage
+ok getLanguage str:5 strs=["Navigator","call"]
+call getScreenResolution
+ok getScreenResolution str:9 strs=["screen","Screen","width","x","height"]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=["cookieEnabled"]
+call getPlugins
+ok getPlugins str:50 strs=["set","from","map","name","join",", "]
+call isSessionStorage
+ok isSessionStorage true strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=["apply"]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=["floor","now","a","href","aaa","jsvmp_challenge/aaa","jsvmp_secret_key_2025","concat","_","timestamp","hash"]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=["getOwnPropertyDescriptor","document","get","indexOf","native code","createElement","canvas","getContext","2d","textBaseline","top","font"]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=["OfflineAudioContext","createOscillator","createAnalyser","createGain","createScriptProcessor","type","triangle","frequency","setValueAtTime","currentTime","gain","connect"]
+call getUserAgent
+ok getUserAgent str:172 strs=["setPublicKey","navigator","substring","encrypt"]
+call getLanguage
+ok getLanguage str:5 strs=["Navigator","call"]
+call getScreenResolution
+ok getScreenResolution str:9 strs=["screen","Screen","width","x","height"]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=["cookieEnabled"]
+call getPlugins
+ok getPlugins str:50 strs=["set","from","map","name","join",", "]
+call isSessionStorage
+ok isSessionStorage true strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=["apply"]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=["floor","now","a","href","aaa","jsvmp_challenge/aaa","jsvmp_secret_key_2025","concat","_","timestamp","hash"]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=["getOwnPropertyDescriptor","document","get","indexOf","native code","createElement","canvas","getContext","2d","textBaseline","top","font"]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=["OfflineAudioContext","createOscillator","createAnalyser","createGain","createScriptProcessor","type","triangle","frequency","setValueAtTime","currentTime","gain","connect"]
+call getUserAgent
+ok getUserAgent str:172 strs=["setPublicKey","navigator","substring","encrypt"]
+call getLanguage
+ok getLanguage str:5 strs=["Navigator","call"]
+call getScreenResolution
+ok getScreenResolution str:9 strs=["screen","Screen","width","x","height"]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=["cookieEnabled"]
+call getPlugins
+ok getPlugins str:50 strs=["set","from","map","name","join",", "]
+call isSessionStorage
+ok isSessionStorage true strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=["apply"]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=["floor","now","a","href","aaa","jsvmp_challenge/aaa","jsvmp_secret_key_2025","concat","_","timestamp","hash"]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=["getOwnPropertyDescriptor","document","get","indexOf","native code","createElement","canvas","getContext","2d","textBaseline","top","font"]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=["OfflineAudioContext","createOscillator","createAnalyser","createGain","createScriptProcessor","type","triangle","frequency","setValueAtTime","currentTime","gain","connect"]
+call getUserAgent
+ok getUserAgent str:172 strs=["setPublicKey","navigator","substring","encrypt"]
+call getLanguage
+ok getLanguage str:5 strs=["Navigator","call"]
+call getScreenResolution
+ok getScreenResolution str:9 strs=["screen","Screen","width","x","height"]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=["cookieEnabled"]
+call getPlugins
+ok getPlugins str:50 strs=["set","from","map","name","join",", "]
+call isSessionStorage
+ok isSessionStorage true strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=["apply"]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=["floor","now","a","href","aaa","jsvmp_challenge/aaa","jsvmp_secret_key_2025","concat","_","timestamp","hash"]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=["getOwnPropertyDescriptor","document","get","indexOf","native code","createElement","canvas","getContext","2d","textBaseline","top","font"]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=["OfflineAudioContext","createOscillator","createAnalyser","createGain","createScriptProcessor","type","triangle","frequency","setValueAtTime","currentTime","gain","connect"]
+call getUserAgent
+ok getUserAgent str:172 strs=["setPublicKey","navigator","substring","encrypt"]
+call getLanguage
+ok getLanguage str:5 strs=["Navigator","call"]
+call getScreenResolution
+ok getScreenResolution str:9 strs=["screen","Screen","width","x","height"]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=["cookieEnabled"]
+call getPlugins
+ok getPlugins str:50 strs=["set","from","map","name","join",", "]
+call isSessionStorage
+ok isSessionStorage true strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=["apply"]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=["floor","now","a","href","aaa","jsvmp_challenge/aaa","jsvmp_secret_key_2025","concat","_","timestamp","hash"]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=["getOwnPropertyDescriptor","document","get","indexOf","native code","createElement","canvas","getContext","2d","textBaseline","top","font"]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=["OfflineAudioContext","createOscillator","createAnalyser","createGain","createScriptProcessor","type","triangle","frequency","setValueAtTime","currentTime","gain","connect"]
+call getUserAgent
+ok getUserAgent str:172 strs=["setPublicKey","navigator","substring","encrypt"]
+call getLanguage
+ok getLanguage str:5 strs=["Navigator","call"]
+call getScreenResolution
+ok getScreenResolution str:9 strs=["screen","Screen","width","x","height"]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=["cookieEnabled"]
+call getPlugins
+ok getPlugins str:50 strs=["set","from","map","name","join",", "]
+call isSessionStorage
+ok isSessionStorage true strs=["Storage"]
+call isJavaEnabled
+ok isJavaEnabled false strs=["apply"]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=["floor","now","a","href","aaa","jsvmp_challenge/aaa","jsvmp_secret_key_2025","concat","_","timestamp","hash"]
+call isLocalStorage
+ok isLocalStorage true strs=[]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=[]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=[]
+call getUserAgent
+ok getUserAgent str:172 strs=[]
+call getLanguage
+ok getLanguage str:5 strs=[]
+call getScreenResolution
+ok getScreenResolution str:9 strs=[]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=[]
+call getPlugins
+ok getPlugins str:50 strs=[]
+call isSessionStorage
+ok isSessionStorage true strs=[]
+call isJavaEnabled
+ok isJavaEnabled false strs=[]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=[]
+call isLocalStorage
+ok isLocalStorage true strs=[]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=[]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=[]
+call getUserAgent
+ok getUserAgent str:172 strs=[]
+call getLanguage
+ok getLanguage str:5 strs=[]
+call getScreenResolution
+ok getScreenResolution str:9 strs=[]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=[]
+call getPlugins
+ok getPlugins str:50 strs=[]
+call isSessionStorage
+ok isSessionStorage true strs=[]
+call isJavaEnabled
+ok isJavaEnabled false strs=[]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=[]
+call isLocalStorage
+ok isLocalStorage true strs=[]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=[]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=[]
+call getUserAgent
+ok getUserAgent str:172 strs=[]
+call getLanguage
+ok getLanguage str:5 strs=[]
+call getScreenResolution
+ok getScreenResolution str:9 strs=[]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=[]
+call getPlugins
+ok getPlugins str:50 strs=[]
+call isSessionStorage
+ok isSessionStorage true strs=[]
+call isJavaEnabled
+ok isJavaEnabled false strs=[]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=[]
+call isLocalStorage
+ok isLocalStorage true strs=[]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=[]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=[]
+call getUserAgent
+ok getUserAgent str:172 strs=[]
+call getLanguage
+ok getLanguage str:5 strs=[]
+call getScreenResolution
+ok getScreenResolution str:9 strs=[]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=[]
+call getPlugins
+ok getPlugins str:50 strs=[]
+call isSessionStorage
+ok isSessionStorage true strs=[]
+call isJavaEnabled
+ok isJavaEnabled false strs=[]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=[]
+call isLocalStorage
+ok isLocalStorage true strs=[]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=[]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=[]
+call getUserAgent
+ok getUserAgent str:172 strs=[]
+call getLanguage
+ok getLanguage str:5 strs=[]
+call getScreenResolution
+ok getScreenResolution str:9 strs=[]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=[]
+call getPlugins
+ok getPlugins str:50 strs=[]
+call isSessionStorage
+ok isSessionStorage true strs=[]
+call isJavaEnabled
+ok isJavaEnabled false strs=[]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=[]
+call isLocalStorage
+ok isLocalStorage true strs=[]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=[]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=[]
+call getUserAgent
+ok getUserAgent str:172 strs=[]
+call getLanguage
+ok getLanguage str:5 strs=[]
+call getScreenResolution
+ok getScreenResolution str:9 strs=[]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=[]
+call getPlugins
+ok getPlugins str:50 strs=[]
+call isSessionStorage
+ok isSessionStorage true strs=[]
+call isJavaEnabled
+ok isJavaEnabled false strs=[]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=[]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=[]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=[]
+call getUserAgent
+ok getUserAgent str:172 strs=[]
+call getLanguage
+ok getLanguage str:5 strs=[]
+call getScreenResolution
+ok getScreenResolution str:9 strs=[]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=[]
+call getPlugins
+ok getPlugins str:50 strs=[]
+call isSessionStorage
+ok isSessionStorage true strs=[]
+call isJavaEnabled
+ok isJavaEnabled false strs=[]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=[]
+call isLocalStorage
+ok isLocalStorage true strs=["localStorage","setItem","spiderdemo","getItem","removeItem"]
+call getCanvasFingerprint
+ok getCanvasFingerprint true strs=[]
+call getAudioFingerprint
+ok getAudioFingerprint true strs=[]
+call getUserAgent
+ok getUserAgent str:172 strs=[]
+call getLanguage
+ok getLanguage str:5 strs=[]
+call getScreenResolution
+ok getScreenResolution str:9 strs=[]
+call getColorDepth
+ok getColorDepth str:2 strs=[]
+call getTimezoneOffset
+ok getTimezoneOffset -480 strs=[]
+call areCookiesEnabled
+ok areCookiesEnabled true strs=[]
+call getPlugins
+ok getPlugins str:50 strs=[]
+call isSessionStorage
+ok isSessionStorage true strs=[]
+call isJavaEnabled
+ok isJavaEnabled false strs=[]
+call generateAuthHash
+ok generateAuthHash obj:timestamp,hash strs=[]

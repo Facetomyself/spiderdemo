@@ -1,0 +1,5 @@
+# 28 TextEncoder realm
+
+The pre-cookie page turn encodes a 63-byte body shaped `32|13|jsvmp2_challenge`. Copying Node's `TextEncoder` into the vm makes `instanceof Uint8Array` false inside the realm. An in-realm byte copy made that check true. A frozen one-worker replay of the same init kept the sealed token id and closed `4003`. The copy was removed. The replay after removal still closed `4003` with that same token id.
+
+The shipped remember log for the page script, before `INIT` is posted, names `Math.imul`, `location.hostname`, `Date.now`, `Math.floor`, `location.search`, `document.querySelector`, an `innerHTML` write, `document.getElementById`, `style`, `createElement`, `setAttribute` of `id`, `documentElement`, `appendChild`, `removeChild`, anchor `href`, `navigator.webdriver`, `Math.min`, and the cookie write. The href row is `other:8:out66:append:plain`. The tag row is `a`. The id row is `id:17:url`. `TextEncoder` is not in that log because the constructor is not wrapped. No second trace.

@@ -1,0 +1,1418 @@
+智能复选框 (CheckboxCaptcha) | WlzShield - 免费且易集成的验证码
+Skip to content
+WlzShield
+Main Navigation
+首页
+文档
+更新日志
+社区
+Appearance
+Menu
+Return to top
+Sidebar Navigation
+接入指南
+快速上手
+更新日志
+组件文档
+智能复选框 (Checkbox)
+站点停靠 (Checkpoint)
+视觉对焦 (Focus)
+磁力排斥 (Magnet)
+避障轨迹 (Obstacle)
+角度矫正 (Rotation)
+刮刮乐 (Scratch)
+光影重合 (Shadow)
+社区和赞助
+社区
+赞助
+On this page
+智能复选框 (CheckboxCaptcha)
+​
+仿 Cloudflare Turnstile 风格的轻量级组件。用户通常只需点击一下复选框即可完成验证。仅支持嵌入式模式，提供完整的验证流程和UI状态管理。
+交互流程
+​
+用户点击复选框。
+组件显示"验证中..."，并在此期间在后台进行环境安全检测。
+验证通过后，自动显示绿色对勾；若失败，提示用户刷新重试。
+基础用法
+​
+html
+<
+div
+id
+=
+"captcha-container"
+></
+div
+>
+<
+script
+>
+// 创建 CheckboxCaptcha 实例
+const
+checkbox
+=
+new
+WlzShield.
+CheckboxCaptcha
+({
+siteKey:
+'your-site-key'
+,
+// 必填：网站唯一标识
+containerId:
+'#captcha-container'
+,
+// 必填：挂载容器ID
+width:
+300
+// 组件宽度（默认300px）
+});
+// 可选：监听验证结果
+checkbox.config.
+onSuccess
+=
+function
+(
+data
+) {
+console.
+log
+(
+'验证成功:'
+, data);
+// 将验证凭证提交到您的后端
+// data.wsToken 或 data.sign 等字段可用于后端验证
+};
+</
+script
+>
+在线体验
+​
+您可以直接在这里体验智能复选框的交互效果：
+配置参数 (API)
+​
+基础配置
+​
+参数名
+类型
+默认值
+是否必填
+说明
+siteKey
+string
+-
+必填
+网站唯一标识，用于区分不同站点的验证请求
+containerId
+string
+-
+必填
+DOM 容器 ID 选择器 (如
+#captcha-box
+)
+challengeUrl
+string
+/api/challenge
+可选
+后端验证接口地址
+width
+number | string
+300
+可选
+组件宽度，支持数字(px)或CSS字符串(如
+'100%'
+,
+'320px'
+)
+lang
+string
+zh
+可选
+语言设置：
+'zh'
+(中文) 或
+'en'
+(英文)
+mode
+'embed' | 'popup'
+'embed'
+可选
+CheckboxCaptcha 仅支持 'embed' 模式
+，设置 'popup' 将被强制转换为 'embed'
+timeout
+number
+10000
+可选
+请求超时时间(毫秒)
+高级配置
+​
+参数名
+类型
+默认值
+说明
+customTexts
+Record<string, string>
+{}
+自定义文案，覆盖默认的按钮文本、提示信息等
+customStyles
+Partial<CSSStyleDeclaration>
+{}
+自定义主容器样式，应用于整个验证码组件
+popupStyles
+Partial<CSSStyleDeclaration>
+{}
+仅对popup模式有效，CheckboxCaptcha中不使用
+回调函数
+​
+参数名
+类型
+默认值
+说明
+onReady
+() => void
+undefined
+组件加载完成时触发
+onSuccess
+(data: any) => void
+undefined
+验证通过时触发
+onFailure
+(data: any) => void
+undefined
+验证失败时触发（逻辑拒绝，如轨迹异常）
+onError
+(error: Error) => void
+undefined
+系统/网络错误时触发（如 404, 500, 网络断开）
+onOpen
+() => void
+undefined
+仅popup模式有效，CheckboxCaptcha中不使用
+onClose
+() => void
+undefined
+仅popup模式有效，CheckboxCaptcha中不使用
+详细配置说明
+​
+自定义文案 (customTexts)
+​
+您可以覆盖以下默认文案：
+javascript
+const
+checkbox
+=
+new
+WlzShield.
+CheckboxCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-container'
+,
+customTexts: {
+// 覆盖按钮初始文本
+buttonText:
+'点击验证'
+,
+// 覆盖验证中文本（进度百分比展示在最后面）
+verifying:
+'正在验证...'
+,
+// 覆盖成功文本
+successText:
+'验证成功'
+,
+// 覆盖失败文本
+failText:
+'验证失败，请重试'
+,
+// 覆盖网络错误提示
+errorNetwork:
+'网络连接异常'
+,
+// 覆盖超时提示
+errorTimeout:
+'请求超时，请检查网络'
+}
+});
+自定义样式 (customStyles)
+​
+您可以调整验证码组件的外观样式：
+javascript
+const
+checkbox
+=
+new
+WlzShield.
+CheckboxCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-container'
+,
+customStyles: {
+// 修改背景色
+backgroundColor:
+'#f8f9fa'
+,
+// 添加边框阴影
+boxShadow:
+'0 2px 8px rgba(0,0,0,0.1)'
+,
+// 调整边框
+border:
+'1px solid #dee2e6'
+,
+// 修改圆角
+borderRadius:
+'8px'
+,
+// 调整内边距
+padding:
+'16px'
+,
+// 修改字体
+fontFamily:
+'"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
+,
+// 修改鼠标悬停效果
+transition:
+'all 0.3s ease'
+}
+});
+响应式宽度设置
+​
+javascript
+const
+checkbox
+=
+new
+WlzShield.
+CheckboxCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-container'
+,
+width:
+'100%'
+,
+// 宽度自适应父容器
+// 或者指定具体宽度
+// width: 320,
+// 320px
+// width: '280px'
+// 280px
+});
+多语言支持
+​
+javascript
+// 显式指定语言
+const
+checkbox
+=
+new
+WlzShield.
+CheckboxCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-container'
+,
+lang:
+'en'
+// 强制使用英文界面
+});
+// 自动检测浏览器语言
+const
+checkbox
+=
+new
+WlzShield.
+CheckboxCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-container'
+,
+lang: navigator.language.
+startsWith
+(
+'zh'
+)
+?
+'zh'
+:
+'en'
+});
+完整示例
+​
+示例1：基础验证表单集成
+​
+html
+<!
+DOCTYPE
+html
+>
+<
+html
+>
+<
+head
+>
+<
+title
+>智能复选框验证示例</
+title
+>
+<
+style
+>
+body
+{
+font-family
+:
+Arial
+,
+sans-serif
+;
+padding
+:
+40
+px
+;
+}
+.login-form
+{
+max-width
+:
+400
+px
+;
+margin
+:
+0
+auto
+;
+}
+.form-group
+{
+margin-bottom
+:
+20
+px
+;
+}
+label
+{
+display
+:
+block
+;
+margin-bottom
+:
+5
+px
+;
+font-weight
+:
+bold
+;
+}
+input
+{
+width
+:
+100
+%
+;
+padding
+:
+10
+px
+;
+border
+:
+1
+px
+solid
+#ddd
+;
+border-radius
+:
+4
+px
+;
+}
+button
+{
+width
+:
+100
+%
+;
+padding
+:
+12
+px
+;
+background
+:
+#007bff
+;
+color
+:
+white
+;
+border
+:
+none
+;
+border-radius
+:
+4
+px
+;
+cursor
+:
+pointer
+;
+}
+button
+:disabled
+{
+background
+:
+#ccc
+;
+cursor
+:
+not-allowed
+;
+}
+#captcha-box
+{
+margin
+:
+20
+px
+0
+;
+}
+</
+style
+>
+<
+script
+src
+=
+"https://captcha.wangluozhe.com/static/js/vendors.min.js"
+></
+script
+>
+<
+script
+src
+=
+"https://captcha.wangluozhe.com/static/js/wlzshield.min.js"
+></
+script
+>
+</
+head
+>
+<
+body
+>
+<
+form
+class
+=
+"login-form"
+id
+=
+"loginForm"
+>
+<
+div
+class
+=
+"form-group"
+>
+<
+label
+>用户名</
+label
+>
+<
+input
+type
+=
+"text"
+id
+=
+"username"
+required
+>
+</
+div
+>
+<
+div
+class
+=
+"form-group"
+>
+<
+label
+>密码</
+label
+>
+<
+input
+type
+=
+"password"
+id
+=
+"password"
+required
+>
+</
+div
+>
+<!-- 验证码容器 -->
+<
+div
+id
+=
+"captcha-box"
+></
+div
+>
+<
+button
+type
+=
+"submit"
+id
+=
+"submitBtn"
+disabled
+>登录</
+button
+>
+</
+form
+>
+<
+script
+>
+let
+captchaInstance
+=
+null
+;
+let
+isVerified
+=
+false
+;
+// 初始化验证码
+captchaInstance
+=
+new
+WlzShield.
+CheckboxCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-box'
+,
+width:
+'100%'
+,
+customTexts: {
+buttonText:
+'点击验证'
+,
+successText:
+'✓ 验证通过'
+},
+customStyles: {
+backgroundColor:
+'#f8f9fa'
+,
+border:
+'1px solid #dee2e6'
+,
+borderRadius:
+'6px'
+},
+onSuccess
+:
+function
+(
+data
+) {
+console.
+log
+(
+'验证成功，凭证:'
+, data);
+isVerified
+=
+true
+;
+document.
+getElementById
+(
+'submitBtn'
+).disabled
+=
+false
+;
+},
+onFailure
+:
+function
+(
+data
+) {
+console.
+warn
+(
+'验证失败:'
+, data);
+isVerified
+=
+false
+;
+document.
+getElementById
+(
+'submitBtn'
+).disabled
+=
+true
+;
+// 可以在这里显示错误提示
+alert
+(
+'验证失败，请重试'
+);
+},
+onError
+:
+function
+(
+error
+) {
+console.
+error
+(
+'系统错误:'
+, error);
+alert
+(
+'验证系统错误，请刷新页面'
+);
+}
+});
+// 表单提交处理
+document.
+getElementById
+(
+'loginForm'
+).
+addEventListener
+(
+'submit'
+,
+function
+(
+e
+) {
+e.
+preventDefault
+();
+if
+(
+!
+isVerified) {
+alert
+(
+'请先完成验证'
+);
+return
+;
+}
+// 收集表单数据
+const
+formData
+=
+{
+username: document.
+getElementById
+(
+'username'
+).value,
+password: document.
+getElementById
+(
+'password'
+).value,
+// 这里通常还需要传递验证凭证给后端
+// captchaToken: captchaInstance.getToken()
+// 如果API提供此方法
+};
+console.
+log
+(
+'提交登录数据:'
+, formData);
+// 这里发送到您的后端进行验证
+});
+</
+script
+>
+</
+body
+>
+</
+html
+>
+示例2：自定义主题样式
+​
+javascript
+// 深色主题验证码
+const
+darkThemeCaptcha
+=
+new
+WlzShield.
+CheckboxCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#dark-captcha'
+,
+customStyles: {
+backgroundColor:
+'#1e293b'
+,
+borderColor:
+'#475569'
+,
+color:
+'#f1f5f9'
+,
+boxShadow:
+'0 4px 12px rgba(0,0,0,0.3)'
+},
+customTexts: {
+buttonText:
+'验证身份'
+,
+successText:
+'✓ 已验证'
+}
+});
+// 圆润风格验证码
+const
+roundedCaptcha
+=
+new
+WlzShield.
+CheckboxCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#rounded-captcha'
+,
+customStyles: {
+borderRadius:
+'20px'
+,
+padding:
+'20px'
+,
+backgroundColor:
+'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+,
+color:
+'white'
+,
+border:
+'none'
+},
+customTexts: {
+buttonText:
+'确认人类身份'
+,
+successText:
+'✓ 验证完成'
+}
+});
+示例3：与框架集成 (Vue.js)
+​
+vue
+<
+template
+>
+<
+div
+>
+<
+h2
+>用户注册</
+h2
+>
+<
+form
+@
+submit
+.
+prevent
+=
+"
+handleSubmit
+"
+>
+<
+input
+v-model
+=
+"
+email
+"
+placeholder
+=
+"邮箱"
+/>
+<
+input
+v-model
+=
+"
+password
+"
+type
+=
+"password"
+placeholder
+=
+"密码"
+/>
+<!-- 验证码容器 -->
+<
+div
+ref
+=
+"captchaContainer"
+></
+div
+>
+<
+button
+:
+disabled
+=
+"
+!
+captchaVerified
+"
+>注册</
+button
+>
+</
+form
+>
+</
+div
+>
+</
+template
+>
+<
+script
+>
+import
+{ref, onMounted}
+from
+'vue'
+;
+export
+default
+{
+setup
+() {
+const
+captchaContainer
+=
+ref
+(
+null
+);
+const
+captchaVerified
+=
+ref
+(
+false
+);
+const
+email
+=
+ref
+(
+''
+);
+const
+password
+=
+ref
+(
+''
+);
+let
+captchaInstance
+=
+null
+;
+onMounted
+(()
+=>
+{
+if
+(captchaContainer.value) {
+// 动态设置containerId
+captchaContainer.value.id
+=
+'captcha-'
++
+Date.
+now
+();
+captchaInstance
+=
+new
+WlzShield.
+CheckboxCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#'
++
+captchaContainer.value.id,
+onSuccess
+: (
+data
+)
+=>
+{
+captchaVerified.value
+=
+true
+;
+console.
+log
+(
+'Vue组件中的验证成功:'
+, data);
+},
+onFailure
+: ()
+=>
+{
+captchaVerified.value
+=
+false
+;
+}
+});
+}
+});
+const
+handleSubmit
+=
+()
+=>
+{
+if
+(
+!
+captchaVerified.value) {
+alert
+(
+'请先完成验证'
+);
+return
+;
+}
+// 提交表单逻辑
+console.
+log
+(
+'提交注册:'
+, {email: email.value, password: password.value});
+};
+return
+{captchaContainer, captchaVerified, email, password, handleSubmit};
+}
+};
+</
+script
+>
+实例方法
+​
+reset()
+​
+重置验证码到初始状态。当您的业务逻辑需要重置验证码时（例如：用户提交表单后，后端报错提示密码错误，此时需要重置验证码以便用户再次尝试），可调用此方法。
+javascript
+// 1. 保存实例引用
+const
+myCaptcha
+=
+new
+WlzShield.
+CheckboxCaptcha
+({
+siteKey:
+'your-site-key'
+,
+containerId:
+'#captcha-box'
+});
+// 2. 在需要的时候调用
+function
+handleFormError
+() {
+// 重置为初始状态
+myCaptcha.
+reset
+();
+// 可以同时重置表单等其他元素
+document.
+getElementById
+(
+'username'
+).value
+=
+''
+;
+document.
+getElementById
+(
+'password'
+).value
+=
+''
+;
+}
+openModal()
+和
+closeModal()
+​
+注意
+: CheckboxCaptcha 强制使用 embed 模式，这些方法在此组件中不可用。
+事件回调详解
+​
+onSuccess
+​
+验证成功时触发，返回后端验证数据。
+javascript
+new
+WlzShield.
+CheckboxCaptcha
+({
+// ... 其他配置
+onSuccess
+:
+function
+(
+data
+) {
+console.
+log
+(
+'验证成功，完整响应:'
+, data);
+// 通常后端会返回一个wsToken或签名，用于后续请求
+if
+(data.wsToken) {
+// 存储token到表单隐藏字段
+document.
+getElementById
+(
+'captcha-token'
+).value
+=
+data.wsToken;
+// 或者设置到请求头中
+window.axios.defaults.headers.common[
+'X-wsToken'
+]
+=
+data.wsToken;
+}
+}
+});
+onFailure
+​
+验证失败时触发，可能是用户行为异常或安全检测不通过。
+javascript
+new
+WlzShield.
+CheckboxCaptcha
+({
+// ... 其他配置
+onFailure
+:
+function
+(
+data
+) {
+console.
+warn
+(
+'验证失败，原因:'
+, data.msg
+||
+'未知原因'
+);
+// 显示友好提示
+showNotification
+(
+'验证失败：'
++
+(data.msg
+||
+'请重试'
+),
+'error'
+);
+// 可以记录失败次数，达到阈值后采取进一步措施
+failureCount
+++
+;
+if
+(failureCount
+>=
+3
+) {
+// 显示更严格的验证方式或限制操作
+showStrictVerification
+();
+}
+}
+});
+onError
+​
+系统错误时触发，通常是网络问题或配置错误。
+javascript
+new
+WlzShield.
+CheckboxCaptcha
+({
+// ... 其他配置
+onError
+:
+function
+(
+error
+) {
+console.
+error
+(
+'验证系统错误:'
+, error);
+// 根据错误类型提供不同的处理
+if
+(error.message.
+includes
+(
+'Network'
+)) {
+showNotification
+(
+'网络连接失败，请检查网络设置'
+,
+'error'
+);
+}
+else
+if
+(error.message.
+includes
+(
+'Timeout'
+)) {
+showNotification
+(
+'请求超时，请重试'
+,
+'warning'
+);
+}
+else
+{
+showNotification
+(
+'验证系统异常，请刷新页面'
+,
+'error'
+);
+}
+// 可以启用备选验证方案
+enableFallbackCaptcha
+();
+}
+});
+onReady
+​
+组件加载完成时触发，可以确保DOM已就绪。
+javascript
+new
+WlzShield.
+CheckboxCaptcha
+({
+// ... 其他配置
+onReady
+:
+function
+() {
+console.
+log
+(
+'验证码组件已加载完成'
+);
+// 可以在这里进行一些初始化操作
+document.
+getElementById
+(
+'submit-btn'
+).style.opacity
+=
+1
+;
+// 或者开始一些动画效果
+startIntroAnimation
+();
+}
+});
+注意事项
+​
+仅支持嵌入式模式
+: CheckboxCaptcha 强制使用
+embed
+模式，即使配置为
+popup
+也会被自动转换。
+依赖 WlzShield
+: 组件依赖于全局的
+WlzShield
+对象进行设备指纹采集，请确保在加载组件前已引入 WlzShield SDK。
+样式隔离
+: 组件使用 Shadow DOM 实现样式隔离，自定义样式需要通过
+customStyles
+配置项应用，直接通过CSS选择器可能无法生效。
+响应式设计
+: 组件内部使用 CSS 变量
+--wlz-s
+控制缩放比例，确保在不同尺寸下保持视觉一致性。
+多实例支持
+: 可以在同一页面创建多个 CheckboxCaptcha 实例，但需要确保每个实例都有独立的
+containerId
+。
+SEO友好
+: 验证码内容通过JavaScript动态生成，不会影响搜索引擎爬虫对页面的索引。
+故障排查
+​
+常见问题
+​
+组件不显示
+检查
+containerId
+是否正确，元素是否存在
+查看控制台是否有错误信息
+确保 WlzShield SDK 已正确加载
+验证总是失败
+确认
+siteKey
+是否正确
+检查网络连接是否正常
+查看后端验证接口是否可访问
+样式异常
+检查
+customStyles
+配置是否正确
+确保没有其他CSS规则干扰 Shadow DOM
+尝试使用更具体的样式属性
+调试技巧
+​
+javascript
+// 创建实例时添加错误处理
+try
+{
+const
+captcha
+=
+new
+WlzShield.
+CheckboxCaptcha
+({
+// 配置
+});
+}
+catch
+(error) {
+console.
+error
+(
+'初始化失败:'
+, error);
+// 显示友好错误提示
+document.
+getElementById
+(
+'captcha-container'
+).innerHTML
+=
+'<div class="error">验证码加载失败，请刷新页面</div>'
+;
+}
+浏览器兼容性
+​
+Chrome 60+
+Firefox 63+
+Safari 12+
+Edge 79+
+对于不支持 Shadow DOM 的旧版浏览器，组件会自动降级到常规 DOM 渲染。
+通过以上详细文档，您可以全面了解 CheckboxCaptcha 的使用方法和配置选项。如有进一步问题，请参考源码或联系技术支持。
+Pager
+Previous page
+更新日志
+Next page
+站点停靠 (Checkpoint)
+Released under the MIT License.
+Copyright © 2025 WlzShield
