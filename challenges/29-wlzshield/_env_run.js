@@ -51,8 +51,37 @@ function makeNode() {
   return node;
 }
 
+function shapeOf(body) {
+  if (!body) return "empty";
+  const text = typeof body === "string" ? body : Buffer.from(body).toString("utf8");
+  try {
+    const parsed = JSON.parse(text);
+    if (!parsed || typeof parsed !== "object") return "scalar";
+    return Object.keys(parsed).map((key) => {
+      const value = parsed[key];
+      const kind = value == null ? "null" : Array.isArray(value) ? "arr" + value.length : typeof value;
+      const size = value == null ? 0 : String(value).length;
+      return key + ":" + kind + ":" + size;
+    }).join(",");
+  } catch (_error) {
+    return "raw:" + text.length;
+  }
+}
+
+function responseShape(text) {
+  try {
+    const parsed = JSON.parse(text);
+    const keys = parsed && typeof parsed === "object" ? Object.keys(parsed) : [];
+    const msg = parsed && (parsed.msg || parsed.message || parsed.error) || "";
+    const tokenLen = parsed && parsed.wsToken ? String(parsed.wsToken).length : 0;
+    return "keys " + keys.join(",") + " msg " + String(msg).slice(0, 40) + " tokenlen " + tokenLen;
+  } catch (_error) {
+    return "raw " + String(text).length;
+  }
+}
+
 function request(method, url, body, headers, done) {
-  note("http " + method + " " + url + " bodylen " + (body ? String(body).length : 0));
+  note("http " + method + " " + url + " " + shapeOf(body));
   let parsed;
   try { parsed = new URL(url); } catch (error) { note("bad-url " + url); done(0, ""); return; }
   const lib = parsed.protocol === "http:" ? require("http") : https;
@@ -68,7 +97,7 @@ function request(method, url, body, headers, done) {
     res.on("data", (chunk) => chunks.push(chunk));
     res.on("end", () => {
       const text = Buffer.concat(chunks).toString("utf8");
-      note("status " + res.statusCode + " " + text.slice(0, 180).replace(/\s+/g, " "));
+      note("status " + res.statusCode + " " + responseShape(text));
       done(res.statusCode, text);
     });
   });
@@ -248,4 +277,4 @@ setTimeout(() => {
 setTimeout(() => {
   fs.writeFileSync(path.join(root, "_env_log.txt"), logs.join("\n"), "utf8");
   process.exit(0);
-}, 4000);
+}, 12000);

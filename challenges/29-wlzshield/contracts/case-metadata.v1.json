@@ -1,0 +1,15 @@
+{
+  "schema": "case-metadata.v1",
+  "caseId": "wlzshield-captcha",
+  "projectRoot": "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\29-wlzshield",
+  "caseClass": "challenge",
+  "currentHead": "ce8eb67bfb42e14017ec7e0895d6d2c96afb4c68",
+  "contractRevision": 0,
+  "contractRefs": {
+    "workflowArtifacts": "contracts/workflow-artifacts.v1.json",
+    "parameterLineage": "contracts/request-parameter-lineage.v1.json",
+    "riskControlPlan": null,
+    "riskControlReceipt": null
+  },
+  "updatedAt": "2026-10-25T08:32:11Z"
+}

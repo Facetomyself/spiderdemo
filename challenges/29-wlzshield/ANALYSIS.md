@@ -19,6 +19,6 @@
 
 ## 重点解决思路
 
-静态还原签名后，用登录会话核对过两道门：坏签名是「签名验证失败，请刷新重试」；好签名且 token 为空是「缺少验证token」；好签名且 token 非空是「验证服务暂时不可用」。
+静态还原签名后，用登录会话核对过这几道门：坏签名是「签名验证失败，请刷新重试」；好签名且 token 为空是「缺少验证token」；好签名且 token 非空、但不是厂商认可的 `wsToken` 时，站点返回「无效的Token」。
 
-控件在 jsdom 补环境里可以构造，并发起挑战请求。`https://captcha.wangluozhe.com/api/challenge` 与 `/api/verify` 当前都是网关 502。站点核销不在本地验签，而是转给这台主机，所以任意非空 token 都得到同一句不可用。没有 `wsToken` 就没有第 2–100 页，提交总和不会被判对。验证码主机恢复后，同一条 verify/submit 链才能收口。
+`https://captcha.wangluozhe.com/api/challenge` 已经恢复。只带 siteKey 的 POST 是 HTTP 400，正文 `认证失败`、`wsToken` 为空。控件在 jsdom 里能跑完采集，挑战正文字段仍是 `timestamp`、`wlzData`、`siteKey`、`type=checkbox`。`getEncryptedPayload` 在当前补环境里返回空串；把 `calculateHash` 得到的指纹密文按浏览器 Origin 提交后，厂商回 HTTP 200，`status=false`，`msg=认证失败`，`wsToken` 仍为空。完整性检查会把 jsdom 标成原生函数、`document.all`、XHR、节点栈和环境代理都不通过，所以这一条密文换不到能过站点 verify 的 token。没有这个 token，第 2–100 页拿不到，总和也不能提交。`result.json` 仍保持上一次站点回执，没有手写通过。

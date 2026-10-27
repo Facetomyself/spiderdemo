@@ -1,0 +1,65 @@
+{
+  "schema": "web-reverse-case.v1",
+  "caseId": "wlzshield-captcha",
+  "objective": "Recover the wlzshield checkbox captcha init, vendor challenge, and site verify path so a local solver can submit the page sum.",
+  "caseClass": "challenge",
+  "status": "triage",
+  "projectRoot": "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\29-wlzshield",
+  "evidenceRoot": "evidence/web/",
+  "sensitivity": "private-redacted",
+  "routes": [
+    "ruyitrace"
+  ],
+  "stages": [
+    {
+      "name": "recon",
+      "status": "running"
+    },
+    {
+      "name": "browser-control",
+      "status": "skipped"
+    },
+    {
+      "name": "browser-evidence",
+      "status": "pending"
+    },
+    {
+      "name": "local-evidence",
+      "status": "pending"
+    },
+    {
+      "name": "environment-patch",
+      "status": "pending"
+    },
+    {
+      "name": "deobfuscation",
+      "status": "pending"
+    },
+    {
+      "name": "protocol-recovery",
+      "status": "pending"
+    },
+    {
+      "name": "parity",
+      "status": "pending"
+    }
+  ],
+  "activeRuns": {
+    "ruyitrace": null,
+    "v8trace": null,
+    "v8trace-chromium": null,
+    "iv8": null
+  },
+  "contractRefs": {
+    "workflowArtifacts": "contracts/workflow-artifacts.v1.json",
+    "parameterLineage": "contracts/request-parameter-lineage.v1.json",
+    "riskControlPlan": null,
+    "riskControlReceipt": null
+  },
+  "handoffPath": null,
+  "notes": [],
+  "artifacts": [],
+  "limitations": [],
+  "createdAt": "2026-10-25T08:32:11Z",
+  "updatedAt": "2026-10-25T08:32:11Z"
+}

@@ -5,6 +5,110 @@ ns open:wtruectrueetruegundefined send:wtruectrueetruegundefined same true fetch
 iframe cw true fetch function xhr true
 native xhr true open true send true ws true fetch true rtc true
 CryptoJS undefined
+chr WlzCollector
+chr encryptAES
+chr encryptValue
+chr encryptWithSeed
+chr ENCRYPT_KEY
+chr wlz_fp_secret_key_2025
+chr getEncryptedPayload
+chr isNativeFunction
+chr nativeLength
+chr checkConsoleErrorProperty
+chr checkPromiseErrorGetter
+chr HookTrap
+chr checkAllHooks
+chr checkXHR
+chr verifyRenderError
+chr checkNativeIntegrity
+chr handleFailureState
+chr handleErrorState
+chr handleFatalError
+chr startWlz
+chr stopWlz
+chr restartWlz
+chr initWlzShield
+chr refreshWlzIds
+chr onWlzReady
+chr onUIUpdateFail
+chr handleLocalFail
+chr WlzShield
+chr wlz_trap_seed_x9
+chr window_missing
+chr navigator_missing
+chr alert_hooked
+chr confirm_hooked
+chr prompt_hooked
+chr check_inconsistencies_error
+chr console_error_property_get
+chr console_dir_error_name_get
+chr promise_error_getter
+chr click_missing_mousemove
+chr keyboard_event_missing
+chr native_function_hooked
+chr document_missing
+chr document_body_missing
+chr create_trap_error
+chr dom_api_hooked
+chr event_api_hooked
+chr timer_api_hooked
+chr console_api_hooked
+chr json_api_hooked
+chr storage_api_hooked
+chr reflect_api_hooked
+chr network_api_hooked
+chr canvas_api_hooked
+chr dialog_api_hooked
+chr time_api_hooked
+chr history_api_hooked
+chr websocket_missing
+chr webrtc_hooked
+chr webrtc_integrity_error
+chr webrtc_unimplemented
+chr xhr_missing
+chr xhr_constructor_hooked
+chr xhr_open_hooked
+chr xhr_send_hooked
+chr fetch_missing
+chr fetch_hooked
+chr error_proxy
+chr check_error
+chr create_element_hooked
+chr svg_support_missing
+chr document_creation_error
+chr document_all_not_missing
+chr document_all_error
+chr function_not_native
+chr plugins_refresh_hooked
+chr audio_api_missing
+chr offline_audio_context_missing
+chr offline_audio_context_error
+chr performance_missing
+chr __WLZ_SECURE_KEY__
+flags-true honey_string_tampered,code_formatted
+flags-true webdriver,os_mismatch,webdriver_attr,iframe_cross_origin,ua_headless,no_chrome_property,zero_dimensions,alert_hooked,prompt_hooked
+bigjson 22:window_missing,navigator_missing,automation_vars,webdriver,webdriver_integrity,os_mismatch
+flags-true webdriver,os_mismatch,vendor_mismatch,webdriver_attr,iframe_cross_origin,plugins_empty,ua_headless,no_chrome_property,zero_dimensions,confirm_hooked
+flags-true process_title,global_type_tag,stack_trace_suspicious
+flags-true event_api_hooked,timer_api_hooked,console_api_hooked,storage_api_hooked,reflect_api_hooked,canvas_api_hooked,dialog_api_hooked,time_api_hooked
+bigjson 13:core_integrity_compromised,dom_api_hooked,event_api_hooked,timer_api_hooked,console_api_hooked,json_api_hooked
+flags-true core_integrity_compromised,dom_api_hooked,json_api_hooked,network_api_hooked,history_api_hooked
+flags-true dimension_mismatch,console_element_id_get,console_error_property_get,console_log_array_performance
+bigjson 8:dimension_mismatch,debugger_pause,console_element_id_get,console_error_property_get,console_dir_error_name_get,console_dir_tampered
+flags-true dimension_mismatch,console_element_id_get,console_dir_tampered,console_log_array_performance
+flags-true document_proxy,Document_proxy,navigator_proxy,Navigator_proxy,History_proxy,localStorage_proxy,sessionStorage_proxy,indexedDB_proxy,openDatabase_proxy,plugins_proxy,intl_proxy,Function_proxy,canvas_context_proxy,webgl_context_proxy,font_faceset_proxy,offline_audio_context_proxy,touch_event_proxy,speech_synthesis_proxy,function_prototype_proxy,json_proxy,error_proxy,reflect_proxy,document_element_proxy,docu
+bigjson 79:window_proxy,Window_poxy,globalThis_proxy,self_proxy,document_proxy,Document_proxy
+flags-true untrusted_event_mousemove,mouse_jump_detected,untrusted_event_click,click_at_zero,click_at_center,click_teleport_detected,click_missing_mousemove,keyboard_event_missing
+bigjson 13:untrusted_event_mousemove,mouse_jump_detected,untrusted_event_click,click_at_zero,click_at_center,click_teleport_detected
+flags-true performance_tampered,performance_mock,performance_missing,low_fps,high_fps,time_dilation
+flags-true performance_mock,performance_missing,low_fps,high_fps,time_dilation
+flags-true trap_clicked,create_trap_error
+flags-true iframe_cross_origin,sandbox_attribute,opener_url,sandbox_domain_empty,history_length_is_zero,create_element_hooked,document_creation_error,document_create_tagname_case,document_create_location_leak,document_all_fake,document_all_type,document_all_not_missing,document_all_error,function_not_native,random_consistent,plugins_type_mismatch,plugins_prototype_anomaly,offline_audio_context_error,offline_audio_con
+bigjson 42:iframe_embedded,parent_url,iframe_cross_origin,frame_element_detected,sandbox_attribute,opener_is_self
+flags-true iframe_cross_origin,sandbox_attribute,opener_url,sandbox_domain_empty,history_length_is_zero,document_creation_error,document_create_tagname_case,document_create_location_leak,document_all_not_missing,random_consistent,plugins_type_mismatch,plugins_refresh_hooked,plugins_prototype_anomaly,offline_audio_context_error,offline_audio_context_rendering_twice,offline_audio_context_sandbox,performance_memory_stat
+flags-true webrtc_hooked,webrtc_unimplemented,xhr_missing,xhr_open_hooked
+bigjson 11:websocket_missing,webrtc_disabled,webrtc_hooked,webrtc_integrity_error,webrtc_unimplemented,xhr_missing
+flags-true webrtc_unimplemented,xhr_missing,xhr_constructor_hooked,xhr_send_hooked,fetch_hooked
 shadow 1
 version 1.0.0
 uaJsdom false
@@ -12,44 +116,76 @@ constructed localUrl false
 methods onWlzReady,createEmbedLayout,initDOM,startVerification,onUIUpdateSuccess,onUIUpdateFail,updateProgress,simulateProgress,onReset,initLayout,resolveWidth,applyCustomStyles,createEmbedLayout,createTriggerWidget,createPopupLayout,openModal,closeModal,resetTriggerUI,detectLanguage,initI18N,injectStyles,injectBaseStyles,triggerSubmission,sendRequest,handleSuccessState,handleFailureState,handleErrorState,handleFatal
 host process:undefined,Buffer:undefined,require:undefined,module:undefined,global:undefined
 crypto object subtle object
+flags-true iframe_cross_origin,sandbox_attribute,opener_url,sandbox_domain_empty,history_length_is_zero,document_creation_error,document_create_tagname_case,document_create_location_leak,document_all_not_missing,random_consistent,plugins_type_mismatch,plugins_refresh_hooked,plugins_prototype_anomaly,offline_audio_context_error,offline_audio_context_sandbox,performance_memory_static
+bigjson 30:USD,EUR,JPY,GBP,CNY,INR
+flags-true supported
 children 0
 onWlzReady undefined
 initLayout undefined
 initDOM undefined
 createEmbedLayout undefined
 children2 0
+flags-true trap_clicked,document_body_missing,create_trap_error
 collected
-inside Error: || IMG || Error: || ptype [object Promise] || pkeys  || ikeys version,modules,behaviorLog,honeypotLog,traceLog,seed,isConsumed,MAX_BEHAVIOR_LOG,cachedFingerprints,collectPromise,first,sessionId,deviceId
-before-payload jsonSeen 2828
+inside arr500000 || IMG || Error: || ptype [object Promise] || pkeys  || ikeys version,modules,behaviorLog,honeypotLog,traceLog,seed,isConsumed,MAX_BEHAVIOR_LOG,cachedFingerprints,collectPromise,first,sessionId,deviceId
+before-payload jsonSeen 2826 consumed false first true
 resolved str0other
 started
-fake OPTIONS  originOk true cred false pre true
+jsonbody {timestamp:number,wlzData:str0other,siteKey:str32hex,type:str8b64ish} checkbox true
+fake OPTIONS optkeys origin,path,method,headers,body,signal,opaque,query,upgrade originOk true cred false pre true
 fake-ok
-fake POST  originOk true cred false pre true
+fake POST optkeys origin,path,method,headers,body,signal,opaque,query,upgrade originOk true cred false pre true
 fake-ok
 success keys status,msg,wsToken tokenlen 11
 behavior 0
+traceN 0 honey 0
+export version,initCollector,CheckboxCaptcha,CheckpointCaptcha,FocusCaptcha,MagnetCaptcha,ObstacleCaptcha,RotationCaptcha,ScratchCaptcha,ShadowCaptcha,instance,getPayload
+instFn constructor,use,unuse,stopAll,addTrace,logBehavior,reportRisk,resolveFingerprints,identify,getPayload,calculateDeviceId,intToHex,calculateHash,stableJSONStringify,generateSessionId,clearLogs,getEncryptedPayload,hash,constructor,__defineGetter__,__defineSetter__,hasOwnProperty,__lookupGetter__,__lookupSetter__,isPrototypeOf,propertyIsEnumerable,toString,valueOf,toLocaleString
+own version:string,modules:object,behaviorLog:object,honeypotLog:object,traceLog:object,seed:string,isConsumed:boolean,MAX_BEHAVIOR_LOG:number,cachedFingerprints:object,collectPromise:object,first:boolean,sessionId:string,deviceId:string
+flagSearch seen 77 hits 
 modules 
 idlens seed4,sessionId24,deviceId36
-slot 0 klen 5 version:s258,vendor:s258,renderer:s258,shadingLanguageVersion:s258,vendorUnmasked:s258,rendererUnmasked:s258,contextAttributes:arr0,parameters:arr0,extensions:s258,extensionParameters:object,imageHash:s4,shaderPrecisions:arr12
-slot 1 klen 6 supported:s9,adapterInfo:s8,limits:s8,features:arr0,isFallbackAdapter:s9,primaryDeviceArchitecture:s3
-slot 2 klen 6 hash:s15,dataUrlLength:s5,windingResult:s258,pixelHash:s4,unstableNoise:s9,unsupported:s9,textMetrics:object
-slot 3 klen 5 canPlayType:object
-slot 4 klen 5 hash:s4,total:s4,absTotal:s4,sampleRate:s5,length:s5,duration:s5,channelCount:s5,maxPoint:s4,minPoint:s4,unsupported:s8
-slot 5 klen 3 prefersColorScheme:s18,prefersContrast:s16,pointer:s16,anyPointer:s16,hover:s16,anyHover:s16,displayMode:s16,overflowBlock:s16,overflowInline:s16,monochrome:s5,scripting:s16,update:s16,keyboardLayout:s3,cssSupports:object
-slot 6 klen 12 hash:s4,x:s4,y:s4,width:s4,height:s4,top:s4,right:s4,bottom:s4,left:s4,unsupported:s8
-slot 7 klen 4 pluralRules:s16,currencyFormatsHash:s14,relativeTimeFormatsHash:s16,listFormatsHash:s15,languages:arr2,intlSupport:object,localeInfo:object,numberFormats:object,datetimeFormats:object,timezoneInfo:object
-slot 8 klen 9 appCodeName:s11,appName:s12,appVersion:s6,platform:s3,product:s9,productSub:s12,vendor:s27,vendorSub:s3,userAgent:s138,brands:arr0,mobile:s9,uaPlatform:s3,effectiveType:s3,rtt:s5,downlink:s5,saveData:s9,batteryLevel:s5,batteryCharging:s9,batteryChargingTime:s5,batteryDischargingTime:s5,onLine:s8,cookieEnabled:s8,deviceMemory:s5,hardwareConcurrency:s5
-slot 9 klen 4 acos:s25,acosh:s22,acoshPf:s22,asin:s26,asinh:s24,asinhPf:s25,atanh:s25,atanhPf:s25,atan:s25,sin:s25,sinh:s25,sinhPf:s24,cos:s26,cosh:s25,coshPf:s25,tan:s26,tanh:s25,tanhPf:s25,exp:s24,expm1:s24,expm1Pf:s24,log1p:s25,log1pPf:s25,powPI:s30
+slot 0 klen 11 supported:s9,permissions:object,notificationPermission:s3,supportedCount:s4,grantedCount:s4,deniedCount:s4,promptCount:s4
+slot 1 klen 8 href:s130,origin:s33,protocol:s10,host:s23,hostname:s23,pathname:s47,port:s3,search:s55,hash:s3,referrer:s3,isTopLevel:s8,inIframe:s9,frameDepth:s4,historyLength=hxLs,isWorker:s9
+long 1.href 1a=B0&?FgB%9;X<Ay!IYAy`K'>,_F}xXt,+F:,75)z,2Vv"yI7hS[^8@2MtBH1Cczg?UJ8urIcsZ<bh."`DhwRjo&?\)iQT'K;<*
+slot 2 klen 11 jsHeapSizeLimit:s5,totalJSHeapSize:s5,usedJSHeapSize:s5,timingPrecision:s29,navigationType:s5,redirectCount:s5,resourceCount:s5,timeOrigin:s24,performanceSupported:s8,memorySupported:s9,navigationSupported:s9,markSupported:s9,measureSupported:s9,getEntriesSupported:s9
+slot 3 klen 6 hash:s4,deviceCount:s4,devices:arr0,ip:s3,candidates:arr0
+slot 4 klen 3 prefersColorScheme:s18,prefersContrast:s16,pointer:s16,anyPointer:s16,hover:s16,anyHover:s16,displayMode:s16,overflowBlock:s16,overflowInline:s16,monochrome:s5,scripting:s16,update:s16,keyboardLayout:s3,cssSupports:object
+slot 5 klen 5 canPlayType:object
+slot 6 klen 4 acos:s25,acosh:s22,acoshPf:s22,asin:s26,asinh:s24,asinhPf:s25,atanh:s25,atanhPf:s25,atan:s25,sin:s25,sinh:s25,sinhPf:s24,cos:s26,cosh:s25,coshPf:s25,tan:s26,tanh:s25,tanhPf:s25,exp:s24,expm1:s24,expm1Pf:s24,log1p:s25,log1pPf:s25,powPI:s30
+slot 7 klen 6 hash:s15,dataUrlLength:s5,windingResult:s258,pixelHash:s4,unstableNoise:s9,unsupported:s9,textMetrics:object
+long 7.windingResult 2nQPov6U`WCe88}q7<txmU(k;\h!E9.1>XeXeU>\6bPePvKzt:KJNXo9tT~Po@gz1~Ttxg_Vg;Vu0n)IcS%@l(H?<RpUa9V:@WET
+slot 8 klen 4 pluralRules:s16,currencyFormatsHash:s14,relativeTimeFormatsHash:s16,listFormatsHash:s15,languages:arr2,intlSupport:object,localeInfo:object,numberFormats:object,datetimeFormats:object,timezoneInfo:object
+slot 9 klen 12 hash:s4,x:s4,y:s4,width:s4,height:s4,top:s4,right:s4,bottom:s4,left:s4,unsupported:s8
 slot 10 klen 4 fonts:arr0,fontPreferences:object
-slot 11 klen 5 maxTouchPoints:s14,touchEvent:s8,touchStart:s8
-slot 12 klen 11 jsHeapSizeLimit:s5,totalJSHeapSize:s5,usedJSHeapSize:s5,timingPrecision:s29,navigationType:s5,redirectCount:s5,resourceCount:s5,timeOrigin:s22,performanceSupported:s8,memorySupported:s9,navigationSupported:s9,markSupported:s9,measureSupported:s9,getEntriesSupported:s9
-slot 13 klen 13 voices:arr0
-slot 14 klen 11 webdriverFlag:s9,webdriverIntegrity:s8,automationVarsCount:s4,automationVarsHash:s4,hasChromeObject:s8,hasChromeRuntime:s8,chromeKeys=hxLA,cdcVarsCount:s4,hasProcess:s9,hasGlobal:s9,hasBuffer:s9,hasRequire:s9,hasModule:s9,alertIntegrity:s9,confirmIntegrity:s9,evalIntegrity:s9,toStringIntegrity:s9,hasSharedArrayBuffer:s8,hasAtomics:s8,hasBluetooth:s9,hasUsb:s9,hasSerial:s9,hasHid:s9,hasXR:s9
-slot 15 klen 7 localStorage:s8,sessionStorage:s8,caches:s9,indexedDB:s9,openDatabase:s9,quota:s5,usage:s5
-slot 16 klen 6 hash:s4,deviceCount:s4,devices:arr0,ip:s3,candidates:arr0
-slot 17 klen 8 href:s130,origin:s33,protocol:s10,host:s23,hostname:s23,pathname:s47,port:s3,search:s55,hash:s3,referrer:s3,isTopLevel:s8,inIframe:s9,frameDepth:s4,historyLength=hxLs,isWorker:s9
-slot 18 klen 11 supported:s9,permissions:object,notificationPermission:s3,supportedCount:s4,grantedCount:s4,deniedCount:s4,promptCount:s4
+slot 11 klen 5 version:s258,vendor:s258,renderer:s258,shadingLanguageVersion:s258,vendorUnmasked:s258,rendererUnmasked:s258,contextAttributes:arr0,parameters:arr0,extensions:s258,extensionParameters:object,imageHash:s4,shaderPrecisions:arr12
+long 11.version 2nQPov6U`WCe88}q7<txmU(k;\h!E9.1>XeXeU>\6bPePvKzt:KJNXo9tT~Po@gz1~Ttxg_Vg;Vu0n)IcS%@l(H?<RpUa9V:@WET
+long 11.vendor 2nQPov6U`WCe88}q7<txmU(k;\h!E9.1>XeXeU>\6bPePvKzt:KJNXo9tT~Po@gz1~Ttxg_Vg;Vu0n)IcS%@l(H?<RpUa9V:@WET
+long 11.renderer 2nQPov6U`WCe88}q7<txmU(k;\h!E9.1>XeXeU>\6bPePvKzt:KJNXo9tT~Po@gz1~Ttxg_Vg;Vu0n)IcS%@l(H?<RpUa9V:@WET
+long 11.shadingLanguageVersion 2nQPov6U`WCe88}q7<txmU(k;\h!E9.1>XeXeU>\6bPePvKzt:KJNXo9tT~Po@gz1~Ttxg_Vg;Vu0n)IcS%@l(H?<RpUa9V:@WET
+long 11.vendorUnmasked 2nQPov6U`WCe88}q7<txmU(k;\h!E9.1>XeXeU>\6bPePvKzt:KJNXo9tT~Po@gz1~Ttxg_Vg;Vu0n)IcS%@l(H?<RpUa9V:@WET
+long 11.rendererUnmasked 2nQPov6U`WCe88}q7<txmU(k;\h!E9.1>XeXeU>\6bPePvKzt:KJNXo9tT~Po@gz1~Ttxg_Vg;Vu0n)IcS%@l(H?<RpUa9V:@WET
+long 11.extensions 2nQPov6U`WCe88}q7<txmU(k;\h!E9.1>XeXeU>\6bPePvKzt:KJNXo9tT~Po@gz1~Ttxg_Vg;Vu0n)IcS%@l(H?<RpUa9V:@WET
+slot 12 klen 9 appCodeName:s11,appName:s12,appVersion:s6,platform:s3,product:s9,productSub:s12,vendor:s27,vendorSub:s3,userAgent:s138,brands:arr0,mobile:s9,uaPlatform:s3,effectiveType:s3,rtt:s5,downlink:s5,saveData:s9,batteryLevel:s5,batteryCharging:s9,batteryChargingTime:s5,batteryDischargingTime:s5,onLine:s8,cookieEnabled:s8,deviceMemory:s5,hardwareConcurrency:s5
+long 12.userAgent dhMI9as#qboQVY$@7DxYI^6kIMrgyy>#*h1#4#7>b*TLTP;2"[!a5GT`S;_(HxejR36_tdqce!:ks(6sco|0@F7CC>&5nF~$WVUx
+slot 13 klen 5 maxTouchPoints:s14,touchEvent:s8,touchStart:s8
+slot 14 klen 7 localStorage:s8,sessionStorage:s8,caches:s9,indexedDB:s9,openDatabase:s9,quota:s5,usage:s5
+slot 15 klen 5 hash:s4,total:s4,absTotal:s4,sampleRate:s5,length:s5,duration:s5,channelCount:s5,maxPoint:s4,minPoint:s4,unsupported:s8
+slot 16 klen 11 webdriverFlag:s9,webdriverIntegrity:s8,automationVarsCount:s4,automationVarsHash:s4,hasChromeObject:s8,hasChromeRuntime:s8,chromeKeys=hxLA,cdcVarsCount:s4,hasProcess:s9,hasGlobal:s9,hasBuffer:s9,hasRequire:s9,hasModule:s9,alertIntegrity:s9,confirmIntegrity:s9,evalIntegrity:s9,toStringIntegrity:s9,hasSharedArrayBuffer:s8,hasAtomics:s8,hasBluetooth:s9,hasUsb:s9,hasSerial:s9,hasHid:s9,hasXR:s9
+slot 17 klen 13 voices:arr0
+slot 18 klen 6 supported:s9,adapterInfo:s8,limits:s8,features:arr0,isFallbackAdapter:s9,primaryDeviceArchitecture:s3
 sameFn false
-console IMG || Error: || arr500000 || IMG || Error: || IMG || Error: || arr500000 || IMG || Error: || IMG || Error:
+console IMG || Error: || arr500000 || IMG || Error: || IMG || Error: || arr500000 || IMG || Error: || ptype [object Promise] || pkeys 
 payload {}
+out resolveFingerprints n 1 len 16 kind object word false {}
+ch-args arr19 || arr0
+out hash n 1 len 6 kind string word false str6other
+out hash n 2 len 6 kind string word false str6other
+out stableJSONStringify n 1 len 6 kind string word false str6other
+out stableJSONStringify n 2 len 6 kind string word false str6other
+out calculateHash n 1 len 1680 kind string word false str1680other
+ch-args arr19 || arr0
+out calculateHash n 2 len 1680 kind string word false str1680other
+enc str0other counts stableJSONStringify526,hash560,calculateHash2,calculateDeviceId0,intToHex0,resolveFingerprints1 captured 1680
+live 200 keys msg,status,wsToken 认证失败 tokenlen 0 statusField false
+stable string18396

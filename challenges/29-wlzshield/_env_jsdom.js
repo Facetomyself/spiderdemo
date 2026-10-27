@@ -49,7 +49,7 @@ const dom = new JSDOM(
           const target = String((opts && opts.origin) || "") + String((opts && opts.path) || "");
           const method = (opts && opts.method) || "GET";
           if (!target.includes("/api/challenge")) return next(opts, handler);
-          let bodyNote = "";
+          let bodyNote = "optkeys " + Object.keys(opts || {}).join(",");
           const body = opts && opts.body;
           if (typeof body === "string" || Buffer.isBuffer(body)) {
             const text = Buffer.isBuffer(body) ? body.toString("utf8") : body;
@@ -195,6 +195,9 @@ let flagsLogged = 0;
 fs.writeFileSync(path.join(root, "_flags.txt"), "", "utf8");
 window.JSON.stringify = function stringify(value) {
   jsonSeen += 1;
+  if (value && typeof value === "object" && (Object.prototype.hasOwnProperty.call(value, "siteKey") || Object.prototype.hasOwnProperty.call(value, "wlzData") || Object.prototype.hasOwnProperty.call(value, "wsToken"))) {
+    note("jsonbody " + shape(value, 0).slice(0, 360) + " checkbox " + (value.type === "checkbox"));
+  }
   if (flagsLogged < 4 && value && typeof value === "object" && Object.prototype.hasOwnProperty.call(value, "xhr_missing")) {
     flagsLogged += 1;
     const flags = Object.keys(value)
@@ -281,6 +284,62 @@ note("native " + window.eval(
   "return ['xhr',native(XMLHttpRequest),'open',native(XMLHttpRequest.prototype.open),'send',native(XMLHttpRequest.prototype.send)," +
   "'ws',native(WebSocket),'fetch',native(window.fetch),'rtc',native(window.RTCPeerConnection)].join(' ');})()"
 ));
+function hardenXhr(win) {
+  const proto = win.XMLHttpRequest && win.XMLHttpRequest.prototype;
+  if (!proto || proto.__hardened) return;
+  proto.__hardened = true;
+  for (const name of ["open", "send", "setRequestHeader", "abort", "getAllResponseHeaders", "getResponseHeader", "overrideMimeType"]) {
+    const orig = proto[name];
+    if (typeof orig !== "function") continue;
+    const wrapped = function xhrMethod() {
+      if (!(this instanceof win.XMLHttpRequest)) {
+        throw new win.TypeError("Failed to execute '" + name + "' on 'XMLHttpRequest': Illegal invocation");
+      }
+      return orig.apply(this, arguments);
+    };
+    try { Object.defineProperty(wrapped, "length", { value: orig.length }); } catch (_error) {}
+    proto[name] = wrapped;
+    if (typeof win.__mark === "function") win.__mark(wrapped, name);
+  }
+  if (typeof win.__mark === "function") win.__mark(win.XMLHttpRequest, "XMLHttpRequest");
+}
+hardenXhr(window);
+const seenChr = new Set();
+const origFromCharCode = window.String.fromCharCode;
+window.String.fromCharCode = function fromCharCode() {
+  const text = origFromCharCode.apply(window.String, arguments);
+  if (seenChr.size < 80 && text.length > 6 && /xhr|missing|hook|illegal|native|wlz|encrypt|token|unimplemented|Error|fail|exception/i.test(text) && !seenChr.has(text)) {
+    seenChr.add(text);
+    note("chr " + text.slice(0, 120));
+  }
+  return text;
+};
+window.__mark(window.String.fromCharCode, "fromCharCode");
+const seenJson = new Set();
+const seenBad = new Set();
+const prevStringify = window.JSON.stringify;
+window.JSON.stringify = function stringify(value) {
+  if (value && typeof value === "object" && !Array.isArray(value)) {
+    const bad = Object.keys(value).filter((key) => value[key] === true);
+    if (bad.length && bad.length < 50) {
+      const sig = bad.join(",");
+      if (!seenBad.has(sig) && seenBad.size < 40) {
+        seenBad.add(sig);
+        note("flags-true " + sig);
+      }
+    }
+    const keys = Object.keys(value);
+    if (keys.length >= 8) {
+      const sig = keys.length + ":" + keys.slice(0, 6).join(",");
+      if (!seenJson.has(sig) && seenJson.size < 30) {
+        seenJson.add(sig);
+        note("bigjson " + sig);
+      }
+    }
+  }
+  return prevStringify.apply(this, arguments);
+};
+window.__mark(window.JSON.stringify, "stringify");
 window.eval(fs.readFileSync(path.join(root, "vendors.min.js"), "utf8"));
 note("CryptoJS " + typeof window.CryptoJS);
 if (window.CryptoJS && window.CryptoJS.AES && typeof window.CryptoJS.AES.encrypt === "function") {
@@ -388,7 +447,8 @@ setTimeout(async () => {
     note("inside-fail " + error.message);
   }
   try {
-    note("before-payload jsonSeen " + jsonSeen);
+    const live = window.WlzShield && window.WlzShield.instance;
+    note("before-payload jsonSeen " + jsonSeen + " consumed " + !!(live && live.isConsumed) + " first " + !!(live && live.first));
     const payload = await window.WlzShield.getPayload();
     note("resolved " + shape(payload, 0));
   } catch (error) {
@@ -399,10 +459,42 @@ setTimeout(async () => {
   }
 }, 600);
 
-setTimeout(() => {
+setTimeout(async () => {
   const inst = window.WlzShield && window.WlzShield.instance;
   if (inst) {
     note("behavior " + (inst.behaviorLog && inst.behaviorLog.length));
+    note("traceN " + (inst.traceLog && inst.traceLog.length) + " honey " + (inst.honeypotLog && inst.honeypotLog.length));
+    note("export " + Object.getOwnPropertyNames(window.WlzShield).join(","));
+    const protoNames = [];
+    let cursor = inst;
+    while (cursor && cursor !== Object.prototype) {
+      for (const name of Object.getOwnPropertyNames(cursor)) {
+        if (typeof inst[name] === "function") protoNames.push(name);
+      }
+      cursor = Object.getPrototypeOf(cursor);
+    }
+    note("instFn " + protoNames.join(","));
+    note("own " + Object.keys(inst).map((key) => key + ":" + typeof inst[key]).join(","));
+    const seenObjs = new Set();
+    const flagHits = [];
+    const stack = [{ value: inst, path: "inst" }, { value: window.WlzShield, path: "shield" }];
+    while (stack.length && seenObjs.size < 4000 && flagHits.length < 6) {
+      const item = stack.pop();
+      const value = item.value;
+      if (!value || typeof value !== "object" || seenObjs.has(value)) continue;
+      seenObjs.add(value);
+      if (Object.prototype.hasOwnProperty.call(value, "core_integrity_compromised") || Object.prototype.hasOwnProperty.call(value, "xhr_missing")) {
+        flagHits.push(item.path);
+      }
+      const keys = Object.keys(value);
+      for (let index = 0; index < keys.length && index < 40; index += 1) {
+        stack.push({ value: value[keys[index]], path: item.path + "." + keys[index] });
+      }
+    }
+    note("flagSearch seen " + seenObjs.size + " hits " + flagHits.join(" | "));
+    if (Array.isArray(inst.traceLog)) {
+      inst.traceLog.slice(0, 12).forEach((item, index) => note("trace " + index + " " + brief(item)));
+    }
     note("modules " + Object.keys(inst.modules || {}).slice(0, 40).join(","));
     note("idlens " + ["seed", "sessionId", "deviceId"].map((key) => key + String(inst[key] == null ? 0 : String(inst[key]).length)).join(","));
     const fps = inst.cachedFingerprints;
@@ -410,6 +502,15 @@ setTimeout(() => {
       for (const key of Object.keys(fps)) {
         const slot = fps[key] || {};
         note("slot " + key + " klen " + String(slot.key || "").length + " " + brief(slot.value));
+        const value = slot.value;
+        if (value && typeof value === "object") {
+          for (const field of Object.keys(value)) {
+            const item = value[field];
+            if (typeof item === "string" && (item.length > 80 || /not implemented|undefined is not|jsdom|failed/i.test(item))) {
+              note("long " + key + "." + field + " " + item.replace(/\s+/g, " ").slice(0, 100));
+            }
+          }
+        }
       }
     } else {
       note("fp " + typeof fps);
@@ -417,6 +518,105 @@ setTimeout(() => {
     note("sameFn " + (window.WlzShield.getPayload === window.WlzShield.initCollector));
     note("console " + Array.from(window.__notes || []).slice(0, 12).join(" || "));
     try { note("payload " + shape(window.WlzShield.getPayload(), 0)); } catch (error) { note("payload-fail " + error.message); }
+    const subtle = window.crypto && window.crypto.subtle;
+    if (subtle && typeof subtle.encrypt === "function" && !subtle.encrypt.__wrapped) {
+      const origEncrypt = subtle.encrypt.bind(subtle);
+      const wrappedEncrypt = function encrypt(algorithm, key, data) {
+        const name = algorithm && (algorithm.name || algorithm);
+        const size = data && (data.byteLength || data.length || 0);
+        note("subtle " + name + " bytes " + size);
+        return origEncrypt(algorithm, key, data).catch((error) => {
+          note("subtle-fail " + String(error && error.message || error).slice(0, 160));
+          throw error;
+        });
+      };
+      wrappedEncrypt.__wrapped = true;
+      subtle.encrypt = wrappedEncrypt;
+    }
+    const origBtoa = window.btoa;
+    let btoaSeen = 0;
+    window.btoa = function btoa(value) {
+      if (btoaSeen < 8) note("btoa " + String(value == null ? "" : value).length);
+      btoaSeen += 1;
+      return origBtoa.apply(window, arguments);
+    };
+    const sizes = {};
+    let captured = "";
+    for (const name of ["stableJSONStringify", "hash", "calculateHash", "calculateDeviceId", "intToHex", "resolveFingerprints"]) {
+      const orig = inst[name];
+      if (typeof orig !== "function") continue;
+      sizes[name] = 0;
+      inst[name] = function wrapped() {
+        if (name === "calculateHash" && sizes[name] < 2) {
+          note("ch-args " + Array.from(arguments).map((item) => shape(item, 0).slice(0, 160)).join(" || "));
+        }
+        const out = orig.apply(this, arguments);
+        sizes[name] += 1;
+        const length = out == null ? -1 : String(out).length;
+        if (name === "calculateHash" && typeof out === "string" && out.length > captured.length) captured = out;
+        if (sizes[name] <= 2 || length === 0) {
+          const word = out === "string" || out === "object" || out === "number" || out === "undefined" || out === "function" || out === "boolean";
+          note("out " + name + " n " + sizes[name] + " len " + length + " kind " + typeof out + " word " + word + " " + shape(out, 0).slice(0, 80));
+        }
+        return out;
+      };
+    }
+    try {
+      const encoded = await inst.getEncryptedPayload();
+      note("enc " + shape(encoded, 0) + " counts " + Object.entries(sizes).map(([key, count]) => key + count).join(",") + " captured " + captured.length);
+      if (captured) {
+        const posted = await new Promise((resolve) => {
+          const body = JSON.stringify({
+            timestamp: Date.now(),
+            wlzData: captured,
+            siteKey: "9d4295076aaef0b4c16e18e4f53b5120",
+            type: "checkbox",
+          });
+          const req = https.request({
+            protocol: "https:",
+            hostname: "captcha.wangluozhe.com",
+            path: "/api/challenge",
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              "content-length": Buffer.byteLength(body),
+              "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+              origin: "https://www.spiderdemo.cn",
+              referer: "https://www.spiderdemo.cn/captcha/wlzshield_captcha_challenge?challenge_type=wlzshield_captcha_challenge",
+            },
+          }, (res) => {
+            const chunks = [];
+            res.on("data", (chunk) => chunks.push(chunk));
+            res.on("end", () => resolve({ status: res.statusCode, text: Buffer.concat(chunks).toString("utf8") }));
+          });
+          req.on("error", (error) => resolve({ status: 0, text: error.message }));
+          req.write(body);
+          req.end();
+        });
+        let tokenLen = 0;
+        let msg = "";
+        let keys = "";
+        let statusField = false;
+        try {
+          const parsed = JSON.parse(posted.text);
+          keys = parsed && typeof parsed === "object" ? Object.keys(parsed).join(",") : "";
+          tokenLen = parsed && parsed.wsToken ? String(parsed.wsToken).length : 0;
+          statusField = !!(parsed && parsed.status);
+          msg = String((parsed && (parsed.msg || parsed.message || parsed.error)) || "").slice(0, 40);
+        } catch (_error) {
+          msg = "raw" + String(posted.text || "").length;
+        }
+        note("live " + posted.status + " keys " + keys + " " + msg + " tokenlen " + tokenLen + " statusField " + statusField);
+      }
+    } catch (error) {
+      note("enc-throw " + String(error && error.stack || error).split("\n").slice(0, 6).join(" | "));
+    }
+    try {
+      const stable = inst.stableJSONStringify(inst.cachedFingerprints);
+      note("stable " + (stable == null ? "null" : typeof stable + String(stable).length));
+    } catch (error) {
+      note("stable-throw " + String(error && error.message || error).slice(0, 180));
+    }
   }
   fs.writeFileSync(path.join(root, "_env_log.txt"), logs.join("\n"), "utf8");
   localServer.close();
