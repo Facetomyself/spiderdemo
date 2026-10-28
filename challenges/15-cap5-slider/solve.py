@@ -158,9 +158,6 @@ async def solve() -> dict:
         )
         payload = _json_body(submit)
         result = public_result(payload)
-        for key in ("is_repeat_success", "challenge_type", "submitted_answer"):
-            if key in payload and key not in result:
-                result[key] = payload[key]
         OUT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print("submit", result.get("success"), result.get("is_correct"), result.get("message"), flush=True)
         return result

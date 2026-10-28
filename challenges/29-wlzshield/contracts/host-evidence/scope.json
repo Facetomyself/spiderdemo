@@ -1,0 +1,46 @@
+{
+  "schema": "web-host-scope.v1",
+  "adapter": "ruyidom-wire-v1",
+  "sessionId": "wlzshield-location-href",
+  "property": "href",
+  "receiver": "location",
+  "callsite": {
+    "line": 5,
+    "column": 21
+  },
+  "runner": {
+    "path": "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\29-wlzshield\\runtime\\host-collector.py",
+    "sha256": "c2f52eda14b20d74a2f3eb6e78d5aeb34f75e6335e50ba9e47b8058039430b5f"
+  },
+  "runtime": {
+    "path": "D:\\reverse_ENV\\.venv\\Scripts\\python.exe",
+    "sha256": "6a74478b20739a9c814dcdb465a68cdf384b43447910399e02776d66a2bd1635"
+  },
+  "input": {
+    "path": "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\29-wlzshield\\contracts\\host-evidence\\input.json",
+    "sha256": "cf03d22daff785bcb6cbeb2e985cbb8e2e65c50a8b0ec41ff4c9e749adb6bdbe"
+  },
+  "source": {
+    "path": "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\29-wlzshield\\runtime\\ruyidom-baseline.js",
+    "sha256": "48cd8048293ef26c2d526017377fd1ee87102e630dbc345338b0f2ddaa893f2e"
+  },
+  "config": {
+    "path": "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\29-wlzshield\\contracts\\host-evidence\\config.json",
+    "sha256": "4526a3dab842346a32aae914ebd6f1c906d298aaf8ee5d0682bab8571f2e8495"
+  },
+  "targetHosts": [
+    "captcha.wangluozhe.com"
+  ],
+  "targetPathPrefixes": [
+    "/api/"
+  ],
+  "args": [
+    "{raw}",
+    "{source}",
+    "{input}",
+    "{variant}"
+  ],
+  "caseId": "wlzshield-captcha",
+  "objectiveSha256": "afc2a5bd8a603e3f34d53c59a9446130289191f93d5d173cb241c09de7af705c",
+  "scopeId": "0e707482e2a60d9fa549c732c4b812ebc60d9ac06beccc7a863140e038814afc"
+}

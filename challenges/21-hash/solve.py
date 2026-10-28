@@ -87,7 +87,6 @@ async def main() -> None:
         )
         body = submit.json()
         result = public_result(body if isinstance(body, dict) else {})
-        result["http_status"] = submit.status_code
         OUT.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
         accepted = body.get("is_correct") is True or "答案正确" in str(body.get("message") or "")
         print("pages", len(pages), "sum", total, "http", submit.status_code, "accepted", accepted)

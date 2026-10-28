@@ -1,0 +1,16 @@
+{
+  "schema": "web-host-scope.v1",
+  "adapter": "ruyidom-wire-v1",
+  "sessionId": "wlzshield-location-href",
+  "property": "href",
+  "receiver": "location",
+  "callsite": {"line": 5, "column": 21},
+  "runner": "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\29-wlzshield\\runtime\\host-collector.py",
+  "runtime": "D:\\reverse_ENV\\.venv\\Scripts\\python.exe",
+  "input": "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\29-wlzshield\\contracts\\host-evidence\\input.json",
+  "source": "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\29-wlzshield\\runtime\\ruyidom-baseline.js",
+  "config": "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\29-wlzshield\\contracts\\host-evidence\\config.json",
+  "targetHosts": ["captcha.wangluozhe.com"],
+  "targetPathPrefixes": ["/api/"],
+  "args": ["{raw}", "{source}", "{input}", "{variant}"]
+}

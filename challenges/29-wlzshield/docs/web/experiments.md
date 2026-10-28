@@ -46,3 +46,48 @@ TEMPLATE-UNFILLED
 - A `beforeParse` XHR shim replaced `window.fetch`. The page called it once and did not raise SecurityError. `elTriggerCheckbox` stayed null, the shadow stayed `STYLE`, and `startVerification()` sent no `/api/challenge`. Note: `agent-notes/wlzshield-ruyidom-click-20261025.md`.
 - After the layout calls, `elTriggerCheckbox` was a DIV with `isConnected=false`. Clicking it and the shadow DIV, then calling `startWlz()`, still sent no `/api/challenge`. Note: `agent-notes/wlzshield-ruyidom-div-20261025.md`.
 - Appending that DIV into the container shadow made `isConnected=true`. Click plus `startWlz()` still sent no `/api/challenge`. The RuyiDOM UI branch stops here. Note: `agent-notes/wlzshield-ruyidom-attach-20261025.md`.
+
+## 2026-10-28 reset
+
+Cleared the nested case ledger and re-initialized with localJsEngine=ruyijs, 	ransportClient=ruyihttp, parameterAnalysis=want. Started interactive capture 
+t_20261028005459_76baddf366. User finished the checkbox in the second tab. Manual stop at 2026-10-28T00:57:07Z. Integrity pass. Same process pid 61476. First context init was HTTP 401 need_login. Second context (rowsingContextId 17179869199): init HTTP 200, page_data length 10, 	otal_pages 100, current_page 1; vendor POST HTTP 200 status=true msg=认证成功, wsToken length 352, wlzData length 41707 prefix 1:, 	ype=checkbox, stack function mV; verify HTTP 200 message 验证成功，获取第2页数据, page_data length 10. No second capture. Nested 
+ext cannot mark this stopped parent run completed.
+
+## 2026-10-28 dispatcher
+
+Nested ctiveRuns.ruyitrace points at 
+t_20261028005459_76baddf366 via a junction to the parent evidence directory. Manifest state stays stopped. 
+ext treats an integrity-pass manual stop as finished and returned 
+uyijs_parameter_analysis (	urnGate=blocked). One offline 
+un_ruyijs.py call returned unavailable. That result is receipt 
+j_20261028_wlzparam with state=runtime-pending and ailure.code=RUNTIME_UNAVAILABLE. The following 
+ext is 
+efuse_local_js_verifier_failure (	urnGate=blocked). No second capture. No iv8. No site acceptance.
+
+## 2026-10-28 parameter analysis failed
+
+act record set parameterAnalysis=failed from the ruyijs receipt. 
+ext returned 
+uyidom_run (	urnGate=run, llowNetwork=true). One cli.js run --allow-network of 
+untime/ruyidom-baseline.js finished in 161 ms. Result 
+equestBoundary=false and an empty href. Registered run 
+d_20261028_wlzbaseline. The following 
+ext is compare_facts. The baseline has no local request to pair with the trace, so irstDivergence stays unset.
+
+## 2026-10-28 environment gap
+
+act record set irstDivergence=environment-gap. Evidence is the baseline output (
+equestBoundary=false, empty href) and aseline-vs-trace.json (trace reached verify, no paired request). 
+ext returned erify_host_scope (	urnGate=blocked). Issued host scope for location.href at 
+untime/ruyidom-baseline.js line 5. No code.js patch. No second capture.
+
+## 2026-10-28 host baseline
+
+After the scope was issued, 
+ext returned 
+un_host_baseline (	urnGate=blocked). One host run --variant baseline finished with status=failed, exitCode=2, 	imedOut=false. The scope argv appends the collector {raw} path, and the RuyiDOM CLI rejects that extra argument. No second capture. No site acceptance.
+
+## 2026-10-28 host pair
+
+Host baseline 1dd2ed3c46a9473c9b98bb23ab4dbea0 completed with exit code 0. The collector ran RuyiDOM and wrote a raw summary. host pair then returned: browser pair requires a verified completed RuyiTrace artifact run. The trace manifest remains stopped with caseId spiderdemo-register-login. 
+ext is pair_host_observations (	urnGate=blocked). No second capture. No site acceptance.

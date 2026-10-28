@@ -8,7 +8,8 @@
   "evidenceRoot": "evidence/web/",
   "sensitivity": "private-redacted",
   "routes": [
-    "ruyitrace"
+    "ruyitrace",
+    "ruyidom"
   ],
   "stages": [
     {
@@ -45,11 +46,15 @@
     }
   ],
   "activeRuns": {
-    "ruyitrace": null,
+    "ruyitrace": "rt_20261028005459_76baddf366",
     "v8trace": null,
     "v8trace-chromium": null,
-    "iv8": null
+    "iv8": null,
+    "ruyijs": "rj_20261028_wlzparam",
+    "ruyidom": "rd_20261028_wlzbaseline"
   },
+  "localJsEngine": "ruyijs",
+  "transportClient": "ruyihttp",
   "contractRefs": {
     "workflowArtifacts": "contracts/workflow-artifacts.v1.json",
     "parameterLineage": "contracts/request-parameter-lineage.v1.json",
@@ -60,6 +65,6 @@
   "notes": [],
   "artifacts": [],
   "limitations": [],
-  "createdAt": "2026-10-25T08:32:11Z",
-  "updatedAt": "2026-10-25T08:32:11Z"
+  "createdAt": "2026-10-28T00:53:51Z",
+  "updatedAt": "2026-10-28T01:29:03Z"
 }

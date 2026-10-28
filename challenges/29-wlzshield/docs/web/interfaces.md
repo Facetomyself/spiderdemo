@@ -6,7 +6,7 @@ Endpoint catalog. The machine contract is `contracts/request-parameter-lineage.v
 
 ## Notes
 
--
+- 2026-10-28: no endpoint catalog from the new capture yet.
 
 <!-- generated:interfaces -->
 TEMPLATE-UNFILLED

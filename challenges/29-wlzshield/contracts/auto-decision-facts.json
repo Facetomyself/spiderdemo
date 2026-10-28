@@ -1,4 +1,38 @@
 {
+  "parameterAnalysis": "failed",
   "noOfflineFallback": true,
-  "ruyidomNetwork": "live"
+  "ruyidomNetwork": "live",
+  "judgment": {
+    "health": "normal",
+    "healthReason": "",
+    "awaitingHint": false,
+    "completion": {
+      "status": "none",
+      "from": [],
+      "scope": null,
+      "verifyStalls": 0,
+      "rejectedFrom": []
+    },
+    "openWork": [],
+    "checkpoint": {
+      "revision": 2,
+      "hintCount": 0,
+      "openWork": 0
+    },
+    "seenEvidence": [
+      "evidence/web/ruyijs/rj_20261028_wlzparam/evidence-run.json",
+      "evidence/web/ruyidom/rd_20261028_wlzbaseline/run-output.json",
+      "evidence/web/ruyidom/rd_20261028_wlzbaseline/baseline-vs-trace.json"
+    ],
+    "seenFacts": [
+      "fact:parameterAnalysis:33d04bd775e7b6c6436742508b41fa693a15bd2c902fcd994253392abd717740",
+      "fact:firstDivergence:f6b6dcc0cdbe490b21bae2d4d5a50831f358b8e2a7b01a6454473b37349bd749"
+    ],
+    "narrowedOnce": false,
+    "pendingZeroOutput": false,
+    "releaseEvidence": [],
+    "activeScope": ""
+  },
+  "firstDivergence": "environment-gap",
+  "revision": 2
 }

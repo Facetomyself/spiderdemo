@@ -24,4 +24,4 @@ TEMPLATE-UNFILLED
 
 ## Notes
 
--
+- 2026-10-28: `ruyijs_parameter_analysis` ran once offline. The public package could not be imported (`error.kind=unavailable`). Receipt `rj_20261028_wlzparam` is `runtime-pending`. `next` is `refuse_local_js_verifier_failure`. No iv8 switch. No host patch was written.

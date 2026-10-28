@@ -1,6 +1,5 @@
 {
   "success": true,
   "message": "答案正确！🎉 恭喜首次通过！ (hash_challenge)",
-  "is_correct": true,
-  "http_status": 200
+  "is_correct": true
 }

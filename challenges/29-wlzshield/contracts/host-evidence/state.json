@@ -1,0 +1,13 @@
+{
+  "schema": "web-host-state.v1",
+  "scopeId": "0e707482e2a60d9fa549c732c4b812ebc60d9ac06beccc7a863140e038814afc",
+  "status": "completed",
+  "executions": {
+    "baseline": {
+      "path": "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\29-wlzshield\\evidence\\host-executions\\1dd2ed3c46a9473c9b98bb23ab4dbea0\\execution.json",
+      "sha256": "1e1762369f7891ef20a9e7d583c0e283ca8ed5a936a3fb9e85b5b8b6d3f31adb"
+    }
+  },
+  "pid": null,
+  "current": "D:\\reverse_ENV\\workspace\\spiderdemo\\challenges\\29-wlzshield\\evidence\\host-executions\\1dd2ed3c46a9473c9b98bb23ab4dbea0\\execution.json"
+}
