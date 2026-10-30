@@ -47,35 +47,41 @@ function installNarrow(win) {
   win.prompt = quiet("prompt");
 }
 
+const nativeMaps = new WeakMap();
+
 function markNatives(win) {
-  const raw = win.Function.prototype.toString;
-  if (raw.__marked) return;
-  const nativeMark = new win.WeakMap();
-  function toString() {
-    win.__toStringCalls = (win.__toStringCalls || 0) + 1;
-    if (this === toString) return "function toString() { [native code] }";
-    if (nativeMark.has(this)) {
-      win.__nativeHits = (win.__nativeHits || 0) + 1;
-      return nativeMark.get(this);
-    }
-    win.__rawHits = (win.__rawHits || 0) + 1;
-    let label = "unknown";
-    try {
-      const text = raw.call(this);
-      const matched = /function\s+([A-Za-z0-9_]+)/.exec(text);
-      label = matched ? matched[1] : text.slice(0, 24).replace(/\s+/g, " ");
-    } catch (_error) {
-      label = "throw";
-    }
-    if (!win.__rawNames) win.__rawNames = [];
-    if (/^[A-Za-z_$][A-Za-z0-9_$]{3,}$/.test(label) && win.__rawNames.length < 20 && !win.__rawNames.includes(label)) win.__rawNames.push(label);
-    return raw.call(this);
+  const current = win.Function.prototype.toString;
+  let nativeMark = nativeMaps.get(current);
+  if (!nativeMark) {
+    const raw = current;
+    nativeMark = new win.WeakMap();
+    const holder = {
+      toString() {
+        if (this === holder.toString) return "function toString() { [native code] }";
+        if (typeof this !== "function") {
+          throw new win.TypeError("Function.prototype.toString requires that 'this' be a Function");
+        }
+        if (nativeMark.has(this)) return nativeMark.get(this);
+        const nativeName = this.name;
+        if (nativeName === "createElement" || nativeName === "appendChild") {
+          return "function " + nativeName + "() { [native code] }";
+        }
+        return raw.call(this);
+      },
+    };
+    const toString = holder.toString;
+    nativeMark.set(toString, "function toString() { [native code] }");
+    nativeMaps.set(toString, nativeMark);
+    win.Object.defineProperty(win.Function.prototype, "toString", {
+      configurable: true,
+      writable: true,
+      enumerable: false,
+      value: toString,
+    });
   }
-  nativeMark.set(toString, "function toString() { [native code] }");
-  try { delete toString.prototype; } catch (_error) {}
-  win.Object.defineProperty(win.Function.prototype, "toString", { configurable: true, writable: true, value: toString });
   win.__mark = function mark(fn, name) {
-    if (typeof fn === "function") nativeMark.set(fn, "function " + (name || "anonymous") + "() { [native code] }");
+    const map = nativeMaps.get(win.Function.prototype.toString);
+    if (map && typeof fn === "function") map.set(fn, "function " + (name || "anonymous") + "() { [native code] }");
   };
   const roots = [win, win.document, win.navigator, win.history, win.console, win.performance, win.location, win.Object, win.JSON, win.Date, win.Math, win.Reflect, win.Array, win.String, win.Number, win.Promise, win.Map, win.Set, win.Function, win.Object && win.Object.prototype, win.Array && win.Array.prototype, win.String && win.String.prototype, win.Function && win.Function.prototype, win.Date && win.Date.prototype];
   const protos = [win.Document, win.Element, win.Node, win.HTMLElement, win.EventTarget, win.XMLHttpRequest, win.Storage, win.Window, win.Navigator, win.History, win.Performance, win.CanvasRenderingContext2D];
@@ -94,7 +100,6 @@ function markNatives(win) {
       if (typeof value === "function") win.__mark(value, name);
     }
   }
-  raw.__marked = true;
 }
 
 function installStack(win) {
@@ -255,10 +260,13 @@ function installAudio(win) {
   }
   OfflineAudioContext.prototype = Object.create(AudioContext.prototype);
   OfflineAudioContext.prototype.startRendering = function startRendering() {
-    const data = new win.Float32Array(this.length || 256);
-    for (let i = 0; i < data.length; i += 1) data[i] = Math.sin(i / 12) * 0.02;
+    if (this.__rendered) return win.Promise.reject(new win.DOMException("InvalidStateError"));
+    this.__rendered = true;
+    const data = new win.Float32Array(Math.min(this.length || 256, 44100));
+    for (let i = 0; i < data.length; i += 1) data[i] = Math.sin(i / 17) * 0.13 + Math.sin(i / 90) * 0.02;
     const buffer = { getChannelData() { return data; }, sampleRate: 44100, length: data.length, duration: data.length / 44100, numberOfChannels: 1 };
-    return win.Promise.resolve(buffer);
+    this.state = "closed";
+    return new win.Promise((resolve) => { win.setTimeout(() => resolve(buffer), 8); });
   };
   win.AudioContext = AudioContext;
   win.webkitAudioContext = AudioContext;
@@ -270,8 +278,38 @@ function installAudio(win) {
 }
 
 function installRtc(win) {
-  const sdp = "v=0\r\no=- 1 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na=group:BUNDLE 0\r\nm=application 9 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 0.0.0.0\r\na=ice-ufrag:abcd\r\na=ice-pwd:abcdefghijklmnopqrstuvwx\r\na=fingerprint:sha-256 00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF\r\na=setup:actpass\r\na=mid:0\r\na=sctp-port:5000\r\n";
-  function RTCPeerConnection() {
+  const sdp = "v=0\r\no=- 4611731409777201367 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na=group:BUNDLE 0\r\na=msid-semantic: WMS\r\nm=application 9 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 0.0.0.0\r\na=ice-ufrag:4GZr\r\na=ice-pwd:0123456789abcdef0123456789abcdef\r\na=ice-options:trickle\r\na=fingerprint:sha-256 1A:2B:3C:4D:5E:6F:70:81:92:A3:B4:C5:D6:E7:F8:09:1A:2B:3C:4D:5E:6F:70:81:92:A3:B4:C5:D6:E7:F8:09\r\na=setup:actpass\r\na=mid:0\r\na=sctp-port:5000\r\n";
+  const hostCandidate = "candidate:1 1 UDP 2122252543 192.168.0.12 9 typ host generation 0 ufrag 4GZr network-id 1";
+  function emit(target, type, event) {
+    const direct = target["on" + type];
+    if (typeof direct === "function") direct(event);
+    const list = target._listeners && target._listeners[type];
+    if (!list) return;
+    for (const listener of list.slice()) listener(event);
+  }
+  function RTCDataChannel() {
+    throw new win.TypeError("Illegal constructor");
+  }
+  RTCDataChannel.prototype.close = function close() { this.readyState = "closed"; };
+  RTCDataChannel.prototype.send = function send() {};
+  RTCDataChannel.prototype.addEventListener = function addEventListener() {};
+  RTCDataChannel.prototype.removeEventListener = function removeEventListener() {};
+  Object.defineProperty(RTCDataChannel.prototype, Symbol.toStringTag, { configurable: true, value: "RTCDataChannel" });
+  function RTCSessionDescription(init) {
+    this.type = init && init.type || "";
+    this.sdp = init && init.sdp || "";
+  }
+  RTCSessionDescription.prototype.toJSON = function toJSON() { return { type: this.type, sdp: this.sdp }; };
+  function RTCIceCandidate(init) {
+    init = init || {};
+    this.candidate = init.candidate || "";
+    this.sdpMid = init.sdpMid || "";
+    this.sdpMLineIndex = init.sdpMLineIndex || 0;
+  }
+  RTCIceCandidate.prototype.toJSON = function toJSON() { return { candidate: this.candidate, sdpMid: this.sdpMid, sdpMLineIndex: this.sdpMLineIndex }; };
+  function RTCPeerConnection(config) {
+    this._config = config || {};
+    this._listeners = {};
     this.iceConnectionState = "new";
     this.connectionState = "new";
     this.signalingState = "stable";
@@ -279,25 +317,458 @@ function installRtc(win) {
     this.localDescription = null;
     this.remoteDescription = null;
     this.onicecandidate = null;
+    this.onicegatheringstatechange = null;
+    this.canTrickleIceCandidates = true;
+    this._gathered = false;
   }
-  RTCPeerConnection.prototype.createDataChannel = function createDataChannel() { return { close() {}, send() {} }; };
-  RTCPeerConnection.prototype.createOffer = function createOffer() { return win.Promise.resolve({ type: "offer", sdp }); };
-  RTCPeerConnection.prototype.createAnswer = function createAnswer() { return win.Promise.resolve({ type: "answer", sdp }); };
+  const offered = sdp + "a=" + hostCandidate + "\r\n";
+  function gather(pc) {
+    if (!pc || pc._gathered || pc.connectionState === "closed") return;
+    pc._gathered = true;
+    if (pc.localDescription && typeof pc.localDescription.sdp === "string" && pc.localDescription.sdp.indexOf("a=candidate:") < 0) {
+      pc.localDescription.sdp += "a=" + hostCandidate + "\r\n";
+    }
+    pc.iceGatheringState = "complete";
+    pc.iceConnectionState = "completed";
+    emit(pc, "icecandidate", { candidate: new RTCIceCandidate({ candidate: hostCandidate, sdpMid: "0", sdpMLineIndex: 0 }) });
+    emit(pc, "icegatheringstatechange", {});
+    emit(pc, "icecandidate", { candidate: null });
+  }
+  RTCPeerConnection.prototype.createDataChannel = function createDataChannel(label) {
+    const channel = Object.create(RTCDataChannel.prototype);
+    channel.label = label || "";
+    channel.readyState = "open";
+    channel.bufferedAmount = 0;
+    channel.binaryType = "blob";
+    channel.protocol = "";
+    channel.ordered = true;
+    return channel;
+  };
+  RTCPeerConnection.prototype.createOffer = function createOffer() {
+    const desc = new RTCSessionDescription({ type: "offer", sdp: offered });
+    gather(this);
+    return win.Promise.resolve(desc);
+  };
+  RTCPeerConnection.prototype.createAnswer = function createAnswer() { return win.Promise.resolve(new RTCSessionDescription({ type: "answer", sdp: offered })); };
   RTCPeerConnection.prototype.setLocalDescription = function setLocalDescription(desc) {
-    this.localDescription = desc || { type: "offer", sdp };
-    this.iceGatheringState = "complete";
-    const callback = this.onicecandidate;
-    if (typeof callback === "function") callback({ candidate: { candidate: "candidate:1 1 UDP 2122252543 192.168.1.8 54321 typ host", sdpMid: "0", sdpMLineIndex: 0 } });
+    if (this.connectionState === "closed") return win.Promise.reject(new win.DOMException("InvalidStateError"));
+    const next = desc || new RTCSessionDescription({ type: "offer", sdp: offered });
+    if (next.sdp && next.sdp.indexOf("a=candidate:") < 0) next.sdp += "a=" + hostCandidate + "\r\n";
+    this.localDescription = next;
+    this.signalingState = "have-local-offer";
+    gather(this);
     return win.Promise.resolve();
   };
-  RTCPeerConnection.prototype.setRemoteDescription = function setRemoteDescription() { return win.Promise.resolve(); };
-  RTCPeerConnection.prototype.addEventListener = function addEventListener() {};
-  RTCPeerConnection.prototype.close = function close() {};
+  RTCPeerConnection.prototype.setRemoteDescription = function setRemoteDescription(desc) {
+    this.remoteDescription = desc || null;
+    this.signalingState = "stable";
+    return win.Promise.resolve();
+  };
+  RTCPeerConnection.prototype.addEventListener = function addEventListener(type, fn) {
+    if (typeof fn !== "function") return;
+    (this._listeners[type] || (this._listeners[type] = [])).push(fn);
+  };
+  RTCPeerConnection.prototype.removeEventListener = function removeEventListener(type, fn) {
+    const list = this._listeners[type];
+    if (!list) return;
+    const index = list.indexOf(fn);
+    if (index >= 0) list.splice(index, 1);
+  };
+  RTCPeerConnection.prototype.close = function close() {
+    this.connectionState = "closed";
+    this.signalingState = "closed";
+    this.iceConnectionState = "closed";
+  };
   RTCPeerConnection.prototype.addIceCandidate = function addIceCandidate() { return win.Promise.resolve(); };
+  RTCPeerConnection.prototype.getConfiguration = function getConfiguration() { return { iceServers: (this._config && this._config.iceServers) || [] }; };
   RTCPeerConnection.prototype.getStats = function getStats() { return win.Promise.resolve(new win.Map()); };
+  RTCPeerConnection.prototype.getSenders = function getSenders() { return []; };
+  RTCPeerConnection.prototype.getReceivers = function getReceivers() { return []; };
+  RTCPeerConnection.prototype.getTransceivers = function getTransceivers() { return []; };
   win.RTCPeerConnection = RTCPeerConnection;
   win.webkitRTCPeerConnection = RTCPeerConnection;
-  if (typeof win.__mark === "function") win.__mark(RTCPeerConnection, "RTCPeerConnection");
+  win.RTCDataChannel = RTCDataChannel;
+  if (process.env.WLZ_WATCH === "1") watchHost(win);
+  win.RTCSessionDescription = RTCSessionDescription;
+  win.RTCIceCandidate = RTCIceCandidate;
+  for (const name of ["RTCPeerConnection", "webkitRTCPeerConnection", "RTCDataChannel", "RTCSessionDescription", "RTCIceCandidate"]) onWindowPrototype(win, name);
+  if (typeof win.__mark === "function") {
+    for (const [fn, name] of [[RTCPeerConnection, "RTCPeerConnection"], [RTCDataChannel, "RTCDataChannel"], [RTCSessionDescription, "RTCSessionDescription"], [RTCIceCandidate, "RTCIceCandidate"]]) win.__mark(fn, name);
+    for (const name of Object.getOwnPropertyNames(RTCDataChannel.prototype)) {
+      if (typeof RTCDataChannel.prototype[name] === "function") win.__mark(RTCDataChannel.prototype[name], name);
+    }
+    for (const name of Object.getOwnPropertyNames(RTCPeerConnection.prototype)) {
+      if (typeof RTCPeerConnection.prototype[name] === "function") win.__mark(RTCPeerConnection.prototype[name], name);
+    }
+  }
+}
+
+function onWindowPrototype(win, name) {
+  const proto = win.Window && win.Window.prototype;
+  const value = win[name];
+  if (!proto || typeof value !== "function") return;
+  let current = null;
+  try { current = Object.getOwnPropertyDescriptor(proto, name); } catch (_error) { current = null; }
+  if (current && typeof current.value === "function") return;
+  try {
+    Object.defineProperty(proto, name, { configurable: true, enumerable: true, writable: true, value });
+  } catch (_error) {}
+}
+
+function watchHost(win) {
+  if (!win || win.__watched) return;
+  win.__watched = true;
+  const watchPath = "C:\\Users\\mengma\\AppData\\Local\\Temp\\wlz-watch.txt";
+  if (!watchHost.cleared) {
+    watchHost.cleared = true;
+    try { fs.writeFileSync(watchPath, "", "utf8"); } catch (_error) {}
+  }
+  let left = 120;
+  const seen = new Set();
+  function note(line) {
+    if (left <= 0 || seen.has(line)) return;
+    seen.add(line);
+    left -= 1;
+    try { fs.appendFileSync(watchPath, line + "\n"); } catch (_error) {}
+  }
+  function tagFn(fn, name) {
+    try {
+      Object.defineProperty(fn, "constructor", { configurable: true, writable: true, enumerable: false, value: win.Function });
+    } catch (_error) {}
+    if (typeof win.__mark === "function") win.__mark(fn, name);
+    return fn;
+  }
+  const xhrProto = win.XMLHttpRequest && win.XMLHttpRequest.prototype;
+  if (xhrProto && typeof xhrProto.open === "function" && !xhrProto.open.__watched) {
+    const origOpen = xhrProto.open;
+    const origSend = xhrProto.send;
+    xhrProto.open = tagFn(function open(method, url, asyncFlag) {
+      let scheme = "bad";
+      try { scheme = new URL(String(url || ""), win.location.href).protocol; } catch (_error) {}
+      const mode = arguments.length < 3 ? "default" : asyncFlag ? "async" : "sync";
+      note("xhr-open " + String(method || "").slice(0, 8) + " " + mode + " " + scheme);
+      try { return origOpen.apply(this, arguments); } catch (error) {
+        note("xhr-open-throw " + (error && error.name));
+        throw error;
+      }
+    }, "open");
+    if (typeof origSend === "function") {
+      xhrProto.send = tagFn(function send(body) {
+        const kind = body == null ? "null" : typeof body;
+        try {
+          const out = origSend.apply(this, arguments);
+          note("xhr-send " + kind + " state " + this.readyState + " status " + this.status);
+          return out;
+        } catch (error) {
+          note("xhr-send-throw " + (error && error.name));
+          throw error;
+        }
+      }, "send");
+    }
+  }
+  if (typeof win.fetch === "function" && !win.fetch.__watched) {
+    const origFetch = win.fetch;
+    function fetch(input, init) {
+      let scheme = typeof input;
+      if (typeof input === "string") {
+        try { scheme = new URL(input, win.location.href).protocol; } catch (_error) { scheme = "bad"; }
+      } else if (input && typeof input.url === "string") scheme = "request";
+      const keys = init && typeof init === "object" ? Object.keys(init).sort().join("+") : "none";
+      note("fetch-call " + scheme + " " + keys);
+      try {
+        const out = origFetch.apply(this, arguments);
+        note("fetch-ret " + (out && typeof out.then));
+        return out;
+      } catch (error) {
+        note("fetch-throw " + (error && error.name));
+        throw error;
+      }
+    }
+    fetch.__watched = true;
+    win.fetch = tagFn(fetch, "fetch");
+  }
+  const pcProto = win.RTCPeerConnection && win.RTCPeerConnection.prototype;
+  if (pcProto && !pcProto.__watched) {
+    pcProto.__watched = true;
+    const OrigPC = win.RTCPeerConnection;
+    function RTCPeerConnection(config) {
+      const keys = config && typeof config === "object" ? Object.keys(config).sort().join("+") : typeof config;
+      note("rtc-new " + keys);
+      return new OrigPC(...arguments);
+    }
+    RTCPeerConnection.prototype = OrigPC.prototype;
+    for (const key of ["generateCertificate"]) {
+      if (typeof OrigPC[key] === "function") RTCPeerConnection[key] = OrigPC[key];
+    }
+    win.RTCPeerConnection = tagFn(RTCPeerConnection, "RTCPeerConnection");
+    win.webkitRTCPeerConnection = win.RTCPeerConnection;
+    for (const name of Object.getOwnPropertyNames(pcProto)) {
+      const fn = pcProto[name];
+      if (typeof fn !== "function" || name === "constructor") continue;
+      pcProto[name] = tagFn(function watched() {
+        const kinds = Array.prototype.map.call(arguments, (item) => typeof item).slice(0, 3).join(",");
+        note("rtc-call " + name + " " + kinds);
+        try {
+          const out = fn.apply(this, arguments);
+          note("rtc-ok " + name + " " + (out && typeof out.then === "function" ? "then" : typeof out));
+          return out;
+        } catch (error) {
+          note("rtc-throw " + name + " " + (error && error.name));
+          throw error;
+        }
+      }, name);
+    }
+  }
+}
+
+// Diagnostic only. WLZ_READ must stay unset on the acceptance path.
+function readHost(win) {
+  if (process.env.WLZ_READ !== "1" || !win || win.__readHost) return;
+  win.__readHost = true;
+  const readPath = process.env.WLZ_READ_OUT || path.join(root, "runtime", "prop-reads.txt");
+  if (!readHost.cleared) {
+    readHost.cleared = true;
+    try { fs.mkdirSync(path.dirname(readPath), { recursive: true }); } catch (_error) {}
+    try { fs.writeFileSync(readPath, "", "utf8"); } catch (_error) {}
+  }
+  const scope = win.parent && win.parent !== win ? "frame" : "page";
+  let left = 800;
+  const seen = new Set();
+  const ours = new WeakSet();
+  const ctorOfProto = new WeakMap();
+  const fnCache = new WeakMap();
+  function safeName(prop) {
+    if (typeof prop === "symbol") {
+      if (prop === Symbol.toStringTag) return "toStringTag";
+      if (prop === Symbol.iterator) return "iterator";
+      if (prop === Symbol.hasInstance) return "hasInstance";
+      return null;
+    }
+    const text = String(prop);
+    return /^[A-Za-z_$][A-Za-z0-9_$]{0,48}$/.test(text) ? text : null;
+  }
+  function note(line) {
+    if (left <= 0 || seen.has(line)) return;
+    seen.add(line);
+    left -= 1;
+    try { fs.appendFileSync(readPath, line + "\n"); } catch (_error) {}
+  }
+  function kindOf(value) {
+    if (value === null) return "null";
+    if (value === undefined) return "undefined";
+    const type = typeof value;
+    if (type === "number" && Number.isFinite(value) && Math.abs(value) < 1000) return "number " + value;
+    if (type === "string") return /^[A-Za-z_$][A-Za-z0-9_$]{0,40}$/.test(value) ? "string " + value : "string";
+    if (type !== "object" && type !== "function") return type;
+    if (ours.has(value)) return type;
+    try {
+      const tag = Object.prototype.toString.call(value);
+      const match = /^\[object ([A-Za-z0-9_]+)\]$/.exec(tag);
+      return match ? match[1] : type;
+    } catch (_error) {
+      return type;
+    }
+  }
+  function followFn(fn, label) {
+    if (typeof fn !== "function" || ours.has(fn)) return fn;
+    if (fnCache.has(fn)) return fnCache.get(fn);
+    const wrapped = observeFunction(fn, label);
+    fnCache.set(fn, wrapped);
+    return wrapped;
+  }
+  function described(desc, label, name) {
+    if (!desc) {
+      if (name) note(label + " desc " + name + " missing");
+      return desc;
+    }
+    const kind = desc.get || desc.set ? "accessor" : "data";
+    if (name) note(label + " desc " + name + " " + kind);
+    if (!name || name === "constructor" || desc.configurable === false) return desc;
+    if (kind === "data" && typeof desc.value === "function") {
+      return Object.assign({}, desc, { value: followFn(desc.value, label + " " + name) });
+    }
+    if (kind !== "accessor") return desc;
+    const next = Object.assign({}, desc);
+    if (typeof desc.get === "function") next.get = followFn(desc.get, label + " getter " + name);
+    if (typeof desc.set === "function") next.set = followFn(desc.set, label + " setter " + name);
+    return next;
+  }
+  function markFn(fn, name) {
+    try {
+      Object.defineProperty(fn, "constructor", {
+        configurable: true,
+        writable: true,
+        enumerable: false,
+        value: win.Function,
+      });
+    } catch (_error) {}
+    if (typeof win.__mark === "function") win.__mark(fn, name);
+  }
+  function observeObject(target, label) {
+    const proxy = new Proxy(target, {
+      get(obj, prop, receiver) {
+        const name = safeName(prop);
+        if (name === "constructor") {
+          const exposed = ctorOfProto.get(obj);
+          if (typeof exposed === "function") {
+            note(label + " get constructor function");
+            return exposed;
+          }
+        }
+        let value;
+        try {
+          value = Reflect.get(obj, prop, receiver);
+        } catch (error) {
+          if (name) note(label + " get " + name + " throw " + String(error && error.name || "Error"));
+          throw error;
+        }
+        if (name && name[0] !== "_" && name !== "constructor" && name !== "toString" && typeof value === "function") value = followFn(value, label + " " + name);
+        if (name) note(label + " get " + name + " " + kindOf(value));
+        return value;
+      },
+      set(obj, prop, value, receiver) {
+        const name = safeName(prop);
+        if (name) note(label + " set " + name + " " + kindOf(value));
+        const dest = receiver && ours.has(receiver) ? obj : receiver;
+        return Reflect.set(obj, prop, value, dest);
+      },
+      has(obj, prop) {
+        const name = safeName(prop);
+        if (name) note(label + " has " + name);
+        return Reflect.has(obj, prop);
+      },
+      getOwnPropertyDescriptor(obj, prop) {
+        const name = safeName(prop);
+        return described(Reflect.getOwnPropertyDescriptor(obj, prop), label, name);
+      },
+      ownKeys(obj) {
+        const keys = Reflect.ownKeys(obj);
+        const names = [];
+        for (const key of keys) {
+          const name = safeName(key);
+          if (name) names.push(name);
+          if (names.length >= 40) break;
+        }
+        note(label + " keys " + names.join(","));
+        return keys;
+      },
+    });
+    ours.add(proxy);
+    return proxy;
+  }
+  function observeFunction(fn, label) {
+    const proxy = new Proxy(fn, {
+      apply(target, thisArg, args) {
+        note(label + " apply " + args.length);
+        return Reflect.apply(target, thisArg, args);
+      },
+      construct(target, args, newTarget) {
+        note(label + " construct " + args.length);
+        return Reflect.construct(target, args, newTarget);
+      },
+      get(target, prop, receiver) {
+        const name = safeName(prop);
+        let value;
+        try {
+          value = Reflect.get(target, prop, receiver);
+        } catch (error) {
+          if (name) note(label + " get " + name + " throw " + String(error && error.name || "Error"));
+          throw error;
+        }
+        if (name && name[0] !== "_" && name !== "constructor" && name !== "toString" && typeof value === "function") value = followFn(value, label + " " + name);
+        if (name) note(label + " get " + name + " " + kindOf(value));
+        return value;
+      },
+      has(target, prop) {
+        const name = safeName(prop);
+        if (name) note(label + " has " + name);
+        return Reflect.has(target, prop);
+      },
+      getOwnPropertyDescriptor(target, prop) {
+        const name = safeName(prop);
+        return described(Reflect.getOwnPropertyDescriptor(target, prop), label, name);
+      },
+      ownKeys(target) {
+        const keys = Reflect.ownKeys(target);
+        const names = [];
+        for (const key of keys) {
+          const name = safeName(key);
+          if (name) names.push(name);
+          if (names.length >= 40) break;
+        }
+        note(label + " keys " + names.join(","));
+        return keys;
+      },
+    });
+    ours.add(proxy);
+    markFn(proxy, fn.name || label);
+    return proxy;
+  }
+  function observeConstructor(Orig, label, wrapInstance) {
+    if (typeof Orig !== "function") return Orig;
+    const protoTarget = Orig.prototype;
+    const protoProxy = protoTarget && typeof protoTarget === "object" ? observeObject(protoTarget, label + " proto") : protoTarget;
+    function Wrapped() {
+      const inst = Reflect.construct(Orig, arguments, new.target);
+      return wrapInstance ? observeObject(inst, label + " inst") : inst;
+    }
+    try { Object.defineProperty(Wrapped, "name", { configurable: true, value: Orig.name || "Anonymous" }); } catch (_error) {}
+    try { Object.defineProperty(Wrapped, "length", { configurable: true, value: Orig.length }); } catch (_error) {}
+    if (protoProxy) {
+      try { Wrapped.prototype = protoProxy; } catch (_error) {}
+    }
+    let names = [];
+    try { names = Object.getOwnPropertyNames(Orig); } catch (_error) {}
+    for (const name of names) {
+      if (name === "prototype" || name === "length" || name === "name") continue;
+      let desc;
+      try { desc = Object.getOwnPropertyDescriptor(Orig, name); } catch (_error) { continue; }
+      if (!desc) continue;
+      try { Object.defineProperty(Wrapped, name, desc); } catch (_error) {}
+    }
+    try { Object.setPrototypeOf(Wrapped, Object.getPrototypeOf(Orig)); } catch (_error) {}
+    const proxied = observeFunction(Wrapped, label);
+    if (protoTarget && typeof protoTarget === "object") ctorOfProto.set(protoTarget, proxied);
+    return proxied;
+  }
+  function publish(name, value) {
+    if (typeof value !== "function") return;
+    try { win[name] = value; } catch (_error) {}
+    const proto = win.Window && win.Window.prototype;
+    if (!proto) return;
+    let desc = null;
+    try { desc = Object.getOwnPropertyDescriptor(proto, name); } catch (_error) { desc = null; }
+    if (desc && desc.configurable === false && desc.writable === false) return;
+    try {
+      Object.defineProperty(proto, name, {
+        configurable: true,
+        enumerable: !desc || desc.enumerable !== false,
+        writable: true,
+        value,
+      });
+    } catch (_error) {}
+  }
+  publish("XMLHttpRequest", observeConstructor(win.XMLHttpRequest, scope + " xhr", false));
+  if (typeof win.fetch === "function") publish("fetch", observeFunction(win.fetch, scope + " fetch"));
+  if (typeof win.RTCPeerConnection === "function") {
+    const rtc = observeConstructor(win.RTCPeerConnection, scope + " rtc", true);
+    publish("RTCPeerConnection", rtc);
+    try { win.webkitRTCPeerConnection = rtc; } catch (_error) {}
+    const proto = win.Window && win.Window.prototype;
+    if (proto) {
+      try {
+        const desc = Object.getOwnPropertyDescriptor(proto, "webkitRTCPeerConnection");
+        if (!desc || desc.configurable !== false || desc.writable !== false) {
+          Object.defineProperty(proto, "webkitRTCPeerConnection", {
+            configurable: true,
+            enumerable: true,
+            writable: true,
+            value: rtc,
+          });
+        }
+      } catch (_error) {}
+    }
+  }
 }
 
 function defineGetter(obj, key, value) {
@@ -361,18 +832,34 @@ function installNavigator(win) {
     win.__mark(nav.javaEnabled, "javaEnabled");
     win.__mark(nav.getBattery, "getBattery");
   }
-  if (process.env.WLZ_FAKE_PLUGINS === "1") {
-    const plugin = { name: "PDF Viewer", filename: "internal-pdf-viewer", description: "Portable Document Format", length: 1, 0: { type: "application/pdf" } };
+  if (process.env.WLZ_PLUGINS === "1") {
+    const pdf = { type: "application/pdf", suffixes: "pdf", description: "Portable Document Format" };
+    const plugin = { name: "PDF Viewer", filename: "internal-pdf-viewer", description: "Portable Document Format", length: 1, 0: pdf };
     const plugins = Object.create(Object.getPrototypeOf(nav.plugins) || Object.prototype);
     plugins[0] = plugin;
     defineGetter(plugins, "length", 1);
     plugins.item = (index) => plugins[index] || null;
-    plugins.namedItem = () => plugin;
+    plugins.namedItem = (name) => (name === plugin.name ? plugin : null);
     plugins.refresh = () => {};
+    plugins[Symbol.iterator] = function values() { let i = 0; const self = this; return { next() { return i < self.length ? { value: self[i++], done: false } : { done: true }; } }; };
+    try { Object.defineProperty(plugins, Symbol.toStringTag, { configurable: true, value: "PluginArray" }); } catch (_error) {}
+    try { Object.defineProperty(plugin, Symbol.toStringTag, { configurable: true, value: "Plugin" }); } catch (_error) {}
     defineGetter(nav, "plugins", plugins);
-    defineGetter(nav, "mimeTypes", { length: 1, 0: { type: "application/pdf" }, item() { return this[0]; } });
+    const mimeTypes = { length: 1, 0: pdf, item(index) { return this[index] || null; }, namedItem(type) { return type === pdf.type ? pdf : null; } };
+    try { Object.defineProperty(mimeTypes, Symbol.toStringTag, { configurable: true, value: "MimeTypeArray" }); } catch (_error) {}
+    try { Object.defineProperty(pdf, Symbol.toStringTag, { configurable: true, value: "MimeType" }); } catch (_error) {}
+    defineGetter(nav, "mimeTypes", mimeTypes);
+    if (typeof win.__mark === "function") {
+      win.__mark(plugins.item, "item");
+      win.__mark(plugins.namedItem, "namedItem");
+      win.__mark(plugins.refresh, "refresh");
+      win.__mark(mimeTypes.item, "item");
+      win.__mark(mimeTypes.namedItem, "namedItem");
+    }
   }
-  defineGetter(nav, "webdriver", false);
+  const navProto = win.Navigator && win.Navigator.prototype;
+  defineGetter(navProto || nav, "webdriver", false);
+  defineGetter(nav, "userAgent", UA);
   win.chrome = {
     app: { isInstalled: false, getDetails() { return null; }, getIsInstalled() { return false; } },
     runtime: { OnInstalledReason: { CHROME_UPDATE: "chrome_update", INSTALL: "install", UPDATE: "update" }, connect() { return { onMessage: { addListener() {} }, postMessage() {}, disconnect() {} }; }, sendMessage() {} },
@@ -392,19 +879,14 @@ function installNavigator(win) {
     win.__mark(win.chrome.csi, "csi");
     win.__mark(win.chrome.loadTimes, "loadTimes");
   }
-  if (win.performance) {
-    const started = Date.now() - 1800;
-    try {
-      const host = (win.Performance && win.Performance.prototype) || win.performance;
-      Object.defineProperty(host, "now", { configurable: true, writable: true, value() { return Date.now() - started; } });
-    } catch (_error) {}
-    let heap = 18000000;
+  if (win.performance && !win.performance.memory) {
+    let heap = 21450331;
     try {
       Object.defineProperty(win.performance, "memory", {
         configurable: true,
         get() {
-          heap += 8192;
-          return { jsHeapSizeLimit: 4294705152, totalJSHeapSize: 38000000 + (heap % 500000), usedJSHeapSize: heap };
+          heap += 4096;
+          return { jsHeapSizeLimit: 2172649472, totalJSHeapSize: 38221120 + (heap % 100000), usedJSHeapSize: heap };
         },
       });
     } catch (_error) {}
@@ -447,19 +929,19 @@ function calmHoneypot(inst) {
 }
 
 function installTrust(win) {
-  const Orig = win.MouseEvent;
-  if (typeof Orig !== "function" || Orig.__trusted) return;
-  function MouseEvent(type, init) {
-    const event = new Orig(type, init);
-    try {
-      win.Object.defineProperty(event, "isTrusted", { configurable: true, get() { return true; } });
-    } catch (_error) {}
-    return event;
-  }
-  MouseEvent.prototype = Orig.prototype;
-  MouseEvent.__trusted = true;
-  win.MouseEvent = MouseEvent;
-  if (typeof win.__mark === "function") win.__mark(MouseEvent, "MouseEvent");
+  if (!win.Event || !win.Event.prototype || win.Event.prototype.__trusted) return;
+  try {
+    Object.defineProperty(win.Event.prototype, "isTrusted", {
+      configurable: true,
+      enumerable: true,
+      get() { return true; },
+    });
+    win.Event.prototype.__trusted = true;
+    if (typeof win.__mark === "function") {
+      const desc = Object.getOwnPropertyDescriptor(win.Event.prototype, "isTrusted");
+      if (desc && typeof desc.get === "function") win.__mark(desc.get, "get isTrusted");
+    }
+  } catch (_error) {}
 }
 
 function installLayout(win) {
@@ -468,8 +950,39 @@ function installLayout(win) {
   defineGetter(win, "innerWidth", 1920);
   defineGetter(win, "innerHeight", 969);
   defineGetter(win, "devicePixelRatio", 1);
-  if (typeof win.fetch !== "function" && typeof globalThis.fetch === "function") win.fetch = globalThis.fetch;
-  if (typeof win.__mark === "function" && typeof win.fetch === "function") win.__mark(win.fetch, "fetch");
+  if (typeof win.matchMedia !== "function") {
+    function matchMedia(query) {
+      const media = String(query || "");
+      return {
+        matches: false,
+        media,
+        onchange: null,
+        addListener() {},
+        removeListener() {},
+        addEventListener() {},
+        removeEventListener() {},
+        dispatchEvent() { return false; },
+      };
+    }
+    win.matchMedia = matchMedia;
+    if (typeof win.__mark === "function") win.__mark(matchMedia, "matchMedia");
+  }
+  if (typeof globalThis.fetch === "function" && win.Promise && !win.fetch) {
+    const nodeFetch = globalThis.fetch;
+    function fetch(input, init) {
+      let resource = input;
+      if (typeof input === "string") {
+        try { resource = new URL(input, (win.location && win.location.href) || PAGE).href; } catch (_error) {}
+      }
+      return win.Promise.resolve(nodeFetch(resource, init));
+    }
+    win.fetch = fetch;
+  }
+  for (const name of ["fetch", "Request", "Response", "Headers", "FormData", "AbortController", "XMLHttpRequest"]) {
+    if (typeof win[name] !== "function" && typeof globalThis[name] === "function") win[name] = globalThis[name];
+    if (typeof win.__mark === "function" && typeof win[name] === "function") win.__mark(win[name], name);
+    onWindowPrototype(win, name);
+  }
   defineGetter(win.history, "length", 5);
   const screen = win.screen;
   for (const [key, value] of Object.entries({ width: 1920, height: 1080, availWidth: 1920, availHeight: 1040, colorDepth: 24, pixelDepth: 24 })) {
@@ -558,14 +1071,251 @@ function primeBehavior(win, target, click) {
   }
 }
 
+const KEEP_CTOR = new Set([
+  "XMLHttpRequest", "RTCPeerConnection", "webkitRTCPeerConnection",
+  "RTCSessionDescription", "RTCIceCandidate",
+  "AudioContext", "webkitAudioContext", "OfflineAudioContext", "webkitOfflineAudioContext",
+  "Worker", "SharedWorker", "Blob", "File", "FileReader",
+  "Image", "Option", "Audio", "Notification", "PaymentRequest",
+  "PluginArray", "MimeTypeArray", "Plugin", "MimeType",
+  "WebSocket", "EventSource", "MessageChannel", "BroadcastChannel",
+  "Headers", "Request", "Response", "FormData", "AbortController", "AbortSignal",
+  "URL", "URLSearchParams", "TextEncoder", "TextDecoder",
+  "DOMParser", "XMLSerializer", "Path2D", "ImageData",
+  "MutationObserver", "IntersectionObserver", "ResizeObserver", "PerformanceObserver",
+  "Object", "Array", "Function", "Promise", "Map", "Set", "WeakMap", "WeakSet",
+  "Date", "Error", "TypeError", "RangeError", "RegExp", "Proxy", "Symbol",
+  "ArrayBuffer", "DataView", "SharedArrayBuffer",
+  "Uint8Array", "Int8Array", "Uint8ClampedArray", "Uint16Array", "Int16Array",
+  "Uint32Array", "Int32Array", "Float32Array", "Float64Array",
+  "BigInt64Array", "BigUint64Array",
+  "Document", "HTMLDocument", "Element", "Node", "HTMLElement", "Window",
+  "Navigator", "History", "Location", "Screen", "Performance", "Storage",
+  "EventTarget", "NodeList", "HTMLCollection", "DOMException",
+  "CustomEvent", "Event", "MouseEvent", "KeyboardEvent", "PointerEvent",
+  "FocusEvent", "WheelEvent", "InputEvent", "TouchEvent", "UIEvent",
+  "MessageEvent", "ErrorEvent", "PopStateEvent", "HashChangeEvent", "StorageEvent",
+  "ProgressEvent", "CompositionEvent", "DragEvent",
+  "IDBFactory", "MediaStream",
+]);
+const SKIP_CONCEAL = new Set(["eval", "constructor", "__mark", "Reflect", "Math", "JSON", "Atomics", "Intl"]);
+const concealedFns = new WeakMap();
+
+function concealHostFunction(win, fn, name) {
+  if (typeof fn !== "function" || typeof win.eval !== "function") return null;
+  const cached = concealedFns.get(fn);
+  if (cached) return cached;
+  if (!/^[$A-Za-z_][$\w]*$/.test(name)) return null;
+  const count = Math.min(Math.max(Number(fn.length) || 0, 0), 8);
+  const params = [];
+  for (let i = 0; i < count; i += 1) params.push("a" + i);
+  const src = "(call)=>({ " + name + "(" + params.join(",") + "){ try { return call.apply(this, arguments); } catch (error) { if (error && typeof error.message === \"string\" && error.message.indexOf(\"not a valid instance of\") !== -1) throw new TypeError(\"Illegal invocation\"); throw error; } } })[\"" + name + "\"]";
+  let wrapped;
+  try {
+    wrapped = win.eval(src)(fn);
+  } catch (_error) {
+    return null;
+  }
+  if (typeof wrapped !== "function" || wrapped === fn) return null;
+  try {
+    if (Object.prototype.hasOwnProperty.call(wrapped, "prototype")) return null;
+  } catch (_error) {
+    return null;
+  }
+  if (typeof win.__mark === "function") win.__mark(wrapped, name);
+  concealedFns.set(fn, wrapped);
+  concealedFns.set(wrapped, wrapped);
+  return wrapped;
+}
+
+function concealHostSurface(win) {
+  if (!win || typeof win.__mark !== "function") return 0;
+  const targets = [
+    win, win.document, win.navigator, win.screen, win.history, win.console,
+    win.performance, win.location, win.crypto,
+    win.XMLHttpRequest && win.XMLHttpRequest.prototype,
+    win.RTCPeerConnection && win.RTCPeerConnection.prototype,
+    win.AudioContext && win.AudioContext.prototype,
+    win.OfflineAudioContext && win.OfflineAudioContext.prototype,
+    win.WebSocket && win.WebSocket.prototype,
+    win.EventTarget && win.EventTarget.prototype,
+    win.Event && win.Event.prototype,
+    win.MouseEvent && win.MouseEvent.prototype,
+    win.Element && win.Element.prototype,
+    win.Node && win.Node.prototype,
+    win.Document && win.Document.prototype,
+    win.HTMLElement && win.HTMLElement.prototype,
+    win.HTMLCanvasElement && win.HTMLCanvasElement.prototype,
+    win.Navigator && win.Navigator.prototype,
+    win.History && win.History.prototype,
+    win.Storage && win.Storage.prototype,
+    win.Performance && win.Performance.prototype,
+    win.CanvasRenderingContext2D && win.CanvasRenderingContext2D.prototype,
+  ];
+  const seen = new Set();
+  let count = 0;
+  for (const obj of targets) {
+    if (!obj || seen.has(obj)) continue;
+    seen.add(obj);
+    let names = [];
+    try { names = Object.getOwnPropertyNames(obj); } catch (_error) { continue; }
+    const onWindow = obj === win;
+    for (const name of names) {
+      if (SKIP_CONCEAL.has(name)) continue;
+      if (onWindow && (KEEP_CTOR.has(name) || /^[A-Z]/.test(name))) continue;
+      let desc;
+      try { desc = Object.getOwnPropertyDescriptor(obj, name); } catch (_error) { continue; }
+      if (!desc || desc.get || desc.set || typeof desc.value !== "function") continue;
+      const fn = desc.value;
+      let owns = false;
+      try { owns = Object.prototype.hasOwnProperty.call(fn, "prototype"); } catch (_error) { continue; }
+      if (onWindow && !owns) continue;
+      if (owns) {
+        let rich = false;
+        try {
+          rich = Object.getOwnPropertyNames(fn.prototype).some((key) => key !== "constructor");
+        } catch (_error) {}
+        if (rich) continue;
+      }
+      const wrapped = concealHostFunction(win, fn, name);
+      if (!wrapped) continue;
+      try {
+        Object.defineProperty(obj, name, {
+          configurable: desc.configurable !== false,
+          enumerable: !!desc.enumerable,
+          writable: desc.writable !== false,
+          value: wrapped,
+        });
+        count += 1;
+      } catch (_error) {}
+    }
+  }
+  return count;
+}
+
+function sealHostRealm(win) {
+  if (!win || !win.Function || !win.Function.prototype) return 0;
+  const pageFnProto = win.Function.prototype;
+  const nodeFnProto = Function.prototype;
+  const seen = new Set();
+  let sealed = 0;
+  function sealFn(fn) {
+    if (typeof fn !== "function" || seen.has(fn)) return;
+    seen.add(fn);
+    let proto;
+    try { proto = Object.getPrototypeOf(fn); } catch (_error) { return; }
+    if (typeof proto === "function" && proto !== nodeFnProto && proto !== pageFnProto) sealFn(proto);
+    let ctor = null;
+    try { ctor = fn.constructor; } catch (_error) { ctor = null; }
+    if (ctor !== win.Function) {
+      try {
+        Object.defineProperty(fn, "constructor", {
+          configurable: true,
+          writable: true,
+          enumerable: false,
+          value: win.Function,
+        });
+        sealed += 1;
+      } catch (_error) {}
+    }
+    let inst = null;
+    try { inst = fn.prototype; } catch (_error) { inst = null; }
+    if (inst && (typeof inst === "object" || typeof inst === "function") && !seen.has(inst)) sealObj(inst, 0);
+  }
+  function sealObj(obj, depth) {
+    if (!obj || seen.has(obj)) return;
+    if (typeof obj !== "object" && typeof obj !== "function") return;
+    seen.add(obj);
+    let names;
+    try { names = Object.getOwnPropertyNames(obj); } catch (_error) { return; }
+    for (const name of names) {
+      let desc;
+      try { desc = Object.getOwnPropertyDescriptor(obj, name); } catch (_error) { continue; }
+      if (!desc) continue;
+      if (typeof desc.value === "function") sealFn(desc.value);
+      else if (desc.value && typeof desc.value === "object" && depth < 2 && !desc.value.nodeType) sealObj(desc.value, depth + 1);
+      if (typeof desc.get === "function") sealFn(desc.get);
+      if (typeof desc.set === "function") sealFn(desc.set);
+    }
+  }
+  sealObj(win, 0);
+  try {
+    const all = win.document && win.document.all;
+    if (all && typeof all === "object" && !seen.has(all)) sealObj(all, 1);
+  } catch (_error) {}
+  return sealed;
+}
+
+function stampHostApis(win) {
+  if (!win || typeof win.__mark !== "function") return;
+  const objs = [
+    win, win.document, win.navigator, win.screen, win.history, win.console, win.performance, win.location, win.crypto,
+    win.XMLHttpRequest && win.XMLHttpRequest.prototype,
+    win.RTCPeerConnection && win.RTCPeerConnection.prototype,
+    win.AudioContext && win.AudioContext.prototype,
+    win.OfflineAudioContext && win.OfflineAudioContext.prototype,
+    win.WebSocket && win.WebSocket.prototype,
+    win.Event && win.Event.prototype,
+    win.MouseEvent && win.MouseEvent.prototype,
+    win.Element && win.Element.prototype,
+    win.Node && win.Node.prototype,
+    win.Document && win.Document.prototype,
+    win.HTMLElement && win.HTMLElement.prototype,
+    win.HTMLCanvasElement && win.HTMLCanvasElement.prototype,
+  ];
+  const seen = new Set();
+  for (const obj of objs) {
+    if (!obj || seen.has(obj)) continue;
+    seen.add(obj);
+    let names = [];
+    try { names = Object.getOwnPropertyNames(obj); } catch (_error) { continue; }
+    for (const name of names) {
+      let value;
+      try { value = obj[name]; } catch (_error) { continue; }
+      if (typeof value === "function") win.__mark(value, value.name || name);
+    }
+  }
+}
+
+function installDocumentAll(win) {
+  if (!win || !win.document || win.document.__allPatched) return;
+  const v8 = require("v8");
+  const vm = require("vm");
+  v8.setFlagsFromString("--allow-natives-syntax");
+  let base;
+  let created = false;
+  try {
+    base = vm.runInThisContext("%GetUndetectable()");
+    created = true;
+  } catch (_error) {
+    created = false;
+  }
+  v8.setFlagsFromString("--no-allow-natives-syntax");
+  if (!created) return;
+  try { Object.defineProperty(base, Symbol.toStringTag, { configurable: true, value: "HTMLAllCollection" }); } catch (_error) {}
+  base.length = win.document.getElementsByTagName("*").length;
+  base.item = function item() { return null; };
+  base.namedItem = function namedItem() { return null; };
+  if (typeof win.__mark === "function") {
+    win.__mark(base.item, "item");
+    win.__mark(base.namedItem, "namedItem");
+  }
+  try {
+    Object.defineProperty(win.document, "all", { configurable: true, get() { return base; } });
+    win.document.__allPatched = true;
+  } catch (_error) {}
+}
+
 function installFrames(win) {
   const proto = win.HTMLIFrameElement && win.HTMLIFrameElement.prototype;
-  const desc = proto && Object.getOwnPropertyDescriptor(proto, "contentWindow");
-  const orig = desc && desc.get;
-  if (typeof orig !== "function") return;
+  const winDesc = proto && Object.getOwnPropertyDescriptor(proto, "contentWindow");
+  const docDesc = proto && Object.getOwnPropertyDescriptor(proto, "contentDocument");
+  const origWindow = winDesc && winDesc.get;
+  const origDocument = docDesc && docDesc.get;
+  if (typeof origWindow !== "function") return;
   const patched = new win.WeakSet();
-  function contentWindow() {
-    const child = orig.call(this);
+  function arm(frame) {
+    const child = origWindow.call(frame);
     if (child && !patched.has(child)) {
       patched.add(child);
       try {
@@ -579,6 +1329,12 @@ function installFrames(win) {
         installRtc(child);
         installHostQuirks(child);
         installWorker(child);
+        installDocumentAll(child);
+        stampHostApis(child);
+        concealHostSurface(child);
+        sealHostRealm(child);
+        if (process.env.WLZ_WATCH === "1") watchHost(child);
+        if (process.env.WLZ_READ === "1") readHost(child);
         if (process.env.WLZ_XHR === "1") installBridge(child);
       } catch (error) {
         report("frame-install " + String(error && error.message || error).slice(0, 80));
@@ -586,8 +1342,17 @@ function installFrames(win) {
     }
     return child;
   }
+  function contentWindow() { return arm(this); }
+  function contentDocument() {
+    arm(this);
+    return origDocument ? origDocument.call(this) : null;
+  }
   Object.defineProperty(proto, "contentWindow", { configurable: true, get: contentWindow });
-  if (typeof win.__mark === "function") win.__mark(contentWindow, "get contentWindow");
+  if (typeof origDocument === "function") Object.defineProperty(proto, "contentDocument", { configurable: true, get: contentDocument });
+  if (typeof win.__mark === "function") {
+    win.__mark(contentWindow, "get contentWindow");
+    win.__mark(contentDocument, "get contentDocument");
+  }
 }
 
 function installWorker(win) {
@@ -643,6 +1408,10 @@ function installWorker(win) {
     };
     const src = blobs.get(String(url)) || "";
     win.__workerBytes = src.length;
+    if (process.env.WLZ_TRACE === "1" && !win.__workerTraced) {
+      win.__workerTraced = true;
+      report("worker bytes " + src.length + " mentionsProcess " + src.includes("process") + " mentionsFunction " + src.includes("Function"));
+    }
     if (process.env.WLZ_WORKER_OUT && src) fs.writeFileSync(process.env.WLZ_WORKER_OUT, src);
     try {
       vm.runInContext(src, vm.createContext(context), { filename: "wlz-worker.js" });
@@ -1338,19 +2107,23 @@ async function main() {
     virtualConsole,
   });
   const win = dom.window;
-  const nativeRandom = win.Math.random.bind(win.Math);
-  const firstR = [];
-  const lastR = [];
-  win.Math.random = function mathRandom() {
-    const value = nativeRandom();
-    win.__mathN = (win.__mathN || 0) + 1;
-    if (firstR.length < 24) firstR.push(value);
-    lastR.push(value);
-    if (lastR.length > 64) lastR.shift();
-    return value;
-  };
-  win.__mathFirst = firstR;
-  win.__mathLast = lastR;
+  try {
+    if (Object.prototype.toString.call(win) === "[object Window]") delete win[Symbol.toStringTag];
+  } catch (_error) {}
+  if (process.env.WLZ_BREAK === "1" || process.env.WLZ_AES === "1") {
+    const nativeRandom = win.Math.random.bind(win.Math);
+    const firstR = [];
+    const lastR = [];
+    win.Math.random = function mathRandom() {
+      const value = nativeRandom();
+      if (firstR.length < 24) firstR.push(value);
+      lastR.push(value);
+      if (lastR.length > 64) lastR.shift();
+      return value;
+    };
+    win.__mathFirst = firstR;
+    win.__mathLast = lastR;
+  }
   if (win.crypto && !win.crypto.subtle) {
     Object.defineProperty(win.crypto, "subtle", {
       value: require("crypto").webcrypto.subtle,
@@ -1490,7 +2263,31 @@ async function main() {
     installAudio(win);
     installRtc(win);
     installHostQuirks(win);
+    installDocumentAll(win);
+    stampHostApis(win);
+    report("conceal " + concealHostSurface(win));
+    const sealed = sealHostRealm(win);
+    let ctorLeak = "skip";
+    if (process.env.WLZ_LOG === "1") {
+      try {
+        ctorLeak = win.eval("(function(){function leaks(fn){if(typeof fn!==\"function\")return false;try{var p=fn.constructor(\"return process\")();return !!(p&&typeof p===\"object\")}catch(e){return false}}var bad=[];function scan(obj,prefix){if(!obj)return;var names;try{names=Object.getOwnPropertyNames(obj)}catch(e){return}for(var i=0;i<names.length;i++){var desc;try{desc=Object.getOwnPropertyDescriptor(obj,names[i])}catch(e){continue}if(!desc)continue;if(leaks(desc.value)&&bad.length<10)bad.push(prefix+names[i]);if(leaks(desc.get)&&bad.length<10)bad.push(prefix+\"get \"+names[i]);if(leaks(desc.set)&&bad.length<10)bad.push(prefix+\"set \"+names[i])}}var n=0;var names=Object.getOwnPropertyNames(window);for(var i=0;i<names.length;i++){var desc;try{desc=Object.getOwnPropertyDescriptor(window,names[i])}catch(e){continue}if(desc&&(leaks(desc.value)||leaks(desc.get)||leaks(desc.set)))n++}scan(window,\"win.\");var ctors=[Document,Element,Node,Navigator,XMLHttpRequest,EventTarget,Function,Object,Event,HTMLIFrameElement];for(var c=0;c<ctors.length;c++)if(ctors[c]&&ctors[c].prototype)scan(ctors[c].prototype,ctors[c].name+\".\");var tag;try{tag=Object.prototype.toString.call(XMLHttpRequest.constructor(\"return this\")())}catch(e){tag=\"throw\"}return n+\" \"+tag+\" \"+bad.join(\",\")})()");
+      } catch (error) {
+        ctorLeak = "throw " + String(error && error.name || "err");
+      }
+    }
+    report("seal " + sealed + " ctorLeak " + ctorLeak);
+    if (process.env.WLZ_THIS === "1") {
+      try {
+        report("thisProbe " + win.eval("(function(){function tagOf(v){try{return Object.prototype.toString.call(v)}catch(e){return e.name}}var f=function(){return tagOf(this)};var frame=document.createElement('iframe');document.body.appendChild(frame);var child=frame.contentWindow;var childTag='nochild';var childProc='nochild';var childCall='nochild';try{childTag=child.eval('Object.prototype.toString.call(this)')}catch(e){childTag=e.name}try{childProc=child.eval('typeof process')}catch(e){childProc=e.name}try{childCall=child.eval('(function(){return Object.prototype.toString.call(this)})()')}catch(e){childCall=e.name}var bind='ok';try{document.createElement.bind(null)}catch(e){bind=String(e.message).slice(0,50)}return 'call '+f()+' child '+childTag+' childProc '+childProc+' bind '+bind+' media '+typeof matchMedia})()"));
+      } catch (error) {
+        report("thisProbe throw " + String(error && error.name || "err"));
+      }
+      win.close();
+      process.exit(2);
+    }
   }
+  if (process.env.WLZ_WATCH === "1") watchHost(win);
+  if (process.env.WLZ_READ === "1") readHost(win);
   const uaBad = /jsdom|headless/i.test(win.navigator.userAgent);
   const stack = String(new win.Error("x").stack || "");
   report("env uaBad " + uaBad + " webdriver " + win.navigator.webdriver + " plugins " + win.navigator.plugins.length + " screen " + win.screen.width + " stackNode " + /node:|jsdom/i.test(stack) + " fetch " + typeof win.fetch + " history " + win.history.length + " all " + typeof win.document.all);
@@ -1540,11 +2337,84 @@ async function main() {
     }
     vendors = vendors.replace(awaitThrow, "function s(t){try{if(globalThis.__capOn){var __m=String(t&&t.message||t).slice(0,120);var __e=globalThis.__awaitErr||(globalThis.__awaitErr=[]);if(__e.length<6&&__e.indexOf(__m)<0)__e.push(__m);}c(r.throw(t))}catch(t){o(t)}}");
   }
-  const vm = require("vm");
-  const context = vm.createContext(win);
-  const runInPage = (code, filename) => vm.runInContext(code, context, { filename: filename || PAGE });
-  win.eval = (code) => runInPage(code, PAGE);
-  runInPage(vendors, "https://captcha.wangluozhe.com/vendors.min.js");
+  const pageEval = win.eval.bind(win);
+  const runInPage = (code) => pageEval(code);
+  if (process.env.WLZ_TRACE === "1") {
+    let reads = 0;
+    function traceProcess() {
+      reads += 1;
+      if (reads <= 4) {
+        const stack = String(new Error("proc").stack || "").split("\n").slice(1, 7).map((line) => line.trim().replace(root, "").slice(0, 140)).join(" || ");
+        report("read-process " + stack);
+      }
+      return undefined;
+    }
+    try { Object.setPrototypeOf(traceProcess, win.Function.prototype); } catch (_error) {}
+    try { Object.defineProperty(win, "process", { configurable: true, enumerable: false, get: traceProcess }); } catch (error) {
+      report("trace-process " + String(error && error.message || error).slice(0, 80));
+    }
+    win.__traceFn = function traceFn(src) {
+      const stack = String(new Error("fn").stack || "").split("\n").slice(1, 5).map((line) => line.trim().replace(root, "").slice(0, 120)).join(" || ");
+      report("fn-call " + String(src).replace(/\s+/g, " ").slice(0, 120) + " :: " + stack);
+    };
+    try { Object.setPrototypeOf(win.__traceFn, win.Function.prototype); } catch (_error) {}
+    try {
+      const tag = runInPage("Object.prototype.toString.call(globalThis)");
+      report("trace-tag " + tag);
+      runInPage("(function(){var Native=Function;var trace=globalThis.__traceFn;function Function(){var src=arguments.length?String(arguments[arguments.length-1]):'';if(/process|global|return this|versions|title/.test(src))trace(src.slice(0,120));return Native.apply(this,arguments)}Function.prototype=Native.prototype;try{Object.setPrototypeOf(Function,Object.getPrototypeOf(Native))}catch(e){}globalThis.Function=Function;try{Object.defineProperty(Native.prototype,'constructor',{configurable:true,writable:true,value:Function})}catch(e){}var raw=Object.prototype.toString;function toString(){var out=raw.call(this);if(out==='[object global]')trace('toString-global');return out}Object.defineProperty(Object.prototype,'toString',{configurable:true,writable:true,value:toString})})()");
+    } catch (error) {
+      report("trace-fn " + String(error && error.message || error).slice(0, 120));
+    }
+  }
+  if (process.env.WLZ_ERR === "1") {
+    const errPath = "C:\\Users\\mengma\\AppData\\Local\\Temp\\wlz-err.txt";
+    try { fs.writeFileSync(errPath, "", "utf8"); } catch (_error) {}
+    let errSeen = 0;
+    const seenErr = new Set();
+    for (const name of ["Error", "TypeError", "ReferenceError", "DOMException"]) {
+      const Orig = win[name];
+      if (typeof Orig !== "function") continue;
+      function Wrapped() {
+        const args = Array.prototype.map.call(arguments, (item) => String(item == null ? "" : item).replace(/[\r\n]/g, " ").slice(0, 100)).join(" | ");
+        const stack = String(new Error("s").stack || "").split("\n").slice(2, 6).map((line) => line.trim().replace(root, "").slice(0, 140)).join(" || ");
+        const text = name + " " + args + " :: " + stack;
+        if (errSeen < 40 && !seenErr.has(text)) {
+          seenErr.add(text);
+          errSeen += 1;
+          try { fs.appendFileSync(errPath, text + "\n"); } catch (_error) {}
+        }
+        return new Orig(...arguments);
+      }
+      Wrapped.prototype = Orig.prototype;
+      try {
+        Object.defineProperty(Wrapped, "constructor", { configurable: true, writable: true, enumerable: false, value: win.Function });
+      } catch (_error) {}
+      win[name] = Wrapped;
+      if (typeof win.__mark === "function") win.__mark(Wrapped, name);
+    }
+  }
+  if (process.env.WLZ_CHR === "1") {
+    const chrPath = "C:\\Users\\mengma\\AppData\\Local\\Temp\\wlz-chr.txt";
+    try { fs.writeFileSync(chrPath, "", "utf8"); } catch (_error) {}
+    const seenChr = new Set();
+    const origFrom = win.String.fromCharCode;
+    function fromCharCode() {
+      const text = origFrom.apply(win.String, arguments);
+      if (typeof text === "string" && text.length >= 4 && text.length <= 96 && !seenChr.has(text)) {
+        seenChr.add(text);
+        if (seenChr.size <= 2500) {
+          try { fs.appendFileSync(chrPath, text.replace(/[\r\n]/g, " ") + "\n"); } catch (_error) {}
+        }
+      }
+      return text;
+    }
+    try {
+      Object.defineProperty(fromCharCode, "constructor", { configurable: true, writable: true, enumerable: false, value: win.Function });
+    } catch (_error) {}
+    win.String.fromCharCode = fromCharCode;
+    if (typeof win.__mark === "function") win.__mark(fromCharCode, "fromCharCode");
+  }
+  runInPage(vendors);
   if (process.env.WLZ_AES === "1") report("aesExport " + typeof (win.__AES && win.__AES.encrypt));
   if (process.env.WLZ_CAP === "1") {
     const leaked = runInPage("typeof process + '/' + typeof Buffer + '/' + typeof require");
@@ -1662,6 +2532,1019 @@ async function main() {
       win.__pair = true;
     }
   }
+  if (process.env.WLZ_PRED === "1") {
+    const instOp = "eT[jb+--BC-64]=eT[jb---BC+60]instanceof eT[jb]";
+    const inOp = "eT[++jb-3]=eT[jb+--BC-71]in eT[jb-=2]";
+    const getOp = "eT[++jb+--BC-55]=eT[jb---3][eT[jb---1]]";
+    const setOp = "eT[--jb- --BC+13]=eT[jb-2][eT[jb--+BC-16]]=eT[jb-BC+++16]";
+    const lxGetOp = "Kd[(yC-=Lb)+64]=Kd[++yC+Lb---3][Kd[yC+=64]]";
+    if ([instOp, inOp, getOp, setOp, lxGetOp].some((item) => sdk.split(item).length !== 2)) {
+      report("FAIL pred-shape");
+      win.close();
+      process.exit(1);
+    }
+    const predPath = process.env.WLZ_PRED_OUT || path.join(root, "runtime", "pred.txt");
+    try { fs.mkdirSync(path.dirname(predPath), { recursive: true }); } catch (_error) {}
+    const focus = /XMLHttpRequest|RTCPeer|webkitRTC|WebSocket|EventTarget|XMLHttp|PeerConnection|MediaStream|DataChannel|IceCandidate|SessionDescription|^fetch$|^open$|^send$/;
+    const apiKey = /^(XMLHttpRequest|fetch|RTCPeerConnection|webkitRTCPeerConnection|WebSocket|open|send|setLocalDescription|createOffer|createAnswer|createDataChannel|addIceCandidate|localDescription|RTCSessionDescription|RTCIceCandidate|RTCDataChannel)$/;
+    const flagKey = /missing|hooked|unimplemented|disabled|integrity|websocket|webrtc|^xhr_|^fetch_/;
+    const inKeep = /xhr|fetch|rtc|socket|peer|event|http|open|send|hook|native|missing|length|name|prototype|constructor|toString|function|window|channel|candidate|description/i;
+    let inN = 0;
+    let instN = 0;
+    let getN = 0;
+    let setN = 0;
+    let toN = 0;
+    let typN = 0;
+    let lines = 0;
+    let busy = false;
+    const buf = [];
+    const inHist = new Map();
+    const instHist = new Map();
+    const inOnFocus = new Map();
+    const getHist = new Map();
+    const setHist = new Map();
+    const missHist = new Map();
+    const toHist = new Map();
+    const typHist = new Map();
+    const hostHist = new Map();
+    const trail = [];
+    const netTrail = [];
+    const early = [];
+    const boot = [];
+    const present = [];
+    let bootClosed = false;
+    let presentLeft = 0;
+    const rawFall = [];
+    const argHist = new Map();
+    let follow = 0;
+    let netLeft = 0;
+    let earlyLeft = 0;
+    const followed = new Set();
+    function bump(map, key, limit) {
+      if (map.has(key)) map.set(key, map.get(key) + 1);
+      else if (map.size < limit) map.set(key, 1);
+    }
+    function tagOf(value) {
+      const kind = typeof value;
+      if (kind === "string") return /^[$A-Za-z_][$\w]{0,40}$/.test(value) ? value : "s" + value.length;
+      if (kind === "boolean") return value ? "true" : "false";
+      if (kind === "number") {
+        if (!Number.isFinite(value)) return "n";
+        const text = String(value);
+        return text.length < 12 ? text : "n";
+      }
+      if (kind === "function") {
+        let name = "";
+        try { name = value.name || ""; } catch (_error) { name = ""; }
+        return /^[$A-Za-z_][$\w]{0,40}$/.test(name) ? "fn:" + name : "fn";
+      }
+      if (kind === "undefined") return "undef";
+      if (value === null) return "null";
+      try {
+        const text = Object.prototype.toString.call(value);
+        if (text.length <= 48) return text;
+      } catch (_error) {}
+      return "obj";
+    }
+    function remember(line) {
+      if (lines >= 400) return;
+      lines += 1;
+      buf.push(line);
+      if (lines % 100 === 0) flushPred();
+    }
+    function flushPred() {
+      const top = (map, take) => [...map.entries()].sort((p, q) => q[1] - p[1]).slice(0, take).map(([key, count]) => count + " " + key);
+      const keptIn = [...inHist.entries()].filter(([key]) => inKeep.test(key)).sort((p, q) => q[1] - p[1]).slice(0, 80).map(([key, count]) => count + " " + key);
+      const text = [
+        "counts in " + inN + " inst " + instN + " get " + getN + " set " + setN + " to " + toN + " typeof " + typN + " lines " + lines,
+        "# hit",
+        ...buf,
+        "# instanceof",
+        ...top(instHist, 40),
+        "# in-on-focus",
+        ...top(inOnFocus, 40),
+        "# get",
+        ...top(getHist, 80),
+        "# miss",
+        ...top(missHist, 80),
+        "# typeof",
+        ...top(typHist, 40),
+        "# host",
+        ...top(hostHist, 200),
+        "# after",
+        ...trail,
+        "# net",
+        ...netTrail,
+        "# early",
+        ...early,
+        "# boot",
+        ...boot,
+        "# present",
+        ...present,
+        "# raw",
+        ...rawFall,
+        "# arg",
+        ...[...argHist.entries()].sort((p, q) => q[1] - p[1]).slice(0, 80).map(([key, count]) => count + " " + key),
+        "# set",
+        ...top(setHist, 80),
+        "# flip",
+        ...(win.__flipLines || []),
+        "# focus",
+        ...(win.__focusLines || []),
+        "# throws",
+        ...(win.__throwLines || []),
+        "# bool",
+        ...(win.__boolKeys || []),
+        "# tostring",
+        ...top(toHist, 40),
+        "# in-keys",
+        ...keptIn,
+      ].join("\n") + "\n";
+      try { fs.writeFileSync(predPath, text, "utf8"); } catch (_error) {}
+    }
+    function note(op, first, second, third) {
+      if (busy) return;
+      busy = true;
+      try {
+        if (op === "typeof") {
+          typN += 1;
+          const value = tagOf(second);
+          const row = "typeof " + first + " =" + value;
+          bump(typHist, row, 40);
+          if (value === "undefined" || value === "undef") bump(missHist, row, 80);
+          remember(row);
+          if (/^(XMLHttpRequest|fetch|WebSocket|RTCPeerConnection)$/.test(String(first)) && !followed.has("early-arm")) {
+            followed.add("early-arm");
+            earlyLeft = 650;
+            if (early.length < 700) early.push("arm typeof " + first);
+          }
+          if (earlyLeft > 0 && early.length < 700) {
+            earlyLeft -= 1;
+            early.push(row);
+          }
+          if (!bootClosed && boot.length < 500) boot.push(row);
+          if (String(first) === "XMLHttpRequest" && !followed.has("present")) {
+            followed.add("present");
+            presentLeft = 220;
+            present.push("arm typeof " + first);
+          }
+          if (presentLeft > 0 && present.length < 240) {
+            presentLeft -= 1;
+            present.push(row);
+          }
+          return;
+        }
+        if (op === "get" || op === "set") {
+          if (op === "get") getN += 1;
+          else setN += 1;
+          const keyText = typeof second === "string"
+            ? second
+            : (typeof second === "symbol" ? "sym:" + (second.description || "") : "");
+          if (op === "get" && keyText === "key" && globalThis.__walkSnap) {
+            try { globalThis.__walkSnap(first, keyText, third); } catch (_walk) {}
+          }
+          const noisyIndex = keyText === "number" && tagOf(first) === "[object Array]";
+          const lcgKey = keyText === "state" || keyText === "a" || keyText === "c" || keyText === "m" || keyText === "random" || (keyText === "slice" && typeof first === "string" && first.length <= 16);
+          const hashNoise = keyText === "charCodeAt" || keyText === "imul" || keyText === "charAt" || lcgKey || keyText.indexOf("_wlz_") === 0 || (keyText === "length" && typeof first === "string" && first.length > 24);
+          if (op === "get" && keyText && !hashNoise && keyText !== "writable" && keyText !== "enumerable" && keyText !== "configurable" && keyText !== "value") {
+            const ring = globalThis.__getRing || (globalThis.__getRing = []);
+            let who = "o";
+            try { who = first === win ? "page" : (first && first.window === first ? "frame" : (typeof first === "function" ? "fn" : typeof first)); } catch (_who) { who = "o"; }
+            const item = who + "." + keyText;
+            if (!ring.length || ring[ring.length - 1] !== item) {
+              ring.push(item);
+              if (ring.length > 50) ring.shift();
+            }
+            if (who === "page" || who === "frame") {
+              const early = globalThis.__winGets || (globalThis.__winGets = []);
+              const shown = third === undefined ? "u" : typeof third;
+              if (early.length < 400) early.push(item + "=" + shown);
+              const tail = globalThis.__winTail || (globalThis.__winTail = []);
+              tail.push(item + "=" + shown);
+              if (tail.length > 60) tail.shift();
+            }
+            if (keyText === "RISK_KEYS" && third && !globalThis.__riskDumped) {
+              globalThis.__riskDumped = 1;
+              const rows = [];
+              try {
+                const list = Array.isArray(third) ? third : [];
+                rows.push("len " + list.length);
+                const n = Math.min(list.length, 30);
+                for (let i = 0; i < n; i += 1) {
+                  const itemValue = list[i];
+                  if (typeof itemValue === "string") rows.push("s " + itemValue.slice(0, 48));
+                  else if (itemValue && typeof itemValue === "object") {
+                    const bits = [];
+                    for (const keyName of Object.keys(itemValue).slice(0, 8)) {
+                      const field = itemValue[keyName];
+                      if (typeof field === "boolean" || typeof field === "number") bits.push(keyName + "=" + field);
+                      else if (typeof field === "string" && field.length < 40) bits.push(keyName + "=" + field);
+                      else bits.push(keyName + ":" + typeof field);
+                    }
+                    rows.push(bits.join(" "));
+                  } else rows.push(typeof itemValue);
+                }
+              } catch (_risk) {}
+              try { fs.writeFileSync("C:\\Users\\mengma\\AppData\\Local\\Temp\\grok-goal-4a395ffcaba0\\implementer\\risk-keys.txt", rows.join("\n"), "utf8"); } catch (_riskWrite) {}
+            }
+          }
+          const lettersOf = (text) => {
+            const letters = text.replace(/[^A-Za-z]/g, "").slice(0, 32);
+            return "s" + text.length + (letters ? ":" + letters : "");
+          };
+          const shownOf = (value) => {
+            if (typeof value === "string" && value.length <= 64) return lettersOf(value);
+            return tagOf(value);
+          };
+          if (op === "get" && keyText === "concat" && typeof first === "string") {
+            const letters = first.replace(/[^a-z]/g, "");
+            if (/^(xhr|fetch|webrtc|network|websocket)/.test(letters)) {
+              const flag = "flag " + letters.slice(0, 48);
+              if (trail.length < 800) trail.push(flag);
+              if (netTrail.length < 900) netTrail.push(flag);
+              if (early.length < 700) early.push(flag);
+              if (follow < 80) follow = 80;
+              if (netLeft < 40) netLeft = 40;
+              if (/missing|unimplemented/.test(letters) && earlyLeft < 30) earlyLeft = 30;
+              if (!bootClosed && /missing|unimplemented/.test(letters)) bootClosed = true;
+            }
+          }
+          const hostish = /^(XMLHttpRequest|fetch|RTCPeerConnection|webkitRTCPeerConnection|WebSocket|createOffer|createDataChannel|setLocalDescription|contentWindow|contentDocument|createElement|UNSENT|OPENED|HEADERS_RECEIVED|LOADING|DONE|upload|withCredentials|responseType|Request|Response|Headers|AbortController|FormData|iceGatheringState|signalingState|connectionState|candidate|localDescription)$/.test(keyText) || ((keyText === "open" || keyText === "send" || keyText === "prototype" || keyText === "constructor") && /XMLHttp|RTC|WebSocket|fetch|Peer|Window/.test(tagOf(first)));
+          if (!bootClosed && !hashNoise && boot.length < 500 && (hostish || typeof third === "boolean" || third === 0 || third === 1)) {
+            let who = first === win ? "page" : tagOf(first);
+            if (typeof first === "string" && first.length <= 48) who = lettersOf(first);
+            boot.push(op + " " + who + " ." + (keyText || typeof second) + " =" + shownOf(third));
+          }
+          if (op === "get" && (keyText === "XMLHttpRequest" || keyText === "fetch" || keyText === "RTCPeerConnection" || keyText === "webkitRTCPeerConnection" || keyText === "WebSocket") && !followed.has("early-arm")) {
+            followed.add("early-arm");
+            earlyLeft = 650;
+            if (early.length < 700) early.push("arm " + keyText);
+          }
+          if (op === "set" && (typeof third === "boolean" || third === 0 || third === 1) && (follow > 0 || netLeft > 0 || earlyLeft > 0)) {
+            const bit = "bit " + (keyText || typeof second) + "=" + (third === true || third === 1 ? "1" : "0");
+            if (follow > 0 && trail.length < 800) trail.push(bit);
+            if (netLeft > 0 && netTrail.length < 900) netTrail.push(bit);
+            if (earlyLeft > 0 && early.length < 700) early.push(bit);
+          }
+          if ((follow > 0 || netLeft > 0 || earlyLeft > 0) && !noisyIndex && !hashNoise) {
+            let left = tagOf(first);
+            if (first === win) left = "page";
+            else if (first && (typeof first === "object" || typeof first === "function") && first !== win) {
+              try {
+                if (first.window === first && first.document) left = "frame";
+              } catch (_error) {}
+            }
+            if (typeof first === "string" && first.length <= 64) left = lettersOf(first);
+            const row = op + " " + left + " ." + (keyText || typeof second) + " =" + shownOf(third);
+            if (follow > 0 && trail.length < 800) {
+              follow -= 1;
+              trail.push(row);
+            }
+            if (netLeft > 0 && netTrail.length < 900) {
+              netLeft -= 1;
+              netTrail.push(row);
+            }
+            if (earlyLeft > 0 && early.length < 700) {
+              earlyLeft -= 1;
+              early.push(row);
+            }
+            const presentNoise = keyText === "Math" || keyText === "defineProperty" || keyText === "toString" || keyText === "call" || keyText === "indexOf" || keyText === "includes" || keyText === "prototype" || keyText === "charCodeAt" || keyText === "imul" || keyText.indexOf("has_") === 0;
+            if (presentLeft > 0 && !presentNoise && present.length < 240) {
+              presentLeft -= 1;
+              present.push(row);
+            }
+          }
+          if (op === "get" && (keyText === "checkFunctionIntegrity" || keyText === "isProxy" || keyText === "checkGroup") && !followed.has("fn:" + keyText)) {
+            followed.add("fn:" + keyText);
+            if (follow < 180) follow = 180;
+            if (trail.length < 800) trail.push("after " + keyText);
+          }
+          if (op === "get" && (keyText === "checkXHR" || keyText === "checkFetch" || keyText === "checkWebRTC" || keyText === "checkWebSocket") && !followed.has("chk:" + keyText)) {
+            followed.add("chk:" + keyText);
+            if (follow < 220) follow = 220;
+            if (netLeft < 260) netLeft = 260;
+            const marker = "after " + keyText;
+            if (trail.length < 800) trail.push(marker);
+            if (netTrail.length < 900) netTrail.push(marker);
+          }
+          if (op === "get" && (keyText === "XMLHttpRequest" || keyText === "fetch" || keyText === "RTCPeerConnection") && !followed.has(keyText)) {
+            followed.add(keyText);
+            if (follow < 24) follow = 24;
+            if (trail.length < 420) trail.push("after " + keyText + " =" + tagOf(third));
+          }
+          if (!keyText) return;
+          const xhrProto = win.XMLHttpRequest && win.XMLHttpRequest.prototype;
+          const rtcProto = win.RTCPeerConnection && win.RTCPeerConnection.prototype;
+          const wsProto = win.WebSocket && win.WebSocket.prototype;
+          let watched = first === win || first === win.fetch || first === win.XMLHttpRequest || first === xhrProto || first === win.RTCPeerConnection || first === rtcProto || first === win.WebSocket || first === wsProto;
+          if (!watched && first && (typeof first === "object" || typeof first === "function")) {
+            try {
+              watched = (win.XMLHttpRequest && first instanceof win.XMLHttpRequest) || (win.RTCPeerConnection && first instanceof win.RTCPeerConnection) || (xhrProto && first === xhrProto.open) || (xhrProto && first === xhrProto.send) || (rtcProto && (first === rtcProto.createOffer || first === rtcProto.setLocalDescription || first === rtcProto.createDataChannel));
+            } catch (_error) { watched = false; }
+          }
+          const flagged = apiKey.test(keyText) || (op === "set" && flagKey.test(keyText));
+          if (!watched && !flagged) return;
+          const left = tagOf(first);
+          const value = tagOf(third);
+          const row = op + " " + left + " ." + keyText + " =" + value;
+          if (flagged || value === "undef" || value === "throw" || (watched && first !== win)) bump(op === "get" ? getHist : setHist, row, 400);
+          if (watched && first !== win) bump(hostHist, row, 200);
+          if (value === "undef" || value === "throw") bump(missHist, row, 80);
+          if (flagged || value === "undef" || value === "throw") remember(row);
+          return;
+        }
+        const left = tagOf(first);
+        const right = tagOf(second);
+        if (op === "in") {
+          inN += 1;
+          if (/^[$A-Za-z_][$\w]{0,40}$/.test(right)) {
+            bump(inHist, right, 800);
+            if (focus.test(left)) bump(inOnFocus, left + " ." + right, 400);
+          }
+        } else {
+          instN += 1;
+          if (right.indexOf("fn:") === 0 || focus.test(left) || focus.test(right)) bump(instHist, left + " => " + right, 400);
+        }
+        if (focus.test(left) || focus.test(right)) remember(op + " " + left + " " + right);
+        if (earlyLeft > 0 && early.length < 700 && (op === "in" || op === "instanceof")) {
+          earlyLeft -= 1;
+          early.push(op + " " + left + " " + right);
+        }
+        if (!bootClosed && boot.length < 500 && (op === "in" || op === "instanceof")) boot.push(op + " " + left + " " + right);
+      } finally {
+        busy = false;
+      }
+    }
+    function watchRef(fn) {
+      if (fn === win.fetch) return "fetch";
+      if (fn === win.XMLHttpRequest) return "xhr";
+      if (fn === win.RTCPeerConnection) return "rtc";
+      const xhrProto = win.XMLHttpRequest && win.XMLHttpRequest.prototype;
+      if (xhrProto && fn === xhrProto.open) return "xhr.open";
+      if (xhrProto && fn === xhrProto.send) return "xhr.send";
+      const rtcProto = win.RTCPeerConnection && win.RTCPeerConnection.prototype;
+      if (rtcProto && fn === rtcProto.setLocalDescription) return "rtc.setLocal";
+      if (rtcProto && fn === rtcProto.createOffer) return "rtc.offer";
+      if (rtcProto && fn === rtcProto.createDataChannel) return "rtc.channel";
+      return "";
+    }
+    const prevToString = win.Function.prototype.toString;
+    function toString() {
+      const out = prevToString.apply(this, arguments);
+      const which = watchRef(this);
+      const native = typeof out === "string" && out.indexOf("[native code]") > 0;
+      if (which) {
+        toN += 1;
+        const row = which + " " + (native ? "native" : "src") + " " + (typeof out === "string" ? out.length : -1);
+        bump(toHist, row, 40);
+        remember("toString " + row);
+      }
+      if (!native && typeof out === "string" && rawFall.length < 60) {
+        let name = "";
+        try { name = this && this.name || ""; } catch (_error) { name = ""; }
+        if (!/^[$A-Za-z_][$\w]{0,40}$/.test(name)) name = "s" + String(name).length;
+        if (name === "xy" || name === "Ts" || name === "HX" || name === "ei" || name === "RC" || name === "Tn") return out;
+        const leak = /jsdom|node:|process|undici/.test(out) ? " leak" : "";
+        rawFall.push(name + " " + out.length + leak);
+      }
+      return out;
+    }
+    try {
+      const marked = nativeMaps.get(prevToString);
+      if (marked) nativeMaps.set(toString, marked);
+      Object.defineProperty(win.Function.prototype, "toString", {
+        configurable: true,
+        writable: true,
+        enumerable: false,
+        value: toString,
+      });
+      if (typeof win.__mark === "function") win.__mark(toString, "toString");
+    } catch (_error) {}
+    const preRingPath = "C:\\Users\\mengma\\AppData\\Local\\Temp\\grok-goal-4a395ffcaba0\\implementer\\pre-ring.txt";
+    win.__dumpPre = () => {
+      try {
+        fs.writeFileSync(preRingPath, ["# ring", ...(globalThis.__getRing || []), "# win", ...(globalThis.__winGets || []), "# tail", ...(globalThis.__winTail || [])].join("\n"), "utf8");
+      } catch (_error) {}
+    };
+    const cmpPath = "C:\\Users\\mengma\\AppData\\Local\\Temp\\grok-goal-4a395ffcaba0\\implementer\\cmp-ring.txt";
+    try { fs.writeFileSync(cmpPath, "", "utf8"); } catch (_error) {}
+    const cmpTag = (value) => {
+      if (value === undefined) return "u";
+      if (value === null) return "n";
+      if (value === true) return "t";
+      if (value === false) return "f";
+      const kind = typeof value;
+      if (kind === "string") {
+        if (value.length <= 24 && /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(value)) return "id" + value;
+        const slice = value.replace(/[^A-Za-z0-9]/g, "").slice(0, 16);
+        return "s" + value.length + (slice ? ":" + slice : "");
+      }
+      if (kind === "number") return Number.isFinite(value) && Math.abs(value) < 1000 ? "n" + value : "num";
+      if (kind === "function") return "fn" + (value.name ? ":" + String(value.name).slice(0, 24) : "");
+      return kind.slice(0, 8);
+    };
+    globalThis.__cmp = function (op, left, right, result) {
+      const ring = globalThis.__cmpRing || (globalThis.__cmpRing = []);
+      const line = op === "typeof"
+        ? "typeof " + cmpTag(left) + "=" + String(right)
+        : op === "not"
+          ? "not " + cmpTag(left) + "=" + (right ? "1" : "0")
+          : op + " " + cmpTag(left) + " " + cmpTag(right) + "=" + (result ? "1" : "0");
+      if (op !== "typeof" && op !== "instanceof" && op !== "in" && !/fn|id|s\d/.test(line)) return;
+      if (/^typeof [tf]=boolean$/.test(line) || line.indexOf("idobject idboolean") >= 0) return;
+      if (op === "typeof" && right === "undefined") {
+        const netU = globalThis.__cmpNet || (globalThis.__cmpNet = []);
+        const gets = (win.__winTail || []).slice(-6).join(">");
+        const row = "UNDEF " + gets;
+        if (!netU.length || netU[netU.length - 1] !== row) netU.push(row);
+        if (netU.length > 120) netU.shift();
+      }
+      const excerptOf = (value) => {
+        if (typeof value !== "string" || value.length < 40 || value.length > 2500) return "";
+        if (!/missing|unimplemented/.test(value)) return "";
+        return value.replace(/[^\x20-\x7e]/g, "").slice(0, 220);
+      };
+      const excerpt = excerptOf(left) || excerptOf(right);
+      if (excerpt) {
+        const netE = globalThis.__cmpNet || (globalThis.__cmpNet = []);
+        if (!netE.length || netE[netE.length - 1] !== excerpt) netE.push(excerpt);
+        if (netE.length > 120) netE.shift();
+      }
+      if (/XMLHttp|fetch|WebSocket|RTC|webkit/.test(line)) {
+        const net = globalThis.__cmpNet || (globalThis.__cmpNet = []);
+        if (!net.length || net[net.length - 1] !== line) net.push(line);
+        if (net.length > 120) net.shift();
+      }
+      if (ring.length && ring[ring.length - 1] === line) return;
+      ring.push(line);
+      if (ring.length > 250) ring.shift();
+      if (/fetch|XMLHttp|WebSocket|RTC|undefined|function|native|prototype|Window|Document|Navigator|missing|hooked/.test(line)) {
+        const focus = globalThis.__cmpFocus || (globalThis.__cmpFocus = []);
+        if (!focus.length || focus[focus.length - 1] !== line) focus.push(line);
+        if (focus.length > 80) focus.shift();
+      }
+    };
+    globalThis.__dumpCmp = (key, where) => {
+      try {
+        const ring = globalThis.__cmpRing || [];
+        const pushN = globalThis.__pushN || {};
+        fs.appendFileSync(cmpPath, ["# " + key + " n=" + (win.__cmpN || 0) + " push=" + (pushN.bs || 0) + "/" + (pushN.zi || 0) + " " + (where || ""), "# push", ...(globalThis.__pushRing || []), "# walk", ...(globalThis.__walkRing || []), "# def", ...(globalThis.__defRing || []), "# keep", ...(globalThis.__defKeep || []), "# net", ...(globalThis.__cmpNet || []), "# tail", ...ring.slice(-20)].join("\n") + "\n\n", "utf8");
+        if (key === "websocket_missing") {
+          fs.writeFileSync(cmpPath.replace(/cmp-ring\.txt$/, "cmp-full.txt"), ring.join("\n"), "utf8");
+        }
+        if (key === "fetch_missing#1") {
+          globalThis.__cmpRing = [];
+          globalThis.__cmpNet = [];
+          globalThis.__cmpFocus = [];
+        }
+      } catch (_error) {}
+    };
+    win.__cmp = globalThis.__cmp;
+    win.__dumpCmp = globalThis.__dumpCmp;
+    globalThis.__walkSnap = (obj, key, value) => {
+      let tag = "o";
+      try { tag = Object.prototype.toString.call(obj).slice(8, 28); } catch (_error) { tag = "e"; }
+      let ctor = "";
+      try { ctor = (obj && obj.constructor && obj.constructor.name) || ""; } catch (_error) { ctor = ""; }
+      let names = "";
+      try {
+        if (obj && (typeof obj === "object" || typeof obj === "function")) names = Object.getOwnPropertyNames(obj).slice(0, 8).join(",");
+      } catch (_error) { names = ""; }
+      let shown = typeof value;
+      try {
+        if (typeof value === "string" && value.length <= 32 && /^[A-Za-z0-9_$.-]+$/.test(value)) shown = value;
+        else if (typeof value === "string") shown = "s" + value.length;
+        else if (typeof value === "number" && Number.isFinite(value) && Math.abs(value) < 1000000) shown = String(value);
+        else if (value === true) shown = "t";
+        else if (value === false) shown = "f";
+        else if (value === null) shown = "n";
+        else if (value === undefined) shown = "u";
+      } catch (_error) { shown = "?"; }
+      const line = key + "=" + shown + " " + tag + " " + String(ctor).slice(0, 24) + " [" + names + "]";
+      globalThis.__walkLast = line;
+      const ring = globalThis.__walkRing || (globalThis.__walkRing = []);
+      if (!ring.length || ring[ring.length - 1] !== line) {
+        ring.push(line);
+        if (ring.length > 40) ring.shift();
+      }
+    };
+    globalThis.__pushT = (which) => {
+      const counts = globalThis.__pushN || (globalThis.__pushN = { bs: 0, zi: 0 });
+      counts[which] = (counts[which] || 0) + 1;
+      const gets = (globalThis.__getRing || []).slice(-3).join(">");
+      const walk = globalThis.__walkLast || "";
+      if (gets === globalThis.__pushGets && walk === globalThis.__pushWalk && (globalThis.__pushRing || []).length > 24) return;
+      globalThis.__pushGets = gets;
+      globalThis.__pushWalk = walk;
+      const ring = globalThis.__pushRing || (globalThis.__pushRing = []);
+      ring.push(which + " " + counts[which] + " " + gets + " || " + walk);
+      if (ring.length > 60) ring.shift();
+    };
+    win.__pushT = globalThis.__pushT;
+    const origDefine = win.Object.defineProperty;
+    function defineProperty(target, prop, desc) {
+      try {
+        const ring = globalThis.__defRing || (globalThis.__defRing = []);
+        let tag = "";
+        try { tag = Object.prototype.toString.call(target).slice(8, -1); } catch (_error) { tag = "?"; }
+        let ctor = "";
+        try { ctor = (target && target.constructor && target.constructor.name) || ""; } catch (_error) { ctor = ""; }
+        const name = typeof prop === "string" ? prop.slice(0, 40) : typeof prop;
+        const line = name + " on " + tag + " " + String(ctor).slice(0, 24);
+        globalThis.__defLast = line;
+        if (/collect|utf8BytesToString|Captcha|missing|unimplemented/.test(name)) {
+          const keep = globalThis.__defKeep || (globalThis.__defKeep = []);
+          let fname = "";
+          try { if (typeof target === "function") fname = target.name || ""; } catch (_name) { fname = ""; }
+          if (keep.length < 40) keep.push(line + " fn=" + String(fname).slice(0, 32));
+        }
+        if (!ring.length || ring[ring.length - 1] !== line) {
+          ring.push(line);
+          if (ring.length > 50) ring.shift();
+        }
+      } catch (_error) {}
+      return origDefine.apply(this, arguments);
+    }
+    try { win.__mark(defineProperty, "defineProperty"); } catch (_error) {}
+    win.Object.defineProperty = defineProperty;
+    win.__pred = note;
+    win.__flipRing = [];
+    win.__flipLines = [];
+    win.__boolKeys = [];
+    win.__callRing = [];
+    win.__callHit = [];
+    win.__focusLines = [];
+    win.__wideRing = [];
+    win.__noteWide = (obj, key, value) => {
+      try {
+        if (typeof key !== "string" || key.length < 1 || key.length > 40) return;
+        const hidden = key.length <= 2 || key === "toString" || key === "prototype" || key === "call" || key === "indexOf" || key === "includes" || key === "defineProperty" || key === "constructor" || key === "apply" || key === "bind";
+        if (!hidden || !/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(key)) return;
+        let who = "o";
+        try { who = obj === win ? "page" : (obj && obj.window === obj ? "frame" : typeof obj); } catch (_error) { who = "o"; }
+        let tag = "?";
+        try {
+          if (value === undefined) tag = "u";
+          else if (value === null) tag = "n";
+          else if (value === true || value === false) tag = value ? "t" : "f";
+          else if (typeof value === "number") tag = "num";
+          else if (typeof value === "string") tag = "s" + value.length;
+          else if (typeof value === "function") tag = "fn";
+          else tag = typeof value;
+        } catch (_error) { tag = "e"; }
+        const item = who + "." + key + "=" + tag;
+        const ring = win.__wideRing;
+        if (ring.length && ring[ring.length - 1] === item) return;
+        ring.push(item);
+        if (ring.length > 40) ring.shift();
+      } catch (_error) {}
+    };
+    win.__throwLines = [];
+    function callName(fn) {
+      if (typeof fn !== "function") return "";
+      let raw = "";
+      try { raw = fn.name || ""; } catch (_error) { raw = ""; }
+      if (/^[A-Za-z_$][A-Za-z0-9_$]{0,40}$/.test(raw)) return raw;
+      return raw ? "fn" : "anon";
+    }
+    function pushCall(ring, tag, limit) {
+      if (!tag) return;
+      if (ring.length && ring[ring.length - 1] === tag) return;
+      ring.push(tag);
+      if (ring.length > limit) ring.shift();
+    }
+    const callHost = /^(AudioContext|OfflineAudioContext|webkitAudioContext|webkitOfflineAudioContext|XMLHttpRequest|fetch|RTCPeerConnection|webkitRTCPeerConnection|WebSocket|refresh|open|send|createOffer|setLocalDescription|createElement|createDataChannel|startRendering|getChannelData|PluginArray|MimeTypeArray)$/;
+    win.__noteCall = (args) => {
+      try {
+        const first = callName(args && args[0]);
+        const second = callName(args && args[1]);
+        const tag = "c" + (first || "x") + (second ? "/" + second : "");
+        pushCall(win.__callRing, tag, 40);
+        if (callHost.test(first) || callHost.test(second)) pushCall(win.__callHit, tag, 24);
+      } catch (_error) {}
+    };
+    win.__noteThrow = (err) => {
+      try {
+        let name = "Err";
+        try {
+          const raw = err && err.name;
+          if (typeof raw === "string" && /^[A-Za-z]+$/.test(raw)) name = raw;
+        } catch (_error) {}
+        const tag = "t" + name;
+        pushCall(win.__callRing, tag, 40);
+        pushCall(win.__callHit, tag, 24);
+        const last = win.__callRing[win.__callRing.length - 1] || "";
+        if (win.__throwLines.length < 40) win.__throwLines.push(tag + " " + last);
+      } catch (_error) {}
+    };
+    const origIndexOf = win.String.prototype.indexOf;
+    function indexOf(needle) {
+      const found = origIndexOf.apply(this, arguments);
+      const text = this == null ? "" : String(this);
+      if (found === -1 && needle === "[native code]" && text.length > 180 && text.length < 280 && rawFall.length < 30) {
+        const where = String(new Error("i").stack || "").split("\n").slice(1, 4).map((line) => line.replace(root, "").replace(/\s+/g, " ").trim().slice(0, 70)).join(" | ");
+        rawFall.push("idx " + text.length + " " + where);
+      }
+      return found;
+    }
+    try {
+      Object.defineProperty(win.String.prototype, "indexOf", { configurable: true, writable: true, enumerable: false, value: indexOf });
+      if (typeof win.__mark === "function") win.__mark(indexOf, "indexOf");
+    } catch (_error) {}
+    win.__predArg = (kind, receiver, arg, found) => {
+      if (busy) return;
+      busy = true;
+      try {
+        const lettersOf = (text) => {
+          const letters = String(text).replace(/[^A-Za-z]/g, "").slice(0, 32);
+          return "s" + String(text).length + (letters ? ":" + letters : "");
+        };
+        let left = typeof receiver;
+        if (typeof receiver === "string" && receiver.length <= 80) left = lettersOf(receiver);
+        else if (typeof receiver === "string") left = "s" + receiver.length;
+        else if (typeof receiver === "function") left = "fn:" + (receiver.name || "");
+        let right = typeof arg;
+        if (typeof arg === "string" && arg.length <= 80) right = lettersOf(arg);
+        else if (typeof arg === "number" && Number.isFinite(arg)) right = String(arg);
+        else if (typeof arg === "function") right = "fn:" + (arg.name || "");
+        else if (arg && typeof arg === "object") {
+          try { right = Object.prototype.toString.call(arg); } catch (_error) { right = "obj"; }
+        }
+        const hit = found === true ? " yes" : found === false ? " no" : typeof found === "number" ? " " + String(found) : "";
+        const argRow = kind + " " + left + " " + right + hit;
+        bump(argHist, argRow, 160);
+        if ((follow > 0 || netLeft > 0) && (found === -1 || found === false || (typeof arg === "string" && arg.indexOf("native") >= 0))) {
+          if (follow > 0 && trail.length < 800) trail.push("arg " + argRow);
+          if (netLeft > 0 && netTrail.length < 900) netTrail.push("arg " + argRow);
+        }
+      } finally {
+        busy = false;
+      }
+    };
+    process.on("exit", () => {
+      flushPred();
+      report("pred in " + inN + " inst " + instN + " get " + getN + " set " + setN + " to " + toN + " typeof " + typN + " lines " + lines);
+    });
+    sdk = sdk.replace(instOp, "eT[jb+--BC-64]=(function(a,b){try{if(globalThis.__pred)globalThis.__pred(\"instanceof\",a,b)}catch(e){}return a instanceof b})(eT[jb---BC+60],eT[jb])");
+    sdk = sdk.replace(inOp, "eT[++jb-3]=(function(a,b){try{if(globalThis.__pred)globalThis.__pred(\"in\",b,a)}catch(e){}return a in b})(eT[jb+--BC-71],eT[jb-=2])");
+    sdk = sdk.replace(getOp, "eT[++jb+--BC-55]=(function(o,k){var v;try{v=o[k]}catch(e){try{if(globalThis.__pred)globalThis.__pred(\"get\",o,k,\"throw\")}catch(x){}throw e}try{if(globalThis.__pred)globalThis.__pred(\"get\",o,k,v)}catch(e){}return v})(eT[jb---3],eT[jb---1])");
+    sdk = sdk.replace(setOp, "eT[--jb- --BC+13]=(function(){var obj=eT[jb-2];var key=eT[jb--+BC-16];var val=eT[jb-BC+++16];try{if(globalThis.__pred)globalThis.__pred(\"set\",obj,key,val)}catch(e){}try{if((key===\"xhr_missing\"||key===\"fetch_missing\"||key===\"webrtc_unimplemented\"||key===\"websocket_missing\")&&val===true){var seen=globalThis.__cmpSeenZi||(globalThis.__cmpSeenZi={});if(!seen[key]){seen[key]=1;if(globalThis.__dumpCmp)globalThis.__dumpCmp(key,\"zi-set\")}}}catch(e2){}return obj[key]=val})()");
+    sdk = sdk.replace(lxGetOp, "Kd[(yC-=Lb)+64]=(function(o,k){var v;try{v=o[k]}catch(e){try{if(globalThis.__pred)globalThis.__pred(\"get\",o,k,\"throw\")}catch(x){}throw e}try{if(globalThis.__pred)globalThis.__pred(\"get\",o,k,v)}catch(e){}return v})(Kd[++yC+Lb---3],Kd[yC+=64])");
+    const poolMark = ".\\u006c\\u0065\\u006e\\u0067\\u0074\\u0068-";
+    const poolHead = "(function(o,k){try{var v=o[k];try{globalThis.__noteWide&&globalThis.__noteWide(o,k,v)}catch(eW){}if(globalThis.__pred){var shown=v;try{if(typeof k==='string'&&k.slice(0,6)==='_wlz_p'){var own=Object.prototype.hasOwnProperty.call(o,k);shown=(own?'own':'inh')+(v===void 0?'Undef':(v===o?'Self':'Other'))}}catch(e){}globalThis.__pred(\"get\",o,k,shown)}if(typeof v==='function'&&globalThis.__predArg&&(k==='indexOf'||k==='includes')&&typeof o==='string'&&o.length<=400){return function(a){var r=v.apply(this,arguments);try{globalThis.__predArg(k,o,a,r)}catch(e){}return r}}if(typeof v==='function'&&globalThis.__predArg&&k==='call'&&o&&o.name==='toString'){return function(a){try{globalThis.__predArg('call',o,a)}catch(e){}return v.apply(this,arguments)}}return v}catch(e){try{if(globalThis.__pred)globalThis.__pred(\"get\",o,k,\"throw\")}catch(x){}throw e}})(";
+    function poolIdent(ch) { return /[A-Za-z0-9_$]/.test(ch); }
+    function poolScan(src, pos) {
+      let depth = 0;
+      while (pos < src.length) {
+        const ch = src[pos];
+        if (ch === "'" || ch === "\"") {
+          const quote = ch;
+          pos += 1;
+          while (pos < src.length && src[pos] !== quote) {
+            if (src[pos] === "\\") pos += 1;
+            pos += 1;
+          }
+          pos += 1;
+          continue;
+        }
+        if (ch === "(" || ch === "[" || ch === "{") { depth += 1; pos += 1; continue; }
+        if (ch === ")" || ch === "]" || ch === "}") {
+          if (depth === 0 && ch === "]") return pos;
+          depth -= 1;
+          pos += 1;
+          continue;
+        }
+        pos += 1;
+      }
+      return -1;
+    }
+    function poolParse(src, dot) {
+      let nameEnd = dot;
+      let nameStart = dot - 1;
+      while (nameStart >= 0 && poolIdent(src[nameStart])) nameStart -= 1;
+      nameStart += 1;
+      if (nameStart >= nameEnd || src[nameStart - 1] !== "[") return null;
+      const pool = src.slice(nameStart, nameEnd);
+      let outerStart = nameStart - 2;
+      while (outerStart >= 0 && poolIdent(src[outerStart])) outerStart -= 1;
+      outerStart += 1;
+      if (outerStart >= nameStart - 1) return null;
+      const outer = src.slice(outerStart, nameStart - 1);
+      const indexStart = dot + poolMark.length;
+      const indexEnd = poolScan(src, indexStart);
+      if (indexEnd < 0 || src[indexEnd + 1] !== "[") return null;
+      const keyStart = indexEnd + 2;
+      const keyEnd = poolScan(src, keyStart);
+      if (keyEnd < 0) return null;
+      const next = src[keyEnd + 1] || "";
+      const next2 = src[keyEnd + 2] || "";
+      let kind = "get";
+      if ((next === "+" && next2 === "+") || (next === "-" && next2 === "-")) kind = "update";
+      else if (next === "=" && next2 !== "=") kind = "set";
+      else if ("+-*/%&|^<>".includes(next) && next2 === "=") kind = "update";
+      return { start: outerStart, end: keyEnd + 1, outer, pool, index: src.slice(indexStart, indexEnd), key: src.slice(keyStart, keyEnd), kind };
+    }
+    function rewritePool(src) {
+      const parts = [];
+      let pos = 0;
+      let reads = 0;
+      while (pos < src.length) {
+        const at = src.indexOf(poolMark, pos);
+        if (at < 0) { parts.push(src.slice(pos)); break; }
+        const parsed = poolParse(src, at);
+        if (!parsed || parsed.end <= pos) { parts.push(src.slice(pos, at + 1)); pos = at + 1; continue; }
+        const indexR = rewritePool(parsed.index);
+        const keyR = rewritePool(parsed.key);
+        parts.push(src.slice(pos, parsed.start));
+        const obj = parsed.outer + "[" + parsed.pool + poolMark + indexR.out + "]";
+        if (parsed.kind === "get") {
+          parts.push(poolHead + obj + "," + keyR.out + ")");
+          reads += 1;
+        } else parts.push(obj + "[" + keyR.out + "]");
+        reads += indexR.reads + keyR.reads;
+        pos = parsed.end;
+      }
+      return { out: parts.join(""), reads };
+    }
+    const stackSet = "KK[xb--- --PY+21]=KK[(xb-=PY)+22][KK[xb+++ ++PY-2]]=KK[(xb+=22)-PY+26]";
+    const stackGet = "KK[xb-++PY+13]=KK[xb--+PY---17][KK[xb]]";
+    const hookedSet = "KK[xb--- --PY+21]=(function(o,k,v){try{if(k===\"websocket_missing\"&&!globalThis.__dumpedWs){globalThis.__dumpedWs=1;globalThis.__dumpCmp&&globalThis.__dumpCmp(\"websocket_missing\",\"bs-set\")}}catch(e0){}try{if((k===\"xhr_missing\"||k===\"fetch_missing\"||k===\"webrtc_unimplemented\")&&v===true){var seen=globalThis.__cmpSeen||(globalThis.__cmpSeen={});if(!seen[k]){seen[k]=1;globalThis.__dumpCmp&&globalThis.__dumpCmp(k,\"bs-set\")}}}catch(eC){}try{if(typeof k===\"string\"&&k.length>2&&k.length<64){var interest=k===\"xhr_missing\"||k===\"fetch_missing\"||k===\"webrtc_unimplemented\"||k===\"xhr_constructor_hooked\"||k.indexOf(\"missing\")>=0||k.indexOf(\"unimplemented\")>=0||k.indexOf(\"hooked\")>=0;if(v===true||v===false){var seen=globalThis.__boolSeen||(globalThis.__boolSeen={});if(!seen[k]){seen[k]=1;var bk=globalThis.__boolKeys||(globalThis.__boolKeys=[]);if(bk.length<200)bk.push(k+\"=\"+(v?1:0))}}if(interest){var lines=globalThis.__flipLines||(globalThis.__flipLines=[]);if(k===\"xhr_missing\"||k===\"fetch_missing\"||k===\"webrtc_unimplemented\"||k===\"audio_api_missing\"||k===\"plugins_refresh_hooked\"||k===\"offline_audio_context_missing\"){var focus=globalThis.__focusLines||(globalThis.__focusLines=[]);if(focus.length<12){var tagF=v===true?\"1\":v===false?\"0\":typeof v;focus.push(\"FOCUS \"+k+\"=\"+tagF+\" || \"+((globalThis.__callHit||[]).join(\" \"))+\" || \"+((globalThis.__callRing||[]).slice(-12).join(\" \"))+\" || \"+((globalThis.__flipRing||[]).slice(-8).join(\" > \"))+\" || \"+((globalThis.__wideRing||[]).slice(-40).join(\" > \")))}}if(lines.length<16){var ring=globalThis.__flipRing||[];var tag=v===true?\"1\":v===false?\"0\":typeof v;lines.push(\"FLIP \"+k+\"=\"+tag+\" | \"+ring.join(\" > \")+\" || \"+(globalThis.__callHit||[]).join(\" \")+\" || \"+(globalThis.__callRing||[]).join(\" \"))}}}}catch(e){}return o[k]=v})(KK[(xb-=PY)+22],KK[xb+++ ++PY-2],KK[(xb+=22)-PY+26])";
+    const hookedGet = "KK[xb-++PY+13]=(function(o,k){var v;try{v=o[k]}catch(e){throw e}try{var ring=globalThis.__flipRing;if(ring&&typeof k===\"string\"&&k.length>2&&k.length<40&&k!==\"toString\"&&k!==\"prototype\"&&k!==\"call\"&&k!==\"indexOf\"&&k!==\"includes\"&&k!==\"defineProperty\"&&k!==\"constructor\"&&k!==\"apply\"&&k!==\"bind\"){var who=\"o\";try{who=o===window?\"page\":(o&&o.window===o?\"frame\":typeof o)}catch(e2){}var tag=\"?\";try{if(v===void 0)tag=\"u\";else if(v===null)tag=\"n\";else if(v===true||v===false)tag=v?\"t\":\"f\";else if(typeof v===\"number\")tag=\"num\";else if(typeof v===\"string\")tag=(k===\"name\"&&/^[A-Za-z_$][A-Za-z0-9_$]{0,24}$/.test(v))?\"id\"+v:\"s\"+v.length;else if(typeof v===\"function\")tag=\"fn\";else tag=typeof v}catch(e4){}ring.push(who+\".\"+k+\"=\"+tag);if(ring.length>70)ring.shift()}}catch(e3){}try{globalThis.__noteWide&&globalThis.__noteWide(o,k,v)}catch(e5){}return v})(KK[xb--+PY---17],KK[xb])";
+    if (sdk.indexOf(stackSet) < 0 || sdk.indexOf(stackGet) < 0) report("pred flip-miss");
+    else {
+      sdk = sdk.replace(stackSet, hookedSet).replace(stackGet, hookedGet);
+      report("pred flip-hook");
+    }
+    const piSet = "KK[--xb-2]=Pi[Pi.\\u006c\\u0065\\u006e\\u0067\\u0074\\u0068-KK[xb+ ++PY-32]][KK[(xb+=105)- --PY-77]]=KK[(xb-=106)-PY--+31]";
+    const piGet = "KK[++xb-PY--+2]=Pi[Pi.\\u006c\\u0065\\u006e\\u0067\\u0074\\u0068-KK[xb+--PY-5]][KK[(xb-=2)+ ++PY-5]]";
+    const piHookedSet = "KK[--xb-2]=(function(o,k,v){try{if(typeof k===\"string\"&&k.length>2&&k.length<64){var interest=k===\"xhr_missing\"||k===\"fetch_missing\"||k===\"webrtc_unimplemented\"||k===\"xhr_constructor_hooked\"||k.indexOf(\"missing\")>=0||k.indexOf(\"unimplemented\")>=0||k.indexOf(\"hooked\")>=0;if(v===true||v===false){var seen=globalThis.__boolSeen||(globalThis.__boolSeen={});if(!seen[k]){seen[k]=1;var bk=globalThis.__boolKeys||(globalThis.__boolKeys=[]);if(bk.length<200)bk.push(k+\"=\"+(v?1:0))}}if(interest){var lines=globalThis.__flipLines||(globalThis.__flipLines=[]);if(k===\"xhr_missing\"||k===\"fetch_missing\"||k===\"webrtc_unimplemented\"||k===\"audio_api_missing\"||k===\"plugins_refresh_hooked\"||k===\"offline_audio_context_missing\"){var focus=globalThis.__focusLines||(globalThis.__focusLines=[]);if(focus.length<12){var tagF=v===true?\"1\":v===false?\"0\":typeof v;focus.push(\"FOCUS \"+k+\"=\"+tagF+\" || \"+((globalThis.__callHit||[]).join(\" \"))+\" || \"+((globalThis.__callRing||[]).slice(-12).join(\" \"))+\" || \"+((globalThis.__flipRing||[]).slice(-8).join(\" > \"))+\" || \"+((globalThis.__wideRing||[]).slice(-40).join(\" > \")))}}if(lines.length<16){var ring=globalThis.__flipRing||[];var tag=v===true?\"1\":v===false?\"0\":typeof v;lines.push(\"FLIP \"+k+\"=\"+tag+\" | \"+ring.join(\" > \")+\" || \"+(globalThis.__callHit||[]).join(\" \")+\" || \"+(globalThis.__callRing||[]).join(\" \"))}}}}catch(e){}return o[k]=v})(Pi[Pi.\\u006c\\u0065\\u006e\\u0067\\u0074\\u0068-KK[xb+ ++PY-32]],KK[(xb+=105)- --PY-77],KK[(xb-=106)-PY--+31])";
+    const piHookedGet = "KK[++xb-PY--+2]=(function(o,k){var v;try{v=o[k]}catch(e){throw e}try{var ring=globalThis.__flipRing;if(ring&&typeof k===\"string\"&&k.length>2&&k.length<40&&k!==\"toString\"&&k!==\"prototype\"&&k!==\"call\"&&k!==\"indexOf\"&&k!==\"includes\"&&k!==\"defineProperty\"&&k!==\"constructor\"&&k!==\"apply\"&&k!==\"bind\"){var who=\"o\";try{who=o===window?\"page\":(o&&o.window===o?\"frame\":typeof o)}catch(e2){}var tag=\"?\";try{if(v===void 0)tag=\"u\";else if(v===null)tag=\"n\";else if(v===true||v===false)tag=v?\"t\":\"f\";else if(typeof v===\"number\")tag=\"num\";else if(typeof v===\"string\")tag=(k===\"name\"&&/^[A-Za-z_$][A-Za-z0-9_$]{0,24}$/.test(v))?\"id\"+v:\"s\"+v.length;else if(typeof v===\"function\")tag=\"fn\";else tag=typeof v}catch(e4){}ring.push(who+\".\"+k+\"=\"+tag);if(ring.length>70)ring.shift()}}catch(e3){}try{globalThis.__noteWide&&globalThis.__noteWide(o,k,v)}catch(e5){}return v})(Pi[Pi.\\u006c\\u0065\\u006e\\u0067\\u0074\\u0068-KK[xb+--PY-5]],KK[(xb-=2)+ ++PY-5])";
+    if (sdk.indexOf(piSet) < 0 || sdk.indexOf(piGet) < 0) report("pred pi-miss");
+    else {
+      sdk = sdk.replace(piSet, piHookedSet).replace(piGet, piHookedGet);
+      report("pred pi-hook");
+    }
+    function stackIdentEnd(src, i) {
+      if (!/[A-Za-z_$]/.test(src[i])) return -1;
+      if (i > 0 && /[A-Za-z0-9_$]/.test(src[i - 1])) return -1;
+      let j = i;
+      while (j < src.length && /[A-Za-z0-9_$]/.test(src[j])) j += 1;
+      return j;
+    }
+    function stackMatchBr(src, i) {
+      if (src[i] !== "[") return -1;
+      let depth = 0;
+      for (let p = i; p < src.length; p += 1) {
+        const ch = src[p];
+        if (ch === '"' || ch === "'") {
+          const quote = ch;
+          p += 1;
+          while (p < src.length && src[p] !== quote) {
+            if (src[p] === "\\") p += 1;
+            p += 1;
+          }
+          continue;
+        }
+        if (ch === "[" || ch === "(") depth += 1;
+        else if (ch === "]" || ch === ")") {
+          depth -= 1;
+          if (depth === 0 && ch === "]") return p;
+          if (depth < 0) return -1;
+        }
+      }
+      return -1;
+    }
+    const stackSetWrap = "(function(o,k,v){try{if(k===\"websocket_missing\"&&!globalThis.__dumpedPre){globalThis.__dumpedPre=1;globalThis.__dumpPre&&globalThis.__dumpPre();var stW=\"\";try{stW=String(new Error(\"c\").stack||\"\").split(\"\\n\").slice(1,5).map(function(x){return x.replace(/\\(.*\\)/,\"\").trim()}).join(\" | \")}catch(eW){}globalThis.__dumpCmp&&globalThis.__dumpCmp(\"websocket_missing\",stW)}}catch(e0){}try{if((k===\"xhr_missing\"||k===\"fetch_missing\"||k===\"webrtc_unimplemented\")&&v===true){var seen=globalThis.__cmpSeen||(globalThis.__cmpSeen={});var n=(seen[k]||0)+1;seen[k]=n;if(n<=2){var st=\"\";try{st=String(new Error(\"c\").stack||\"\").split(\"\\n\").slice(1,5).map(function(x){return x.replace(/\\(.*\\)/,\"\").trim()}).join(\" | \")}catch(eS){}globalThis.__dumpCmp&&globalThis.__dumpCmp(k+\"#\"+n,st)}}}catch(eC){}try{if(typeof k===\"string\"&&(k.indexOf(\"missing\")>=0||k.indexOf(\"unimplemented\")>=0||k.indexOf(\"hooked\")>=0)){var lines=globalThis.__flipLines||(globalThis.__flipLines=[]);if(k===\"xhr_missing\"||k===\"fetch_missing\"||k===\"webrtc_unimplemented\"||k===\"audio_api_missing\"||k===\"plugins_refresh_hooked\"||k===\"offline_audio_context_missing\"){var focus=globalThis.__focusLines||(globalThis.__focusLines=[]);if(focus.length<12){var tagF=v===true?\"1\":v===false?\"0\":typeof v;focus.push(\"FOCUS \"+k+\"=\"+tagF+\" || \"+((globalThis.__callHit||[]).join(\" \"))+\" || \"+((globalThis.__callRing||[]).slice(-12).join(\" \"))+\" || \"+((globalThis.__flipRing||[]).slice(-8).join(\" > \"))+\" || \"+((globalThis.__wideRing||[]).slice(-40).join(\" > \")))}}if(lines.length<20){var ring=globalThis.__flipRing||[];var tag=v===true?\"1\":v===false?\"0\":typeof v;lines.push(\"FLIP \"+k+\"=\"+tag+\" | \"+ring.join(\" > \")+\" || \"+(globalThis.__callHit||[]).join(\" \")+\" || \"+(globalThis.__callRing||[]).join(\" \"))}}}catch(e){}return o[k]=v})";
+    const stackGetWrap = "(function(o,k){var v;try{v=o[k]}catch(e){throw e}try{if(typeof k===\"string\"&&k.length>0&&k.length<40){var who=\"o\";try{if(o===window)who=\"page\";else if(o&&o.window===o)who=\"frame\"}catch(e3){}var item=who+\".\"+k;var ring=globalThis.__getRing||(globalThis.__getRing=[]);if(!ring.length||ring[ring.length-1]!==item){ring.push(item);if(ring.length>50)ring.shift()}if(who===\"page\"||who===\"frame\"){var shown=v===undefined?\"u\":v===null?\"n\":v===true?\"t\":v===false?\"f\":typeof v;var early=globalThis.__winGets||(globalThis.__winGets=[]);if(early.length<400)early.push(item+\"=\"+shown);var tail=globalThis.__winTail||(globalThis.__winTail=[]);tail.push(item+\"=\"+shown);if(tail.length>80)tail.shift()}if(k===\"key\"&&globalThis.__walkSnap){try{globalThis.__walkSnap(o,k,v)}catch(e4){}}}}catch(e2){}return v})";
+    const stackSpans = [];
+    const stackGets = [];
+    for (let i = 0; i < sdk.length; i += 1) {
+      const nameEnd = stackIdentEnd(sdk, i);
+      if (nameEnd < 0 || sdk[nameEnd] !== "[") continue;
+      const b1 = stackMatchBr(sdk, nameEnd);
+      if (b1 < 0 || sdk[b1 + 1] !== "=" || sdk[b1 + 2] === "=") continue;
+      const j = b1 + 2;
+      const name2 = stackIdentEnd(sdk, j);
+      if (name2 < 0 || sdk[name2] !== "[") continue;
+      const b2 = stackMatchBr(sdk, name2);
+      if (b2 < 0 || sdk[b2 + 1] !== "[") continue;
+      const name3 = stackIdentEnd(sdk, b2 + 2);
+      if (name3 < 0 || sdk[name3] !== "[") continue;
+      const b3 = stackMatchBr(sdk, name3);
+      if (b3 < 0 || sdk[b3 + 1] !== "]") continue;
+      const obj = sdk.slice(j, b2 + 1);
+      const key = sdk.slice(b2 + 2, b3 + 1);
+      if (sdk[b3 + 2] === "=" && sdk[b3 + 3] !== "=") {
+        const k = b3 + 3;
+        const name4 = stackIdentEnd(sdk, k);
+        if (name4 < 0 || sdk[name4] !== "[") continue;
+        const b4 = stackMatchBr(sdk, name4);
+        if (b4 < 0) continue;
+        const dest = sdk.slice(i, b1 + 1);
+        const nextCh = sdk[b4 + 1] || "";
+        if (",;):[".includes(nextCh)) stackSpans.push({ start: i, end: b4 + 1, dest, call: stackSetWrap + "(" + obj + "," + key + "," + sdk.slice(k, b4 + 1) + ")" });
+        i = b4;
+        continue;
+      }
+      const getNext = sdk[b3 + 2] || "";
+      if (",;):".includes(getNext)) {
+        const dest = sdk.slice(i, b1 + 1);
+        stackGets.push({ start: i, end: b3 + 2, dest, call: stackGetWrap + "(" + obj + "," + key + ")" });
+      }
+      i = b3 + 1;
+    }
+    const keptGets = [];
+    let getEnd = -1;
+    stackGets.sort((a, b) => a.start - b.start);
+    for (const span of stackGets) {
+      if (span.start < getEnd) continue;
+      let hit = false;
+      for (const setSpan of stackSpans) {
+        if (span.start < setSpan.end && setSpan.start < span.end) { hit = true; break; }
+      }
+      if (hit) continue;
+      keptGets.push(span);
+      getEnd = span.end;
+    }
+    stackSpans.push(...keptGets);
+    stackSpans.sort((a, b) => b.start - a.start);
+    for (const span of stackSpans) sdk = sdk.slice(0, span.start) + span.dest + "=" + span.call + sdk.slice(span.end);
+    report("pred stack-ops " + stackSpans.length + " gets " + keptGets.length);
+    const cmpPairs = [
+      ["KK[xb---PY--+22]=KK[(xb+=PY++)-24]!==KK[(xb-=23)+ ++PY-25]", "KK[xb---PY--+22]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a!==b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\"!==\",a,b,r)}catch(e){}return r})(KK[(xb+=PY++)-24],KK[(xb-=23)+ ++PY-25])"],
+      ["KK[(xb-=--PY)+31]=KK[(xb+=PY++)-2]===KK[--xb]", "KK[(xb-=--PY)+31]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a===b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\"===\",a,b,r)}catch(e){}return r})(KK[(xb+=PY++)-2],KK[--xb])"],
+      ["KK[++xb+--PY-52]=KK[++xb+PY-53]>=KK[(xb-=3)+--PY-48]", "KK[++xb+--PY-52]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a>=b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\">=\",a,b,r)}catch(e){}return r})(KK[++xb+PY-53],KK[(xb-=3)+--PY-48])"],
+      ["KK[xb---2]=KK[(xb-=PY)+65]instanceof KK[(xb+=66)- --PY+65]", "KK[xb---2]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a instanceof b;try{globalThis.__cmp(\"instanceof\",a,b,r)}catch(e){}return r})(KK[(xb-=PY)+65],KK[(xb+=66)- --PY+65])"],
+      ["KK[(xb-=39)+PY++-21]=KK[++xb+--PY-22]<KK[xb+=37]", "KK[(xb-=39)+PY++-21]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a<b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\"<\",a,b,r)}catch(e){}return r})(KK[++xb+--PY-22],KK[xb+=37])"],
+      ["KK[xb--+PY---51]=KK[++xb-++PY+47]==KK[xb---PY+48]", "KK[xb--+PY---51]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a==b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\"==\",a,b,r)}catch(e){}return r})(KK[++xb-++PY+47],KK[xb---PY+48])"],
+      ["KK[xb---PY--+43]=KK[xb-1]!=KK[xb-PY+44]", "KK[xb---PY--+43]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a!=b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\"!=\",a,b,r)}catch(e){}return r})(KK[xb-1],KK[xb-PY+44])"],
+      ["KK[--xb-PY+50]=KK[(xb-=PY++)+50]>KK[(xb+=51)-PY--+52]", "KK[--xb-PY+50]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a>b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\">\",a,b,r)}catch(e){}return r})(KK[(xb-=PY++)+50],KK[(xb+=51)-PY--+52])"],
+      ["KK[xb+++PY---49]=typeof KK[xb---2]", "KK[xb+++PY---49]=(function(a){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=typeof a;try{globalThis.__cmp(\"typeof\",a,r)}catch(e){}return r})(KK[xb---2])"],
+      ["KK[++xb+--PY-7]=!KK[--xb-PY--+4]", "KK[++xb+--PY-7]=(function(a){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=!a;try{if(typeof a!==\"number\")globalThis.__cmp(\"not\",a,r)}catch(e){}return r})(KK[--xb-PY--+4])"],
+      ["KK[++xb+PY-57]=KK[xb---3]in KK[--xb-PY+++54]", "KK[++xb+PY-57]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a in b;try{globalThis.__cmp(\"in\",a,b,r)}catch(e){}return r})(KK[xb---3],KK[--xb-PY+++54])"],
+      ["eT[(jb+=22)+BC---81]=eT[++jb+BC---81]===eT[jb-=24]", "eT[(jb+=22)+BC---81]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a===b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\"===\",a,b,r)}catch(e){}return r})(eT[++jb+BC---81],eT[jb-=24])"],
+      ["eT[(jb-=--BC)+53]=eT[--jb-BC+++109]!==eT[(jb+=55)-++BC+57]", "eT[(jb-=--BC)+53]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a!==b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\"!==\",a,b,r)}catch(e){}return r})(eT[--jb-BC+++109],eT[(jb+=55)-++BC+57])"],
+      ["eT[--jb+ ++BC-29]=eT[++jb+--BC-29]>=eT[jb--- --BC+25]", "eT[--jb+ ++BC-29]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a>=b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\">=\",a,b,r)}catch(e){}return r})(eT[++jb+--BC-29],eT[jb--- --BC+25])"],
+      ["eT[--jb+BC-68]=eT[(jb-=5)+BC++-63]<=eT[(jb+=5)-BC+++68]", "eT[--jb+BC-68]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a<=b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\"<=\",a,b,r)}catch(e){}return r})(eT[(jb-=5)+BC++-63],eT[(jb+=5)-BC+++68])"],
+      ["eT[(jb-=52)+--BC+17]=eT[++jb-++BC+83]<eT[(jb+=50)- --BC+33]", "eT[(jb-=52)+--BC+17]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a<b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\"<\",a,b,r)}catch(e){}return r})(eT[++jb-++BC+83],eT[(jb+=50)- --BC+33])"],
+      ["eT[++jb+BC++-6]=eT[--jb-BC+++2]==eT[--jb- --BC+4]", "eT[++jb+BC++-6]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a==b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\"==\",a,b,r)}catch(e){}return r})(eT[--jb-BC+++2],eT[--jb- --BC+4])"],
+      ["eT[(jb-=126)- --BC+178]=eT[++jb-BC+177]!=eT[(jb+=124)-BC--+54]", "eT[(jb-=126)- --BC+178]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a!=b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\"!=\",a,b,r)}catch(e){}return r})(eT[++jb-BC+177],eT[(jb+=124)-BC--+54])"],
+      ["eT[jb-2]=eT[(jb-=53)-++BC+88]>eT[(jb+=52)+BC++-37]", "eT[jb-2]=(function(a,b){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=a>b;try{if(typeof a!==\"number\"||typeof b!==\"number\")globalThis.__cmp(\">\",a,b,r)}catch(e){}return r})(eT[(jb-=53)-++BC+88],eT[(jb+=52)+BC++-37])"],
+      ["eT[jb+++--BC-15]=typeof eT[--jb-BC+++13]", "eT[jb+++--BC-15]=(function(a){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=typeof a;try{globalThis.__cmp(\"typeof\",a,r)}catch(e){}return r})(eT[--jb-BC+++13])"],
+      ["eT[jb++-BC+++10]=!eT[--jb-BC--+11]", "eT[jb++-BC+++10]=(function(a){globalThis.__cmpN=(globalThis.__cmpN||0)+1;var r=!a;try{if(typeof a!==\"number\")globalThis.__cmp(\"not\",a,r)}catch(e){}return r})(eT[--jb-BC--+11])"],
+    ];
+    let cmpN = 0;
+    for (const pair of cmpPairs) {
+      if (sdk.split(pair[0]).length !== 2) continue;
+      sdk = sdk.replace(pair[0], pair[1]);
+      cmpN += 1;
+    }
+    report("pred cmp-ops " + cmpN);
+    const pushPairs = [
+      ["KK[xb++]=\\u0074", "KK[xb++]=(function(){try{globalThis.__pushT&&globalThis.__pushT(\"bs\")}catch(e){}return \\u0074})()"],
+      ["eT[++jb+ ++BC-75]=\\u0074", "eT[++jb+ ++BC-75]=(function(){try{globalThis.__pushT&&globalThis.__pushT(\"zi\")}catch(e){}return \\u0074})()"],
+    ];
+    let pushN = 0;
+    for (const pair of pushPairs) {
+      if (sdk.split(pair[0]).length !== 2) continue;
+      sdk = sdk.replace(pair[0], pair[1]);
+      pushN += 1;
+    }
+    report("pred push-true " + pushN);
+    function skipCallString(text, i) {
+      const quote = text[i];
+      let j = i + 1;
+      while (j < text.length) {
+        if (text[j] === "\\") { j += 2; continue; }
+        if (text[j] === quote) return j + 1;
+        j += 1;
+      }
+      return text.length;
+    }
+    function matchCallParen(text, open) {
+      let depth = 0;
+      for (let j = open; j < text.length; j += 1) {
+        const ch = text[j];
+        if (ch === "'" || ch === "\"" || ch === "`") { j = skipCallString(text, j) - 1; continue; }
+        if (ch === "(") depth += 1;
+        else if (ch === ")") {
+          depth -= 1;
+          if (depth === 0) return j;
+        }
+      }
+      return -1;
+    }
+    const callStart = sdk.indexOf("function bs(");
+    const callStop = callStart < 0 ? -1 : sdk.indexOf("})(function(bi,oY,bb,YM,oC,VY)", callStart);
+    const callSites = [];
+    if (callStart >= 0 && callStop > callStart) {
+      const chunk = sdk.slice(callStart, callStop);
+      let cursor = 0;
+      while (cursor < chunk.length) {
+        const ch = chunk[cursor];
+        if (ch === "'" || ch === "\"" || ch === "`") { cursor = skipCallString(chunk, cursor); continue; }
+        let helper = "";
+        if (chunk.startsWith("oC(", cursor) && (cursor === 0 || !/[A-Za-z0-9_$]/.test(chunk[cursor - 1]))) helper = "oC";
+        else if (chunk.startsWith("bb(", cursor) && (cursor === 0 || !/[A-Za-z0-9_$]/.test(chunk[cursor - 1]))) helper = "bb";
+        if (!helper) { cursor += 1; continue; }
+        const open = cursor + helper.length;
+        const close = matchCallParen(chunk, open);
+        if (close < 0) { cursor += 1; continue; }
+        let end = close + 1;
+        while (chunk[end] === "(") {
+          const trailClose = matchCallParen(chunk, end);
+          if (trailClose < 0) break;
+          end = trailClose + 1;
+        }
+        const isNew = chunk.slice(cursor - 4, cursor) === "new(";
+        if (isNew && chunk[end] !== ")") { cursor = end; continue; }
+        const from = isNew ? cursor - 4 : cursor;
+        const to = isNew ? end + 1 : end;
+        const args = chunk.slice(open + 1, close);
+        const trail = chunk.slice(close + 1, end);
+        const wrapped = isNew
+          ? "(function(__a){try{globalThis.__noteCall&&globalThis.__noteCall(__a)}catch(__n){}try{return new (bb(...__a))}catch(__e){try{globalThis.__noteThrow&&globalThis.__noteThrow(__e)}catch(__n){}throw __e}})([" + args + "])"
+          : "(function(__a){try{globalThis.__noteCall&&globalThis.__noteCall(__a)}catch(__n){}try{return " + helper + "(...__a)" + trail + "}catch(__e){try{globalThis.__noteThrow&&globalThis.__noteThrow(__e)}catch(__n){}throw __e}})([" + args + "])";
+        callSites.push({ from: callStart + from, to: callStart + to, wrapped });
+        cursor = to;
+      }
+    }
+    callSites.sort((a, b) => b.from - a.from);
+    for (const site of callSites) sdk = sdk.slice(0, site.from) + site.wrapped + sdk.slice(site.to);
+    report("pred call-wrap " + callSites.length);
+    const pooled = rewritePool(sdk);
+    sdk = pooled.out;
+    report("pred pool " + pooled.reads);
+    function rewriteGets(src) {
+      const parts = [];
+      let pos = 0;
+      let reads = 0;
+      while (pos < src.length) {
+        const ch = src[pos];
+        if (ch === "'" || ch === "\"") {
+          const quote = ch;
+          let end = pos + 1;
+          while (end < src.length && src[end] !== quote) {
+            if (src[end] === "\\") end += 1;
+            end += 1;
+          }
+          parts.push(src.slice(pos, end + 1));
+          pos = end + 1;
+          continue;
+        }
+        if (!poolIdent(ch) || (pos > 0 && (poolIdent(src[pos - 1]) || src[pos - 1] === "."))) {
+          parts.push(ch);
+          pos += 1;
+          continue;
+        }
+        let end = pos;
+        while (end < src.length && poolIdent(src[end])) end += 1;
+        if (src[end] !== "[") {
+          parts.push(src.slice(pos, end));
+          pos = end;
+          continue;
+        }
+        const indexEnd = poolScan(src, end + 1);
+        if (indexEnd < 0 || src[indexEnd + 1] !== "[") {
+          parts.push(src.slice(pos, end));
+          pos = end;
+          continue;
+        }
+        const keyEnd = poolScan(src, indexEnd + 2);
+        if (keyEnd < 0) {
+          parts.push(src.slice(pos, end));
+          pos = end;
+          continue;
+        }
+        const ident = src.slice(pos, end);
+        const indexR = rewriteGets(src.slice(end + 1, indexEnd));
+        const keyR = rewriteGets(src.slice(indexEnd + 2, keyEnd));
+        const next = src[keyEnd + 1] || "";
+        const next2 = src[keyEnd + 2] || "";
+        let kind = "get";
+        if ((next === "+" && next2 === "+") || (next === "-" && next2 === "-")) kind = "update";
+        else if (next === "=" && next2 !== "=") kind = "set";
+        else if ("+-*/%&|^<>".includes(next) && next2 === "=") kind = "update";
+        parts.push(kind === "get"
+          ? poolHead + ident + "[" + indexR.out + "]," + keyR.out + ")"
+          : ident + "[" + indexR.out + "][" + keyR.out + "]");
+        if (kind === "get") reads += 1;
+        reads += indexR.reads + keyR.reads;
+        pos = keyEnd + 1;
+      }
+      return { out: parts.join(""), reads };
+    }
+    const stacked = rewriteGets(sdk);
+    sdk = stacked.out;
+    const typeofFocus = { XMLHttpRequest: 1, fetch: 1, WebSocket: 1, RTCPeerConnection: 1, webkitRTCPeerConnection: 1 };
+    sdk = sdk.replace(/typeof\s+((?:\\u[0-9a-fA-F]{4})+)/g, (all, hex) => {
+      let name = "";
+      try { name = JSON.parse('"' + hex + '"'); } catch (_error) { return all; }
+      if (!typeofFocus[name]) return all;
+      return "(function(v){try{if(globalThis.__pred)globalThis.__pred(\"typeof\"," + JSON.stringify(name) + ",v)}catch(e){}return v})(" + all + ")";
+    });
+    report("pred gets " + stacked.reads);
+  }
   runInPage(sdk, "https://captcha.wangluozhe.com/wlzshield.min.js");
   const shield = win.WlzShield;
   if (!shield || typeof shield.initCollector !== "function") {
@@ -1673,11 +3556,12 @@ async function main() {
   if (process.env.WLZ_LOG === "1") {
     const seenBad = new Set();
     const origStringify = win.JSON.stringify;
-    win.JSON.stringify = function stringify(value) {
+    function stringify(value) {
       if (value && typeof value === "object" && !Array.isArray(value)) {
-        const bad = Object.keys(value).filter((key) => value[key] === true);
-        if (bad.length && bad.length < 80 && seenBad.size < 20) {
-          const sig = bad.join(",");
+        const keys = Object.keys(value);
+        const bad = keys.filter((key) => value[key] === true);
+        if (bad.length && keys.length < 80 && seenBad.size < 30) {
+          const sig = keys.map((key) => key + (value[key] === true ? ":1" : value[key] === false ? ":0" : "")).join(",");
           if (!seenBad.has(sig)) {
             seenBad.add(sig);
             report("flags " + sig);
@@ -1685,7 +3569,12 @@ async function main() {
         }
       }
       return origStringify.apply(this, arguments);
-    };
+    }
+    try {
+      Object.defineProperty(stringify, "constructor", { configurable: true, writable: true, enumerable: false, value: win.Function });
+    } catch (_error) {}
+    if (typeof win.__mark === "function") win.__mark(stringify, "stringify");
+    win.JSON.stringify = stringify;
   }
   let widget = null;
   try {

@@ -1,4 +1,5 @@
 {
-  "success": false,
-  "error": "验证服务暂时不可用"
+  "success": true,
+  "message": "答案正确！🎉 恭喜首次通过！ (wlzshield_captcha_challenge)",
+  "is_correct": true
 }

@@ -19,8 +19,10 @@
 
 ## 重点解决思路
 
-静态还原签名后，用登录会话核对过这几道门：坏签名是「签名验证失败，请刷新重试」；好签名且 token 为空是「缺少验证token」；好签名且 token 非空、但不是厂商认可的 `wsToken` 时，站点返回「无效的Token」。
+厂商只接受真实 Gecko 里跑出来的 `wlzData`。jsdom 采集会被完整性检查拒绝，历史密文也不能拿来重放。可用路径是在同一个 RuyiDOM 进程里签发 `wsToken`、立刻 verify，再提交总和。登录态用 `dom.cookieJar.setCookieSync` 放进这个进程，页面请求走 XHR。
 
-`https://captcha.wangluozhe.com/api/challenge` 已经恢复。只带 siteKey 的 POST 是 HTTP 400，正文 `认证失败`、`wsToken` 为空。控件在 jsdom 里能跑完采集，挑战正文字段仍是 `timestamp`、`wlzData`、`siteKey`、`type=checkbox`。`getEncryptedPayload` 在当前补环境里返回空串；把 `calculateHash` 得到的指纹密文按浏览器 Origin 提交后，厂商回 HTTP 200，`status=false`，`msg=认证失败`，`wsToken` 仍为空。完整性检查会把 jsdom 标成原生函数、`document.all`、XHR、节点栈和环境代理都不通过，所以这一条密文换不到能过站点 verify 的 token。没有这个 token，第 2–100 页拿不到，总和也不能提交。
+签发和校验必须看见同一个出口。本机混合代理会把厂商域名和站点域名送到不同出口，站点就回「IP地址不匹配」。RuyiDOM 把 `network.proxy.type` 设为直连后，两边出口一致，verify 才能过。
 
-2026-10-28 的浏览器现场里，登录后的第二个标签完成过一次勾选：厂商返回认证成功，`wsToken` 长度 352，站点 verify 第 2 页返回验证成功。这个 token 不能拿来重放。随后 ruyijs 参数分析不可用，RuyiDOM 基线没有发出挑战请求，host pair 也不接受父级仍标成 `stopped`、caseId 还是登录案的那次 trace。`solve.py` 还没有可提交的 100 页总和。`result.json` 仍是 `success=false`，`error` 为 `验证服务暂时不可用`，没有改成通过。
+一个 `wsToken` 只能核销一页。并发拿同一枚 token 会得到「Token已被使用」；未核销时 `POST .../page/` 仍是「验证已过期，请重新验证」。第 1 页用 init，第 2–100 页各签发一次再 verify。下一页要新建 `CheckboxCaptcha`，并先换掉 `#login-captcha` 节点，否则 `attachShadow` 不能挂到已有 shadow root 上。`enumerateDevices` 用 200ms 超时兜底，`createEvent('Touch')` 失败时改成 `TouchEvent`，控件才会真正发出挑战请求。
+
+`solve.py` 已跑通。`result.json` 为 `success=true`、`is_correct=true`，`message` 含「答案正确」。
